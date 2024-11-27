@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Web;
 
 use Closure;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMustAdmin
+class WebAuthenticateUser
 {
     /**
      * Handle an incoming request.
@@ -17,14 +16,9 @@ class RoleMustAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            $user = User::find(Auth::user()->id);
-
-            // Periksa role pengguna
-            if ($user->hasRole('user')) {
-                // Arahkan ke /skpd jika perannya adalah user
-                return redirect('/');
-            }
+        if (!Auth::check()) {
+            // Redirect user if not authenticated
+            return redirect()->to('/auth/login')->with('pesan', 'Anda harus login terlebih dahulu!');
         }
         return $next($request);
     }

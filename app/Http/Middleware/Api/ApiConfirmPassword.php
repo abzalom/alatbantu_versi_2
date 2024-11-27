@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Api;
 
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApiCustomAuth
+class ApiConfirmPassword
 {
     /**
      * Handle an incoming request.
@@ -17,7 +19,27 @@ class ApiCustomAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!$request->has('username') || !$request->has('username')) {
+        if (!$request->hasHeader('x-token')) {
+            return response()->json([
+                'success' => false,
+                'alert' => 'danger',
+                'message' => 'error missing key!'
+            ], 500);
+        }
+
+        $token = explode('|', $request->header('x-token'));
+        $hashKey = $token[0];
+        $halfKey1 = $token[1];
+        $userData = json_decode(base64_decode($token[2]), true);
+        $halfKey2 = Storage::disk('local')->get('client/users/user-secret-key-' . $userData['user_id'] . '.txt');
+        if (! Hash::check($halfKey1 . $halfKey2, $hashKey)) {
+            return response()->json([
+                'success' => false,
+                'alert' => 'danger',
+                'message' => 'unauthorized'
+            ], 401);
+        }
+        if (!$request->has('username')) {
             return response()->json([
                 'alert' => 'error',
                 'status' => false,
@@ -28,11 +50,9 @@ class ApiCustomAuth
         $validator = Validator::make(
             $request->all(),
             [
-                'username' => 'required',
                 'password' => 'required',
             ],
             [
-                'username.required' => 'Username tidak boleh kosong!',
                 'password.required' => 'Password tidak boleh kosong!',
             ]
         );
@@ -46,13 +66,13 @@ class ApiCustomAuth
             ], 442);
         }
 
-        if (!Auth::attempt(['username' => $request->username, 'password' => $request->password])) {
+        if (!Auth::attempt(['username' => $userData['username'], 'password' => $request->password])) {
             return response()->json([
                 'success' => false,
                 'alert' => 'danger',
                 'message' => 'Unauthenticated'
             ], 401);
-        }
+        };
 
         return $next($request);
     }

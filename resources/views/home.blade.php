@@ -15,15 +15,33 @@
                 <div class="card-body">
                     <h4>Selamat Datang</h4>
                     @if (auth()->user()->hasRole('user'))
-                        <h4>Anda login sebagai Perangkat Daerah</h4>
-                        <h4>{{ auth()->user()->opd->kode_opd . ' ' . auth()->user()->opd->nama_opd }}</h4>
+                        <h4>Anda login sebagai User Perangkat Daerah</h4>
                     @else
                         <h4>Anda login sebagai {{ auth()->user()->name }}</h4>
                     @endif
+
+                    {{-- <button id="test_api" class="btn btn-danger mb-3 mt-3">Test Api</button> --}}
                 </div>
             </div>
         </div>
     </div>
 
     @include('script-home')
+
+    {{-- <script>
+        $('#test_api').on('click', function() {
+            $.ajax({
+                type: "POST",
+                url: appApiUrl + "/api/test",
+                data: {
+                    test: 'Testing Data'
+                },
+                dataType: "JSON",
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+        });
+    </script> --}}
+
 </x-app-layout-component>

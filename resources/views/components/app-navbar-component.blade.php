@@ -6,29 +6,26 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 flex-wrap">
-                @foreach ($navbar_menus as $itemMenu)
-                    @if (auth()->user()->hasRole($itemMenu['roles']))
-                        @if (count($itemMenu['subs']) == 0)
+                @foreach ($navbar_menus as $mainMenu)
+                    @if (auth()->user()->hasRole($mainMenu['roles']))
+                        @if (count($mainMenu['subs']) == 0)
                             <li class="nav-item">
-                                <a class="nav-link @if (request()->is($itemMenu['current']) || request()->is($itemMenu['current'] . '/*')) active @endif" @if (request()->is($itemMenu['current']) || request()->is($itemMenu['current'] . '/*')) aria-current="true" @endif href="{{ $itemMenu['path'] }}">
-                                    {{ $itemMenu['name'] }}
+                                <a class="nav-link @if (request()->is($mainMenu['current']) || request()->is($mainMenu['current'] . '/*')) active @endif" @if (request()->is($mainMenu['current']) || request()->is($mainMenu['current'] . '/*')) aria-current="true" @endif href="{{ $mainMenu['path'] }}">
+                                    {{ $mainMenu['name'] }}
                                 </a>
                             </li>
                         @else
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle @if (request()->is($itemMenu['current']) || request()->is($itemMenu['current'] . '/*')) active @endif" @if (request()->is($itemMenu['current']) || request()->is($itemMenu['current'] . '/*')) aria-current="true" @endif href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ $itemMenu['name'] }}
+                                <a class="nav-link dropdown-toggle @if (request()->is($mainMenu['current']) || request()->is($mainMenu['current'] . '/*')) active @endif" @if (request()->is($mainMenu['current']) || request()->is($mainMenu['current'] . '/*')) aria-current="true" @endif href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ $mainMenu['name'] }}
                                 </a>
-                                @foreach ($itemMenu['subs'] as $itemMenuSub)
-                                    <ul class="dropdown-menu">
-                                        @if (auth()->user()->hasRole($itemMenuSub['roles']))
-                                            <li>
-                                                <a class="dropdown-item" href="{{ $itemMenuSub['path'] }}">{{ $itemMenuSub['name'] }}</a>
-                                            </li>
+                                <ul class="dropdown-menu">
+                                    @foreach ($mainMenu['subs'] as $subMenu)
+                                        @if (auth()->user()->hasRole($subMenu['roles']))
+                                            <a class="dropdown-item" href="{{ $subMenu['path'] }}">{{ $subMenu['name'] }}</a>
                                         @endif
-                                        {{-- <li><a class="dropdown-item" href="/rap/target-utama/opd">Cetak Target Utama Per OPD</a></li> --}}
-                                    </ul>
-                                @endforeach
+                                    @endforeach
+                                </ul>
                             </li>
                         @endif
                     @endif
@@ -58,9 +55,10 @@
                 </div>
                 <div class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
-                        <i class="fa-solid fa-user"></i> {{ auth()->user()->name }}
+                        <i class="fa-solid fa-user"></i> {{ auth()->user()->username }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
+                        <li class="dropdown-item">Profile</li>
                         <li>
                             <form action="/auth/logout" method="post">
                                 @csrf
@@ -73,3 +71,5 @@
         </div>
     </div>
 </nav>
+
+{{-- @dump($debugSubMenu); --}}

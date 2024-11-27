@@ -27,7 +27,7 @@ return new class extends Migration
             $table->text('indikator_subkegiatan');
             $table->string('satuan_subkegiatan')->index();
             $table->string('klasifikasi_belanja')->index();
-            $table->string('text_subkegiatan')->index();
+            $table->text('text_subkegiatan')->index();
             $table->enum('sumberdana', [
                 "PAD",
                 "DAU",

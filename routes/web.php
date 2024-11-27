@@ -1,26 +1,25 @@
 <?php
 
 use App\Http\Controllers\Alatbantu\BantuPaguSkpdController;
-use App\Http\Controllers\Api\ApiRequestController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Otsus\OtsusController;
 use App\Http\Controllers\Otsus\RapOtsusController;
 use App\Http\Controllers\Config\ConfigAppController;
 use App\Http\Controllers\Config\ConfigOpdController;
 use App\Http\Controllers\Ref\ReferensiDataController;
-use App\Http\Controllers\Referensi\RefLokasiController;
 use App\Http\Controllers\TestController;
-use App\Http\Middleware\AuthenticateUser;
-use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\RoleMustAdmin;
+use App\Http\Middleware\Web\WebAuthenticateUser;
+use App\Http\Middleware\Web\WebRoleMustAdmin;
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/login', 'login_auth');
     Route::post('/auth/login', 'process_login_auth');
 });
 
-Route::middleware(AuthenticateUser::class)->group(function () {
+Route::middleware(WebAuthenticateUser::class)->group(function () {
     Route::get('/', function () {
         return view('home', [
             'app' => [
@@ -37,13 +36,19 @@ Route::middleware(AuthenticateUser::class)->group(function () {
 
     Route::controller(ReferensiDataController::class)->group(function () {
         Route::get('/ref/data', 'ref_data');
+        Route::get('/ref/nomenklatur', 'ref_nomenklatur');
+        Route::get('/ref/nomenklatur/cetak', 'ref_cetak_nomenklatur');
     });
 
     Route::controller(ConfigAppController::class)->group(function () {
         Route::post('/config/app/session/tahun', 'config_app_session_tahun');
     });
 
-    Route::middleware(RoleMustAdmin::class)->group(function () {
+    Route::middleware(WebRoleMustAdmin::class)->group(function () {
+        Route::controller(UserController::class)->group(function () {
+            Route::get('/config/user', 'user_config');
+        });
+
         Route::controller(OtsusController::class)->group(function () {
             Route::get('/otsus', 'otsus');
             Route::get('/otsus/indikator', 'otsus_indikator');
@@ -77,10 +82,6 @@ Route::middleware(AuthenticateUser::class)->group(function () {
 
         Route::controller(BantuPaguSkpdController::class)->group(function () {
             Route::get('/bantu/pagu', 'pagu_alatbantu');
-        });
-
-        Route::controller(TestController::class)->group(function () {
-            Route::get('/test', 'test');
         });
     });
 

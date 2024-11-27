@@ -6,6 +6,7 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="tahun" content="{{ session()->get('tahun') }}">
+    <meta name="user-token" content="{{ session()->get('user_token') }}">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/vendors/bootstrap-5.3.3-dist/css/bootstrap.min.css">
@@ -37,7 +38,7 @@
         }
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const tahunAnggaran = document.querySelector('meta[name="tahun"]').getAttribute('content');
-
+        const userToken = document.querySelector('meta[name="user-token"]').getAttribute('content');
         const old = @json(old());
     </script>
 </head>
@@ -114,6 +115,11 @@
     </footer>
 
     <script>
+        $.ajaxSetup({
+            headers: {
+                'x-token': userToken
+            }
+        });
         let auth_username = @json(auth()->user()->username);
 
         function copyToClipboard(text) {

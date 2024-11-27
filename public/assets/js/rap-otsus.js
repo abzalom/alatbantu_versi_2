@@ -291,4 +291,41 @@ $(document).ready(function () {
         }
     });
 
+    $('#rapViewFilesModal').on('hidden.bs.modal', function () {
+        $('#rapViewFilesModalLabel').html('');
+        $('#rap-show-list-files').html('');
+    });
+
+    $('.btn-view-files-rap').on('click', function () {
+        let id_rap = $(this).val();
+        let subkegiatan = $(this).data('subkegiatan');
+        $('#rapViewFilesModalLabel').html(subkegiatan);
+        console.log(id_rap);
+        $.ajax({
+            type: "POST",
+            url: appApiUrl + "/api/data/rap/file-check",
+            data: {
+                id_rap: id_rap
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if (response.status) {
+                    console.log(response);
+                    let data = response.data;
+
+                    data.forEach(item => {
+                        $('#rap-show-list-files').append(`
+                            <tr>
+                                <td>${item.filename.toUpperCase()}</td>
+                                <td>:</td>
+                                <td>${item.exists ? item.file : 'Tidak ada file!'}</td>
+                            </tr>
+                        `);
+                    });
+
+                }
+            }
+        });
+    });
+
 });

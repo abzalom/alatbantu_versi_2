@@ -362,6 +362,7 @@ class RapOtsusController extends Controller
                         $exists = RapOtsus::where([
                             'kode_unik_opd_tag_otsus' => $data['kode_unik_opd_tag_otsus'],
                             'kode_subkegiatan' => $data['kode_subkegiatan'],
+                            'sumberdana' => $data['sumberdana'],
                         ])->exists();
                         if ($exists) {
                             $fail("Subkegiatan sudah ada.");
@@ -512,6 +513,7 @@ class RapOtsusController extends Controller
         $request->validate(
             [
                 'id_rap' => 'required|exists:rap_otsuses,id',
+                'opd_id' => 'required|exists:opds,id',
                 'file_kak' => [
                     Rule::requiredIf(function () use ($request) {
                         $rap = RapOtsus::find($request->id_rap);
@@ -549,6 +551,9 @@ class RapOtsusController extends Controller
                 'id_rap.required' => 'Sub Kegiatan tidak ditemukan!',
                 'id_rap.exists' => 'Sub Kegiatan tidak ditemukan!',
 
+                'opd_id.required' => 'Perangkat Daerah tidak ditemukan!',
+                'opd_id.exists' => 'Perangkat Daerah tidak ditemukan!',
+
                 'file_kak.required' => 'File KAK tidak boleh kosong!',
                 'file_kak.mimes' => 'File KAK hanya boleh berformat PDF!',
                 'file_kak.max' => 'Ukuran file KAK tidak boleh lebih dari 5MB!',
@@ -572,9 +577,16 @@ class RapOtsusController extends Controller
 
 
         $rap = RapOtsus::findOrFail($request->id_rap);
+        $opd = Opd::find($request->opd_id);
 
+        if (!$rap) {
+            return redirect()->back()->with('error', 'RAP tidak ditemukan!');
+        }
+        if (!$opd) {
+            return redirect()->back()->with('error', 'Perangkat Daerah tidak ditemukan!');
+        }
         $date = now()->format('Ymd_hms');
-        $path = 'file-rap/uploads/' . session('tahun') . '/skpd/' . Auth::user()->opd->kode_unik_opd . '/';
+        $path = 'file-rap/uploads/' . session('tahun') . '/skpd/' . $opd->kode_unik_opd . '/';
         $filePrefix = ['kak', 'rab', 'pendukung1', 'pendukung2', 'pendukung3'];
         $fileNames = [];
 

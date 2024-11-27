@@ -48,7 +48,6 @@ class RapSubkegiatanImport implements
     {
         $target_aktifitas = B5TargetAktifitasUtamaOtsus::where('kode_target_aktifitas', $data['kode_indikator'])->first();
         $subkegiatan = A5Subkegiatan::where('kode_subkegiatan', $data['kode_subkegiatan'])->first();
-        $subkegiatan = $subkegiatan ? $subkegiatan : null;
         $opd = Opd::where('kode_opd', $data['kode_skpd'])->first();
 
         $kode_opd = $opd ? $opd['kode_opd'] : '';
@@ -62,9 +61,8 @@ class RapSubkegiatanImport implements
         preg_match_all('/\d+(?=~)/', $data['lokasi'], $matchLokasi);
         $id_lokasi = $matchLokasi[0]; // Ambil semua angka sebelum '~'
 
-        preg_match_all('/\d+(?=~)/', $data['sumberdana'], $mathcDanaLain);
-        $id_sumberdana = $mathcDanaLain[0]; // Ambil semua angka sebelum '~'
-        $getSumberdana = Sumberdana::find($id_sumberdana);
+        $id_sumberdana = explode('~', $data['sumberdana']);
+        $getSumberdana = Sumberdana::find($id_sumberdana[0]);
 
 
         preg_match_all('/\d+(?=~)/', $data['dana_lain'], $mathcDanaLain);
@@ -86,9 +84,13 @@ class RapSubkegiatanImport implements
             ];
         })->toJson() : null;
 
+        // $subkegiatan = $subkegiatan ? $subkegiatan : null;
+        $kode_bidang = $subkegiatan ? $subkegiatan->kode_bidang : null;
+        $kode_unik_opd_tag_bidang = $kode_unik_opd . '-' . $kode_bidang;
+
         $newData = [
             'kode_unik_opd' => $kode_unik_opd,
-            'kode_unik_opd_tag_bidang' => $kode_unik_opd . '-' . $subkegiatan->kode_bidang,
+            'kode_unik_opd_tag_bidang' => $kode_unik_opd_tag_bidang,
             'kode_unik_opd_tag_otsus' => $opdTagOtsus ? $opdTagOtsus->kode_unik_opd_tag_otsus : null,
             'kode_opd' => $kode_opd,
             'kode_tema' => $target_aktifitas ? $target_aktifitas['kode_tema'] : null,

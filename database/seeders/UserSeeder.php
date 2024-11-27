@@ -19,6 +19,9 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        // Role::truncate();
+        // Permission::truncate();
+        User::truncate();
         $adminRole = Role::create(['name' => 'admin']);
         $userRole = Role::create(['name' => 'user']);
 
@@ -31,7 +34,6 @@ class UserSeeder extends Seeder
         $userRole->syncPermissions(['read', 'update']);
 
 
-        User::truncate();
         $admin = User::updateOrCreate(
             ['username' => 'admin'],
             [

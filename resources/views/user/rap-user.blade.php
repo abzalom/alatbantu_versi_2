@@ -47,14 +47,19 @@
                     </div>
                     <div class="row mb-3 mx-2">
                         @foreach ($sumberdanas as $itemDana)
-                            <div class="col-3">
-                                <div class="row alert alert-info">
+                            <div class="col-sm-12 col-md-6 col-lg-4 me-3">
+                                <div class="row alert text-bg-light border-info">
                                     <strong>{{ $itemDana['nama_dana'] }}</strong>
-                                    <span>Rp. 000,00</span>
+                                    <strong>Rp. {{ formatIdr($itemDana['pagu_dana'], 2) }}</strong>
                                 </div>
                             </div>
                         @endforeach
                     </div>
+
+                    {{-- <div class="mb-3 mt-3">
+                        <button id="test-token" class="btn btn-danger">Test Token</button>
+                    </div> --}}
+
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-striped" style="font-size: 90%">
                             <thead class="table-dark align-middle">
@@ -63,10 +68,12 @@
                                     <th></th>
                                     <th>KLASIFIKASI BELANJA</th>
                                     <th>SUB KEGIATAN</th>
+                                    <th>INDIKATOR</th>
                                     <th>TARGET</th>
                                     <th>PAGU</th>
                                     <th>LOKASI</th>
                                     <th>DATA PENDUKUNG</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
@@ -86,11 +93,14 @@
                                         <td class="text-center">{{ $no++ }}</td>
                                         <td class="text-center">
                                             <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary btn-upluad-user-rap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#userUploadFileModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                <button class="btn btn-sm btn-primary btn-user-edit-rap text-nowrap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#userEditRapModal">
+                                                    <i class="fa-solid fa-pen-to-square"></i> Edit RAP
+                                                </button>
                                             </div>
                                         </td>
                                         <td>{{ $rap->klasifikasi_belanja }}</td>
                                         <td>{{ $rap->text_subkegiatan }}</td>
+                                        <td>{{ $rap->indikator_subkegiatan }}</td>
                                         <td>{{ $target }}</td>
                                         <td class="text-end">{{ formatIdr($rap->anggaran, 2) }}</td>
                                         <td>
@@ -158,6 +168,14 @@
                                                 @endif
                                             </ul>
                                         </td>
+
+                                        <td class="text-center">
+                                            <div class="btn-group">
+                                                <button class="btn btn-sm btn-secondary btn-upluad-user-rap text-nowrap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#userUploadFileModal">
+                                                    <i class="fa-regular fa-folder-open"></i> Upload File
+                                                </button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -168,7 +186,8 @@
         </div>
     </div>
 
-    @include('user.modal-user-rap')
+    @include('user.modal-user-edit-rap')
+    @include('user.modal-user-rap-upload-files')
     @include('user.modal-user-rap-konfirmasi-delete-file')
     @include('user.script-user-rap')
 </x-app-layout-component>

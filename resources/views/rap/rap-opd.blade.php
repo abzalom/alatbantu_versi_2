@@ -100,10 +100,11 @@
                         </div>
                     </div>
                     <div class="table-responsive mb-4">
-                        <table class="table table-bordered table-striped" style="font-size: 90%">
+                        <table class="table table-bordered table-striped" style="font-size: 85%">
                             <thead class="table-dark">
                                 <tr>
                                     <th>#</th>
+                                    <th></th>
                                     <th>Target Aktifitas Utama</th>
                                     <th>Sub Kegiatan</th>
                                     <th>Klasifikasi Belanja</th>
@@ -113,6 +114,7 @@
                                     <th>Alokasi Pagu</th>
                                     <th>Lokasi Fokus</th>
                                     <th>Sumberdana</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -128,8 +130,69 @@
                                     </tr>
                                 @else
                                     @foreach ($opd->raps as $rap)
+                                        @php
+                                            $kakFile = $rap->file_path && $rap->file_kak_name ? $rap->file_path . $rap->file_kak_name : null;
+                                            $rabFile = $rap->file_path && $rap->file_rab_name ? $rap->file_path . $rap->file_rab_name : null;
+                                            $pendukung1File = $rap->file_path && $rap->file_pendukung1_name ? $rap->file_path . $rap->file_rab_name : null;
+                                            $pendukung2File = $rap->file_path && $rap->file_pendukung2_name ? $rap->file_path . $rap->file_rab_name : null;
+                                            $pendukung3File = $rap->file_path && $rap->file_pendukung3_name ? $rap->file_path . $rap->file_rab_name : null;
+                                        @endphp
                                         <tr id="rap-show-id-{{ $rap->id }}">
                                             <td>{{ $no++ }}</td>
+                                            <td class="text-nowrap">
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
+                                                        @if ($kakFile && Storage::disk('public')->exists($kakFile))
+                                                            <div class="me-3">
+                                                                <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
+                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_kak_name]) }}" target="_blank">KAK</a>
+                                                            </div>
+                                                        @else
+                                                            <div>
+                                                                <i class="fa-solid fa-circle-xmark fa-lg" style="color: #ff5252;"></i>
+                                                                KAK
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                    <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
+                                                        @if ($rabFile && Storage::disk('public')->exists($rabFile))
+                                                            <div class="me-3">
+                                                                <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
+                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_rab_name]) }}" target="_blank">RAB</a>
+                                                            </div>
+                                                        @else
+                                                            <div>
+                                                                <i class="fa-solid fa-circle-xmark fa-lg" style="color: #ff5252;"></i>
+                                                                RAB
+                                                            </div>
+                                                        @endif
+                                                    </li>
+                                                    @if ($pendukung1File && Storage::disk('public')->exists($pendukung1File))
+                                                        <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
+                                                            <div class="me-3">
+                                                                <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
+                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung1_name]) }}" target="_blank">Pendukung1</a>
+                                                            </div>
+                                                        </li>
+                                                    @endif
+                                                    @if ($pendukung2File && Storage::disk('public')->exists($pendukung2File))
+                                                        <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
+                                                            <div class="me-3">
+                                                                <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
+                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung2_name]) }}" target="_blank">Pendukung2</a>
+                                                            </div>
+                                                        </li>
+                                                    @endif
+                                                    @if ($pendukung3File && Storage::disk('public')->exists($pendukung3File))
+                                                        <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
+                                                            <div class="me-3">
+                                                                <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
+                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung3_name]) }}" target="_blank">Pendukung3</a>
+                                                            </div>
+                                                        </li>
+                                                    @endif
+                                                </ul>
+                                            </td>
                                             <td>{{ $rap->target_aktifitas->text }}</td>
                                             <td id="show-rap-subkegiatan-id-{{ $rap->id }}" class="remove-bg-subkegiatan">
                                                 <button class="btn btn-sm btn-primary me-2 copy-subkegiatan" data-subkegiatan="{{ $rap->kode_subkegiatan }}" data-id="{{ $rap->id }}">
@@ -150,6 +213,7 @@
                                                 </div>
                                             </td>
                                             <td>{{ $rap->lokasi_text }}</td>
+
                                             <td id="show-rap-sumberdana-id-{{ $rap->id }}" class="remove-bg-sumberdana">
                                                 @php
                                                     $copyDana = '';
@@ -194,5 +258,6 @@
 
     @include('rap.rap-modal.rap-modal-edit')
     @include('rap.rap-modal.rap-modal-upload-subkegiatan')
+    @include('rap.rap-modal.rap-modal-view-files')
     @include('rap.rap-script')
 </x-app-layout-component>

@@ -1,8 +1,5 @@
 $(document).ready(function () {
 
-
-
-
     $('#alatBantuAddPaguModal').on('hide.bs.modal', function () {
         $('#modal-add-pagu-nama-skpd').html('');
     });

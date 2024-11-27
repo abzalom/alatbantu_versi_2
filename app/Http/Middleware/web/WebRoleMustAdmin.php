@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Http\Middleware\Web;
 
 use Closure;
 use App\Models\User;
@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleOnlyUser
+class WebRoleMustAdmin
 {
     /**
      * Handle an incoming request.
@@ -21,7 +21,7 @@ class RoleOnlyUser
             $user = User::find(Auth::user()->id);
 
             // Periksa role pengguna
-            if ($user->hasRole('admin')) {
+            if ($user->hasRole('user')) {
                 // Arahkan ke /skpd jika perannya adalah user
                 return redirect('/');
             }

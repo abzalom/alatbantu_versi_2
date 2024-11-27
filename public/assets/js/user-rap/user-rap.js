@@ -12,6 +12,8 @@ $(document).ready(function () {
         $('.user-rap-file-pendukung').val('');
         $('#modal-show-spinner').show();
         $('#modal-show-content').hide();
+        $('#user-rap-file-kak').removeClass('is-invalid');
+        $('#file_kak_error').html('');
         $('#user-rap-file-kak').attr('disabled', false);
 
         ['kak', 'rab', 'pendukung1', 'pendukung2', 'pendukung3'].forEach((item) => {
@@ -21,6 +23,9 @@ $(document).ready(function () {
             $(`#${item}-name-show`).html('')
             $(`#${item}-exists-show`).hide();
         })
+
+        $('#user-rap-file-rab').removeClass('is-invalid');
+        $('#file_rab_error').html('');
     });
 
     async function fileCheck(url, data) {
@@ -63,7 +68,7 @@ $(document).ready(function () {
                     $('#user-rap-id-rap').val(data.id);
                     let items = ['kak', 'rab', 'pendukung1', 'pendukung2', 'pendukung3'];
 
-                    let fileExists = await await fileCheck(appApiUrl + "/api/data/rap/file-check", JSON.stringify({
+                    let fileExists = await fileCheck(appApiUrl + "/api/data/rap/file-check", JSON.stringify({
                         id_rap: data.id,
                     }));
 
@@ -71,7 +76,6 @@ $(document).ready(function () {
                         let fileData = fileExists.data;
                         fileData.map(function (item) {
                             if (item.exists) {
-                                console.log(item.filename);
                                 $(`#user-rap-file-${item.filename}`).attr('disabled', true);
                                 $(`#user-rap-file-${item.filename}`).hide();
                                 $(`#user-rap-file-${item.filename}`).data('filename', item.file);
@@ -96,12 +100,10 @@ $(document).ready(function () {
                         })
                     }
 
-                    console.log(response);
-
                     setTimeout(() => {
                         $('#modal-show-spinner').hide();
                         $('#modal-show-content').show();
-                    }, 1000);
+                    }, 500);
                 }
             }
         });
@@ -232,6 +234,200 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+
+    /**
+     * Edit RAP Oleh User
+     */
+
+    $('#userEditRapModal').on('hidden.bs.modal', function () {
+        $('#modal-edit-rap-show-content').hide();
+        $('#modal-edit-rap-show-spinner').show();
+        $('#userEditRapModalLabel').html('');
+        $('#user-rap-show-indikator').html('');
+        $('#user-rap-show-sumberdana').html('');
+        $('#user-rap-show-anggaran').html('');
+        $('#user-rap-show-jenis-kegiatan').html('');
+        $('#rap-user-edit-target-kinerja').val('');
+        $('#user-rap-show-satuan').html('');
+        $('#rap-user-edit-lokus').val(null);
+        $('#user-rap-show-jenis').hide();
+        $('#user-rap-edit-koordinat').attr('disabled', true);
+        $('#user-rap-edit-koordinat').val('');
+
+        ['id_rap', 'vol_subkeg', 'lokus', 'koordinat', 'keterangan'].forEach(function (field) {
+            if ($('#user-rap-edit-' + field).length > 0) {
+                $('#user-rap-edit-' + field).removeClass('is-invalid');
+            }
+            $('#' + field + '_error').html('');
+        });
+    });
+
+    $('.btn-user-edit-rap').on('click', function () {
+        let id_rap = $(this).val();
+        console.log(id_rap);
+
+        $.ajax({
+            type: "POST",
+            url: appApiUrl + "/api/data/rap",
+            data: {
+                id: id_rap
+            },
+            dataType: "JSON",
+            success: async function (response) {
+                if (response.success) {
+                    let item = response.data[0];
+                    let lokasi = JSON.parse(item.lokus);
+                    $('#user-edit-rap-id').val(item.id);
+                    $('#userEditRapModalLabel').html(item.text_subkegiatan);
+                    $('#user-rap-show-indikator').html(item.indikator_subkegiatan);
+                    $('#user-rap-show-sumberdana').html(item.sumberdana);
+                    $('#user-rap-show-anggaran').html('Rp. ' + formatIDR(item.anggaran));
+                    $('#user-rap-show-jenis-kegiatan').html(item.jenis_kegiatan === 'fisik' ? 'Pekerjaan Fisik' : 'Non Fisik');
+                    $('#rap-user-edit-jenis-kegiatan').val(item.jenis_kegiatan);
+                    $('#rap-user-edit-target-kinerja').val(item.vol_subkeg);
+                    $('#user-rap-show-satuan').html(item.satuan_subkegiatan);
+
+                    const lokusIds = lokasi.map(lokus => lokus.id);
+                    $('#rap-user-edit-lokus').val(lokusIds).trigger('change');
+
+                    if (item.jenis_kegiatan === 'fisik') {
+                        $('#user-rap-show-jenis').show();
+                        $('#user-rap-edit-koordinat').attr('disabled', false);
+                        $('#user-rap-edit-koordinat').val(item.koordinat);
+                    }
+
+                    $('#user-rap-edit-keterangan').html(item.keterangan);
+                    console.log(item);
+                }
+            },
+            error: function (xhr, status, error) {
+                let errorResponse = handleAjaxError(xhr);
+                showToast(errorResponse.message, 'danger');
+            }
+        })
+
+        setTimeout(() => {
+            $('#modal-edit-rap-show-content').show();
+            $('#modal-edit-rap-show-spinner').hide();
+        }, 500);
+    });
+
+    $('#form-user-edit-rap').on('submit', function (e) {
+        e.preventDefault();
+        $('#modal-edit-rap-show-content').hide();
+        $('#modal-edit-rap-show-spinner').show();
+        ['id_rap', 'vol_subkeg', 'lokus', 'koordinat', 'keterangan'].forEach(function (field) {
+            if ($('#user-rap-edit-' + field).length > 0) {
+                $('#user-rap-edit-' + field).removeClass('is-invalid');
+            }
+            $('#' + field + '_error').html('');
+        });
+        let dataForm = $(this).serialize();
+        console.log(dataForm);
+        $.ajax({
+            type: "POST",
+            url: appApiUrl + "/api/user/rap/update",
+            data: dataForm,
+            contentType: "application/x-www-form-urlencoded",
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    console.log(response);
+                    showToast(response.message, response.alert);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                }
+            },
+            error: function (xhr, status, error) {
+                let errorResponse = handleAjaxError(xhr);
+                showToast(errorResponse.message, errorResponse.alert);
+
+                Object.entries(errorResponse.errors || {}).forEach(function ([key, value]) {
+                    if (['id_rap', 'vol_subkeg', 'lokus', 'koordinat', 'keterangan'].includes(key)) {
+                        if ($('#user-rap-edit-' + key).length > 0) {
+                            $('#user-rap-edit-' + key).addClass('is-invalid');
+                        }
+                        $('#' + key + '_error').html(value);
+                    }
+                });
+
+                setTimeout(() => {
+                    $('#modal-edit-rap-show-content').show();
+                    $('#modal-edit-rap-show-spinner').hide();
+                }, 500);
+            }
+        });
+    });
+
+    $('#test-token').on('click', function () {
+        console.log(userToken);
+        $.ajax({
+            type: "POST",
+            url: appApiUrl + "/api/user/test/token",
+            data: {
+                user_token: userToken
+            },
+            dataType: "JSON",
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, status, error) {
+                let errorResponse = handleAjaxError(xhr);
+                showToast(errorResponse.message, errorResponse.alert);
+                console.error(response);
+                console.error(status);
+                console.error(error);
+            }
+        });
+    });
+
+    $('#form-user-upload-file').on('submit', function (e) {
+        e.preventDefault();
+        let kak_input = $('#user-rap-file-kak').val();
+        let rab_input = $('#user-rap-file-rab').val();
+        let isValid = true;
+
+        if (kak_input == '') {
+            $('#user-rap-file-kak').addClass('fa-bounce is-invalid');
+            $('#file_kak_error').html('File KAK tidak boleh kosong!');
+            setTimeout(() => {
+                $('#user-rap-file-kak').removeClass('fa-bounce');
+            }, 500);
+            isValid = false;
+        }
+        if (rab_input == '') {
+            $('#user-rap-file-rab').addClass('fa-bounce is-invalid');
+            $('#file_rab_error').html('File RAB tidak boleh kosong!');
+            setTimeout(() => {
+                $('#user-rap-file-rab').removeClass('fa-bounce');
+            }, 500);
+            isValid = false;
+        }
+
+        if (isValid) {
+            this.submit();
+        }
+    });
+
+    $('#user-rap-file-kak').on('change', function () {
+        let value = $(this).val();
+        console.log(value !== '');
+        if (value) {
+            $('#user-rap-file-kak').removeClass('is-invalid');
+            $('#file_kak_error').html('');
+        }
+    });
+
+    $('#user-rap-file-rab').on('change', function () {
+        let value = $(this).val();
+        console.log(value !== '');
+        if (value) {
+            $('#user-rap-file-rab').removeClass('is-invalid');
+            $('#file_rab_error').html('');
+        }
     });
 
 });

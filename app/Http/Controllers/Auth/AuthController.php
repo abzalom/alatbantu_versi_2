@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -42,7 +43,7 @@ class AuthController extends Controller
                 'tahun' => $request->tahun,
             ])
                 ->withErrors($validator)
-                ->with('pesan', 'Login gagal. terjadi kesalahan!');
+                ->with('error', 'Login gagal. terjadi kesalahan!');
         }
 
         $credentials = [
@@ -51,16 +52,29 @@ class AuthController extends Controller
         ];
 
         if (Auth::attempt($credentials, $request->rememberme)) {
+            $user = User::find(Auth::user()->id);
+            $generatedKey = bin2hex(random_bytes(64));
+            $keyLen = strlen($generatedKey);
+            $devideKkey = $keyLen / 2;
+            $keyHalf1 = substr($generatedKey, 0, $devideKkey); // simpan ke session
+            $keyHalf2 = substr($generatedKey, $devideKkey, $keyLen); // simpan ke file
+            Storage::disk('local')->put("client/users/user-secret-key-{$user->id}.txt", $keyHalf2);
+            $hasKey = Hash::make($generatedKey);
             session([
                 'tahun' => (int) $request->tahun,
             ]);
-
-            $user = User::find(Auth::user()->id);
-
+            $userData = [
+                'user_id' => $user->id,
+                'username' => $user->username,
+                'role' => $user->getRoleNames()->toArray(),
+                'tahun' => session()->get('tahun'),
+            ];
+            $userToken = $hasKey . '|' . $keyHalf1 . '|' . base64_encode(json_encode($userData));
+            session(['user_token' => $userToken]);
             return redirect()->to('/')->with('success', "Selamat datang $user->name!");
         }
 
-        return redirect()->back()->with('pesan', 'Terjadi kesalahan! username tidak diketahui!');
+        return redirect()->back()->with('error', 'Terjadi kesalahan! username tidak diketahui!');
     }
 
     public function logout_auth(Request $request)
