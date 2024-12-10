@@ -1,5 +1,31 @@
 $(document).ready(function () {
 
+    async function requestApiRap(type, url, data) {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: type,
+                url: appApiUrl + '/api' + url,
+                data: data,
+                dataType: "JSON",
+                success: function (response) {
+                    try {
+                        if (response.status) {
+                            resolve(response)
+                        }
+                    } catch (error) {
+                        reject(response)
+                        showToast(response.message, response.alert);
+                    }
+                },
+                error: function (xhr) {
+                    let errorResponse = handleAjaxError(xhr);
+                    showToast(errorResponse.message, errorResponse.alert);
+                    reject(xhr);
+                }
+            });
+        })
+    }
+
     $('#rap-select-target-aktifitas').on('change', function () {
         $('#rap-select-subkegiatan').attr('disabled', true);
         $('#rap-select-sumberdana').attr('disabled', true);
@@ -326,6 +352,137 @@ $(document).ready(function () {
                 }
             }
         });
+    });
+
+    $('#detailRapViewModal').on('hidden.bs.modal', function () {
+        $('#modal-detail-rap-show-spinner').show();
+        $('#modal-detail-rap-show-content').hide();
+        $('#rap-detail-nama_subkegiatan').html('');
+        $('#rap-detail-indikator_subkegiatan').html('');
+        $('#rap-detail-jenis_kegiatan').html('');
+        $('#rap-detail-vol_subkeg').html('');
+        $('#rap-detail-anggaran').html('');
+        $('#rap-detail-lokus').html('');
+        $('#rap-detail-nama_opd').html('');
+        $('#rap-detail-keterangan').html('');
+        $('#rap-detail-link_file_dukung_lain').html('');
+        $('#rap-detail-files').html('');
+        $('#rap-detail-target_aktifitas').html('');
+        $('#rap-detail-jenis_layanan').html('');
+        $('#rap-detail-ppsb').html('');
+        $('#rap-detail-dana_lain').html('');
+        $('#rap-detail-multiyears').html('');
+    });
+
+    $('.btn-view-detail-rap').on('click', function () {
+        let rap_id = $(this).val();
+        $.ajax({
+            type: "POST",
+            url: "/api/data/rap",
+            data: {
+                id: rap_id,
+                with: 'opd'
+            },
+            dataType: "JSON",
+            success: async function (response) {
+                if (response.success) {
+                    let rap = response.data[0];
+
+                    $('#rap-detail-nama_subkegiatan').html(`
+                        <span class="text-primary user-select-all">${rap.kode_subkegiatan}</span>&nbsp;
+                        <span class="text-primary user-select-all">${rap.nama_subkegiatan}</span>&nbsp;<span class="text-muted">[${rap.klasifikasi_belanja}]</span>
+                    `);
+
+                    $('#rap-detail-indikator_subkegiatan').html(`
+                        <span>${rap.indikator_subkegiatan}</span>
+                    `);
+
+                    $('#rap-detail-jenis_kegiatan').html(`
+                        <span>${rap.jenis_kegiatan}</span>
+                    `);
+
+                    $('#rap-detail-vol_subkeg').html(`
+                        <span class="text-primary user-select-all">${formatIDR(rap.vol_subkeg)}</span> &nbsp;
+                        <span>${rap.satuan_subkegiatan}</span>
+                    `);
+
+                    $('#rap-detail-anggaran').html(`
+                        <span class="text-primary user-select-all">${formatNumber(rap.anggaran)}</span> &nbsp;
+                    `);
+
+                    JSON.parse(rap.lokus).forEach(lokus => {
+                        $('#rap-detail-lokus').append(`
+                            <span class="text-primary user-select-all">${lokus.kampung}</span>&nbsp;|
+                        `);
+                    })
+
+                    $('#rap-detail-nama_opd').html(`
+                        <span class="text-primary user-select-all">${rap.opd.nama_opd}</span> &nbsp;
+                    `);
+
+                    $('#rap-detail-keterangan').html(`
+                        <span class="text-primary user-select-all">${rap.keterangan ?? ''}</span> &nbsp;
+                    `);
+
+                    $('#rap-detail-link_file_dukung_lain').html(`
+                        <span class="text-primary user-select-all">${rap.link_file_dukung_lain ?? ''}</span> &nbsp;
+                    `);
+
+                    let dataFiles = await requestApiRap('POST', '/data/rap/file-check', {
+                        id_rap: rap.id
+                    });
+
+                    dataFiles.data.forEach(file => {
+                        if (file.exists) {
+                            $('#rap-detail-files').append(`
+                                <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
+                                    <a href="/rap/download/file?file=${file.file}&name=${file.filename.toUpperCase() + ' - ' + rap.nama_subkegiatan.replace('/', '_') + '.pdf'}">${file.filename}</a>
+                                </div>
+                            `)
+                        }
+                    })
+
+                    if ($('#rap-detail-files').children().length == 0) {
+                        $('#rap-detail-files').html('<span class="text-danger fw-bold">File Pendukung Kosong</span>')
+                    }
+
+                    $('#rap-detail-target_aktifitas').html(`
+                        <span>${rap.target_aktifitas.kode_target_aktifitas}</span>&nbsp;
+                        <span class="text-primary user-select-all">${rap.target_aktifitas.uraian}</span>
+                    `);
+
+                    $('#rap-detail-jenis_layanan').html(`
+                        <span>${rap.jenis_layanan}</span>
+                    `);
+
+                    $('#rap-detail-penerima_manfaat').html(`
+                        <span>${rap.penerima_manfaat}</span>
+                    `);
+
+                    $('#rap-detail-ppsb').html(`
+                        <span>${rap.ppsb}</span>
+                    `);
+
+                    JSON.parse(rap.dana_lain).forEach(dana_lain => {
+                        $('#rap-detail-dana_lain').append(`
+                            <span class="text-primary user-select-all">${dana_lain.uraian}</span>&nbsp;|
+                        `);
+                    })
+
+                    $('#rap-detail-multiyears').html(`
+                        <span>${rap.multiyears}</span>&nbsp;
+                        <span class="text-primary user-select-all">${rap.multiyears}</span>
+                    `);
+
+                    // setTimeout(() => {
+                    // }, 300);
+                    $('#modal-detail-rap-show-spinner').hide();
+                    $('#modal-detail-rap-show-content').show();
+                }
+                console.log(response);
+            }
+        });
+
     });
 
 });

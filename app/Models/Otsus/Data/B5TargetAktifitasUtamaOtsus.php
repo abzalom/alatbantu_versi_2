@@ -41,6 +41,11 @@ class B5TargetAktifitasUtamaOtsus extends Model
         return $this->belongsTo(B4AktifitasUtamaOtsus::class, 'kode_aktifitas', 'kode_aktifitas');
     }
 
+    public function taggings(): HasMany
+    {
+        return $this->hasMany(OpdTagOtsus::class, 'kode_target_aktifitas', 'kode_target_aktifitas');
+    }
+
     public function opds(): HasManyThrough
     {
         return $this->hasManyThrough(

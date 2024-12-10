@@ -3,6 +3,7 @@
 namespace App\Models\Otsus\Data;
 
 use App\Models\Rap\RapOtsus;
+use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,6 +41,11 @@ class B1TemaOtsus extends Model
     public function target_aktifitas(): HasMany
     {
         return $this->hasMany(B5TargetAktifitasUtamaOtsus::class, 'kode_tema', 'kode_tema');
+    }
+
+    public function taggings(): HasMany
+    {
+        return $this->hasMany(OpdTagOtsus::class, 'kode_tema', 'kode_tema');
     }
 
     public function raps(): HasMany

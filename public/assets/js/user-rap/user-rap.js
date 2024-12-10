@@ -10,8 +10,8 @@ $(document).ready(function () {
         $('#user-rap-file-kak').val('');
         $('#user-rap-file-rab').val('');
         $('.user-rap-file-pendukung').val('');
-        $('#modal-show-spinner').show();
-        $('#modal-show-content').hide();
+        $('#user-rap-file-modal-show-spinner').show();
+        $('#user-rap-file-modal-show-content').hide();
         $('#user-rap-file-kak').removeClass('is-invalid');
         $('#file_kak_error').html('');
         $('#user-rap-file-kak').attr('disabled', false);
@@ -90,7 +90,7 @@ $(document).ready(function () {
                                     const filePath = urlParts.join('/'); // Gabungkan kembali sisanya menjadi path
 
                                     // Buat URL baru
-                                    const newUrl = `/rap/download/file?path=${encodeURIComponent(filePath + '/')}&name=${fileName}`;
+                                    const newUrl = `/rap/view/file?path=${encodeURIComponent(filePath + '/')}&name=${fileName}`;
 
                                     // Return HTML baru
                                     return `<a href="${newUrl}" target="_blank">${item.name}</a>`;
@@ -101,8 +101,8 @@ $(document).ready(function () {
                     }
 
                     setTimeout(() => {
-                        $('#modal-show-spinner').hide();
-                        $('#modal-show-content').show();
+                        $('#user-rap-file-modal-show-spinner').hide();
+                        $('#user-rap-file-modal-show-content').show();
                     }, 500);
                 }
             }
@@ -174,6 +174,8 @@ $(document).ready(function () {
 
     // Delete File Konfirmasi
     $('#konfirmasiDeleteFileRapModal').on('hidden.bs.modal', function () {
+        $('#user-konfirmasi-delete-file-modal-show-spinner').show();
+        $('#user-konfirmasi-delete-file-modal-show-content').hide();
         $('#hidden-delete-id').val('');
         $('#hidden-delete-filename').val('');
         $('#konfimasi-delete-info-subkegiatan').html('');
@@ -195,10 +197,19 @@ $(document).ready(function () {
         $('#konfimasi-delete-info-file').html(file);
         $('#delete-konfirmasi-password').val('');
         $('#delete-konfirmasi-password').attr('disabled', false);
+
+        setTimeout(() => {
+            $('#user-konfirmasi-delete-file-modal-show-spinner').hide();
+            $('#user-konfirmasi-delete-file-modal-show-content').show();
+        }, 500);
     });
 
     $('#btn-submit-delete-file').on('click', function (e) {
         e.preventDefault();
+
+        $('#user-konfirmasi-delete-file-modal-show-spinner').show();
+        $('#user-konfirmasi-delete-file-modal-show-content').hide();
+
         ['password'].forEach(function (field) {
             $('#' + field + '_error').html('');
             $('#delete-konfirmasi-' + field).removeClass('is-invalid');
@@ -217,7 +228,10 @@ $(document).ready(function () {
             dataType: "JSON",
             success: function (response) {
                 if (response.success) {
-                    $('#form-confirm-delete-file').submit();
+                    showToast('proses hapus file sedang berlangsung....', 'info');
+                    setTimeout(() => {
+                        $('#form-confirm-delete-file').submit();
+                    }, 1000);
                 }
             },
             error: function (xhr) {
@@ -231,6 +245,10 @@ $(document).ready(function () {
                 });
                 if (!errorResponse.success) {
                     $('#delete-konfirmasi-password').attr('disabled', false);
+                    setTimeout(() => {
+                        $('#user-konfirmasi-delete-file-modal-show-spinner').hide();
+                        $('#user-konfirmasi-delete-file-modal-show-content').show();
+                    }, 500);
                 }
             }
         });
@@ -408,6 +426,8 @@ $(document).ready(function () {
         }
 
         if (isValid) {
+            $('#user-rap-file-modal-show-spinner').show();
+            $('#user-rap-file-modal-show-content').hide();
             this.submit();
         }
     });

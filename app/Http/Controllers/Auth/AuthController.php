@@ -71,6 +71,9 @@ class AuthController extends Controller
             ];
             $userToken = $hasKey . '|' . $keyHalf1 . '|' . base64_encode(json_encode($userData));
             session(['user_token' => $userToken]);
+            if ($user->hasRole('user')) {
+                return redirect()->to('/user/rap')->with('success', "Selamat datang $user->name!");
+            }
             return redirect()->to('/')->with('success', "Selamat datang $user->name!");
         }
 

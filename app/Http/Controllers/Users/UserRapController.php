@@ -52,7 +52,9 @@ class UserRapController extends Controller
             return redirect()->to('/user/rap/skpd')->with('error', 'Perangkat Daerah tidak ditemukan!');
         }
 
-        $data = Opd::with('raps')
+        $data = Opd::with([
+            'raps' => fn($q) => $q->orderBy('kode_subkegiatan')
+        ])
             ->find($opd_id);
         // return $data;
         if (!$data) {

@@ -36,6 +36,19 @@
                 maximumFractionDigits: 2
             });
         }
+
+        // Fungsi untuk memformat angka sesuai dengan kondisi
+        function formatNumber(number) {
+            // Memisahkan angka menjadi bagian sebelum dan setelah titik desimal
+            let [integerPart, decimalPart] = number.toString().split('.');
+
+            // Jika bagian desimal ada dan nilainya bukan 00
+            if (decimalPart && decimalPart !== '00') {
+                return number.toFixed(2); // Tampilkan dengan dua desimal
+            }
+            return integerPart; // Jika tidak, tampilkan hanya bagian integer
+        }
+
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const tahunAnggaran = document.querySelector('meta[name="tahun"]').getAttribute('content');
         const userToken = document.querySelector('meta[name="user-token"]').getAttribute('content');

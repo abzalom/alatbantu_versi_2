@@ -3,6 +3,7 @@
 namespace App\Models\Otsus\Data;
 
 use App\Models\Rap\RapOtsus;
+use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -26,6 +27,11 @@ class B4AktifitasUtamaOtsus extends Model
     public function keluaran(): BelongsTo
     {
         return $this->belongsTo(B3TargetKeluaranStrategisOtsus::class, 'kode_keluaran', 'kode_keluaran');
+    }
+
+    public function taggings(): HasMany
+    {
+        return $this->hasMany(OpdTagOtsus::class, 'kode_aktifitas', 'kode_aktifitas');
     }
 
     public function target_aktifitas(): HasMany

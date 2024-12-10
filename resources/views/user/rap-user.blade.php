@@ -115,7 +115,7 @@
                                                     @if ($kakFile && Storage::disk('public')->exists($kakFile))
                                                         <div class="me-3">
                                                             <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                            <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_kak_name]) }}" target="_blank">KAK</a>
+                                                            <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_kak_name]) }}" target="_blank">KAK</a>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-danger btn-delete-file" data-subkegiatan="{{ $rap->text_subkegiatan }}" data-file="Kerangka Acuan Kerja (KAK)" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;" data-id_rap="{{ $rap->id }}" data-filename="file_kak_name" data-bs-toggle="modal" data-bs-target="#konfirmasiDeleteFileRapModal"><i class="fa-solid fa-trash"></i></button>
                                                     @else
@@ -129,7 +129,7 @@
                                                     @if ($rabFile && Storage::disk('public')->exists($rabFile))
                                                         <div class="me-3">
                                                             <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                            <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_rab_name]) }}" target="_blank">RAB</a>
+                                                            <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_rab_name]) }}" target="_blank">RAB</a>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-danger btn-delete-file" data-subkegiatan="{{ $rap->text_subkegiatan }}" data-file="Rincian Anggaran Belanja (RAB)" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;" data-id_rap="{{ $rap->id }}" data-filename="file_rab_name" data-bs-toggle="modal" data-bs-target="#konfirmasiDeleteFileRapModal"><i class="fa-solid fa-trash"></i></button>
                                                     @else
@@ -143,7 +143,7 @@
                                                     <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                         <div class="me-3">
                                                             <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                            <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung1_name]) }}" target="_blank">Pendukung1</a>
+                                                            <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung1_name]) }}" target="_blank">Pendukung1</a>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-danger btn-delete-file" data-subkegiatan="{{ $rap->text_subkegiatan }}" data-file="File Pendukung 1" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;" data-id_rap="{{ $rap->id }}" data-filename="file_pendukung1_name" data-bs-toggle="modal" data-bs-target="#konfirmasiDeleteFileRapModal"><i class="fa-solid fa-trash"></i></button>
                                                     </li>
@@ -152,7 +152,7 @@
                                                     <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                         <div class="me-3">
                                                             <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                            <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung2_name]) }}" target="_blank">Pendukung2</a>
+                                                            <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung2_name]) }}" target="_blank">Pendukung2</a>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-danger btn-delete-file" data-subkegiatan="{{ $rap->text_subkegiatan }}" data-file="File Pendukung 2" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;" data-id_rap="{{ $rap->id }}" data-filename="file_pendukung2_name" data-bs-toggle="modal" data-bs-target="#konfirmasiDeleteFileRapModal"><i class="fa-solid fa-trash"></i></button>
                                                     </li>
@@ -161,7 +161,7 @@
                                                     <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                         <div class="me-3">
                                                             <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                            <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung3_name]) }}" target="_blank">Pendukung3</a>
+                                                            <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung3_name]) }}" target="_blank">Pendukung3</a>
                                                         </div>
                                                         <button type="button" class="btn btn-sm btn-danger btn-delete-file" data-subkegiatan="{{ $rap->text_subkegiatan }}" data-file="File Pendukung 3" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .65rem;" data-id_rap="{{ $rap->id }}" data-filename="file_pendukung3_name" data-bs-toggle="modal" data-bs-target="#konfirmasiDeleteFileRapModal"><i class="fa-solid fa-trash"></i></button>
                                                     </li>

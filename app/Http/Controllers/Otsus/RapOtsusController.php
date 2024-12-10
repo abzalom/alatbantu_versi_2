@@ -625,7 +625,7 @@ class RapOtsusController extends Controller
         return redirect()->back()->with('success', 'File berhasil diupload!');
     }
 
-    public function download_file(Request $request)
+    public function view_file(Request $request)
     {
         $path = $request->get('path');
         $name = $request->get('name');
@@ -633,6 +633,18 @@ class RapOtsusController extends Controller
         if (!empty($name) && is_file(Storage::disk('public')->path($path . $name))) {
             $file = Storage::disk('public')->path($path . $name);
             return response()->file($file);
+        }
+        return abort(404, 'File not found.');
+    }
+
+    public function download_file(Request $request)
+    {
+        $file = $request->get('file');
+        $name = $request->get('name');
+
+        if (!empty($name) && is_file(Storage::disk('public')->path($file))) {
+            $file = Storage::disk('public')->path($file);
+            return response()->download($file, $name);
         }
         return abort(404, 'File not found.');
     }

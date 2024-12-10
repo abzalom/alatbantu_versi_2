@@ -23,7 +23,7 @@ class WebRoleMustAdmin
             // Periksa role pengguna
             if ($user->hasRole('user')) {
                 // Arahkan ke /skpd jika perannya adalah user
-                return redirect('/');
+                return redirect('/user/rap');
             }
         }
         return $next($request);

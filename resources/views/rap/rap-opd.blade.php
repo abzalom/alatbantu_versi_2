@@ -105,12 +105,11 @@
                                 <tr>
                                     <th>#</th>
                                     <th></th>
+                                    <th></th>
                                     <th>Target Aktifitas Utama</th>
-                                    <th>Sub Kegiatan</th>
                                     <th>Klasifikasi Belanja</th>
-                                    <th>Indikator</th>
-                                    <th>Satuan</th>
-                                    <th>Target</th>
+                                    <th>Sub Kegiatan</th>
+                                    <th>Target Kinerja</th>
                                     <th>Alokasi Pagu</th>
                                     <th>Lokasi Fokus</th>
                                     <th>Sumberdana</th>
@@ -139,13 +138,16 @@
                                         @endphp
                                         <tr id="rap-show-id-{{ $rap->id }}">
                                             <td>{{ $no++ }}</td>
+                                            <td>
+                                                <button class="btn btn-sm btn-secondary btn-view-detail-rap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#detailRapViewModal"><i class="fa-solid fa-list"></i></button>
+                                            </td>
                                             <td class="text-nowrap">
                                                 <ul class="list-group list-group-flush">
                                                     <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                         @if ($kakFile && Storage::disk('public')->exists($kakFile))
                                                             <div class="me-3">
                                                                 <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_kak_name]) }}" target="_blank">KAK</a>
+                                                                <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_kak_name]) }}" target="_blank">KAK</a>
                                                             </div>
                                                         @else
                                                             <div>
@@ -158,7 +160,7 @@
                                                         @if ($rabFile && Storage::disk('public')->exists($rabFile))
                                                             <div class="me-3">
                                                                 <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_rab_name]) }}" target="_blank">RAB</a>
+                                                                <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_rab_name]) }}" target="_blank">RAB</a>
                                                             </div>
                                                         @else
                                                             <div>
@@ -171,7 +173,7 @@
                                                         <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                             <div class="me-3">
                                                                 <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung1_name]) }}" target="_blank">Pendukung1</a>
+                                                                <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung1_name]) }}" target="_blank">Pendukung1</a>
                                                             </div>
                                                         </li>
                                                     @endif
@@ -179,7 +181,7 @@
                                                         <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                             <div class="me-3">
                                                                 <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung2_name]) }}" target="_blank">Pendukung2</a>
+                                                                <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung2_name]) }}" target="_blank">Pendukung2</a>
                                                             </div>
                                                         </li>
                                                     @endif
@@ -187,23 +189,22 @@
                                                         <li class="list-group-item d-flex justify-content-between align-items-start align-items-center" style="background: none">
                                                             <div class="me-3">
                                                                 <i class="fa-solid fa-circle-check fa-lg" style="color: #566ef5;"></i>
-                                                                <a href="{{ route('download.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung3_name]) }}" target="_blank">Pendukung3</a>
+                                                                <a href="{{ route('view.file', ['path' => $rap->file_path, 'name' => $rap->file_pendukung3_name]) }}" target="_blank">Pendukung3</a>
                                                             </div>
                                                         </li>
                                                     @endif
                                                 </ul>
                                             </td>
                                             <td>{{ $rap->target_aktifitas->text }}</td>
+                                            <td>{{ $rap->klasifikasi_belanja }}</td>
                                             <td id="show-rap-subkegiatan-id-{{ $rap->id }}" class="remove-bg-subkegiatan">
                                                 <button class="btn btn-sm btn-primary me-2 copy-subkegiatan" data-subkegiatan="{{ $rap->kode_subkegiatan }}" data-id="{{ $rap->id }}">
                                                     <i class="fa-regular fa-clipboard"></i>
                                                 </button>
                                                 {{ $rap->text_subkegiatan }}
                                             </td>
-                                            <td>{{ $rap->klasifikasi_belanja }}</td>
-                                            <td>{{ $rap->indikator_subkegiatan }}</td>
-                                            <td>{{ $rap->satuan_subkegiatan }}</td>
-                                            <td id="show-rap-vol_subkeg-id-{{ $rap->id }}">{{ formatIdr($rap->vol_subkeg, 2) }}</td>
+                                            {{-- <td>{{ $rap->indikator_subkegiatan }}</td> --}}
+                                            <td id="show-rap-vol_subkeg-id-{{ $rap->id }}">{{ formatIdr($rap->vol_subkeg, 2) . ' ' . $rap->satuan_subkegiatan }}</td>
                                             <td id="show-rap-anggaran-id-{{ $rap->id }}" class="remove-bg-anggaran">
                                                 <div class="d-flex">
                                                     <button class="btn btn-sm btn-primary me-2 copy-anggaran" data-anggaran="{{ $rap->anggaran }}" data-id="{{ $rap->id }}">
@@ -259,5 +260,6 @@
     @include('rap.rap-modal.rap-modal-edit')
     @include('rap.rap-modal.rap-modal-upload-subkegiatan')
     @include('rap.rap-modal.rap-modal-view-files')
+    @include('rap.rap-modal.rap-modal-detail-rap')
     @include('rap.rap-script')
 </x-app-layout-component>

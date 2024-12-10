@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiTaggingController;
 use App\Http\Controllers\Api\ApiTestController;
 use App\Http\Controllers\Api\Auth\ApiAuthController;
 use App\Http\Controllers\Api\Data\ApiUsersController;
+use App\Http\Controllers\Api\Data\Sinkron\ApiSinkronDjpkSikdController;
 use App\Http\Controllers\Api\Otsus\ApiAlokasiOtsusController;
 use App\Http\Controllers\Api\User\ApiUserRapController;
 use App\Http\Controllers\TestController;
@@ -90,5 +91,10 @@ Route::middleware(ApiAuthToken::class)->group(function () {
 
     Route::middleware(ApiAdminOnly::class)->controller(ApiTaggingController::class)->group(function () {
         Route::post('/data/tagging/indikator/target_aktifitas/rap', 'indikator_target_aktifitas_tag_rap');
+    });
+
+    Route::middleware(ApiAdminOnly::class)->controller(ApiSinkronDjpkSikdController::class)->group(function () {
+        Route::post('/data/sinkron/djpk/sikd', 'sinkron_data_djpk_sikd');
+        Route::post('/data/sinkron/djpk/sikd/create', 'create_data_djpk_sikd');
     });
 });

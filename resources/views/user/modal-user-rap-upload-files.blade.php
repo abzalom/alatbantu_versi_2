@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
-            <div id="modal-show-spinner">
+            <div id="user-rap-file-modal-show-spinner" style="display: block">
                 <div class="modal-body text-center">
                     <div class="spinner-border" style="width: 7rem; height: 7rem;" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <div id="modal-show-content" style="display: none">
+            <div id="user-rap-file-modal-show-content" style="display: none">
                 <div class="modal-header text-bg-secondary">
                     <h1 class="modal-title fs-5" id="userUploadFileModalLabel">Modal title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

@@ -241,8 +241,8 @@
                                         <td class="text-end">{{ formatIdr($opd->pagu, 2) }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="/rap/opd?id={{ $opd->id }}" class="btn btn-primary text-nowrap"><i class="fa-solid fa-clipboard-list"></i> RAP</a>
-                                                <a href="/rap/indikator?opd={{ $opd->id }}" class="btn btn-info text-nowrap"><i class="fa-solid fa-square-plus"></i> Indikator</a>
+                                                <a href="/rap/opd?id={{ $opd->id }}" class="btn btn-primary text-nowrap" target="_blank"><i class="fa-solid fa-clipboard-list"></i> RAP</a>
+                                                <a href="/rap/indikator?opd={{ $opd->id }}" class="btn btn-info text-nowrap" target="_blank"><i class="fa-solid fa-square-plus"></i> Indikator</a>
                                             </div>
                                         </td>
                                     </tr>

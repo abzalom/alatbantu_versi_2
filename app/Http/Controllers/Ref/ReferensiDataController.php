@@ -6,7 +6,11 @@ use App\Models\Data\Lokus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Data\Sumberdana;
+use App\Models\Nomenklatur\A2Bidang;
+use App\Models\Nomenklatur\A3Program;
+use App\Models\Nomenklatur\A4Kegiatan;
 use App\Models\Nomenklatur\A5Subkegiatan;
+use App\Models\Nomenklatur\NomenklaturSikd;
 use Illuminate\Support\Facades\DB;
 
 class ReferensiDataController extends Controller
@@ -98,5 +102,52 @@ class ReferensiDataController extends Controller
             'title' => $title,
             'data' => $data,
         ]);
+    }
+
+    public function update_nomenklatur_sikd(Request $request)
+    {
+        $nomenSikd = NomenklaturSikd::all();
+
+        $notFound = [];
+
+        foreach ($nomenSikd as $sikd) {
+            // $lokal = A4Kegiatan::where('kode_kegiatan', $sikd->kode_program)->get();
+            $lokal = A5Subkegiatan::where('kode_subkegiatan', $sikd->kode_subkegiatan)->first();
+            if (!$lokal) {
+                $kode_urusan = explode('.', $sikd->kode_bidang)[0];
+                A5Subkegiatan::updateOrCreate(
+                    [
+                        'kode_subkegiatan' => $sikd->kode_subkegiatan,
+                    ],
+                    [
+                        'kode_urusan' => $kode_urusan,
+                        'kode_bidang' => $sikd->kode_bidang,
+                        'kode_program' => $sikd->kode_program,
+                        'kode_kegiatan' => $sikd->kode_kegiatan,
+                        'uraian' => $sikd->nama_subkegiatan,
+                        'indikator' => $sikd->indikator,
+                        'kinerja' => 'kosong',
+                        'satuan' => $sikd->satuan,
+                        'klasifikasi_belanja' => $sikd->klasifikasi_belanja,
+                        'rutin' => $sikd->kode_program == 'X.XX.01' ? 1 : 0,
+                        'gaji' => 0,
+                        'referensi' => 'kosong',
+                        'prioritas_pendidikan' => 0,
+                        'pendukung_pendidikan' => 0,
+                        'prioritas_kesehatan' => 0,
+                        'pendukung_kesehatan' => 0,
+                        'prioritas_pu' => 0,
+                        'pendukung_pu' => 0,
+                        'tahun' => session()->get('tahun'),
+                    ]
+                );
+            }
+            if ($lokal) {
+                $lokal->klasifikasi_belanja = $sikd->klasifikasi_belanja;
+                $lokal->save();
+            }
+        }
+        // return $notFound;
+        return redirect()->to('/ref/nomenklatur')->with('success', 'Data berhasil di update');
     }
 }

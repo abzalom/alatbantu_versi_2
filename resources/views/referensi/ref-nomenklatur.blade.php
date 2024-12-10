@@ -3,7 +3,7 @@
     <div class="row mb-3">
         <div class="col-lg">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex flex-column flex-md-row align-middle">
                     <h5 class="card-title">
                         @isset($app['desc'])
                             {{ $app['desc'] }}
@@ -11,6 +11,12 @@
                             Deskripsi Halaman
                         @endisset
                     </h5>
+                    <div class="ms-md-auto mt-3 mt-md-0">
+                        <form action="/ref/nomenklatur/update/sikd" method="post">
+                            @csrf
+                            <button type="submit" id="sinkron-data" type="button" class="btn btn-secondary">Update Dari SIKD</button>
+                        </form>
+                    </div>
                 </div>
                 <div class="card-body">
                     <form action="/ref/nomenklatur/cetak" method="get" target="_blank">
@@ -48,7 +54,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-12">
+                            <div class="col-6">
                                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak</button>
                             </div>
                         </div>
@@ -87,6 +93,5 @@
             </div>
         </div>
 
-        @include('script-home')
-        <script src="/assets/js/referensi-js/ref-nomenklatur.js"></script>
+        @include('referensi.ref-script')
 </x-app-layout-component>

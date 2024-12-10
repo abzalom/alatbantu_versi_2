@@ -59,6 +59,11 @@ class ApiRapController extends Controller
                         $data = $data->withoutGlobalScope(TahunScope::class)->where([$attribute => $request->$attribute]);
                     }
                 }
+                if ($request->has('with') || $request->with && $request->with == 'opd') {
+                    $data = $data->with([
+                        'opd' => fn($q) => $q->where('tahun', $request->tahun)
+                    ]);
+                }
                 $data = $data->with('target_aktifitas')->get();
             }
 
