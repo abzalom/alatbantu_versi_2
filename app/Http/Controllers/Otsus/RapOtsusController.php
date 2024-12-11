@@ -74,21 +74,21 @@ class RapOtsusController extends Controller
         $alokasi_otsus = [
             'Otsus 1%' => [
                 'nama' => 'BG 1%',
-                'alokasi' => $tkdd->alokasi_bg,
+                'alokasi' => $tkdd ? $tkdd->alokasi_bg : 0,
                 'pagu' => $rap_bg,
-                'selisih' => $tkdd->alokasi_bg - $rap_bg,
+                'selisih' => $tkdd ? $tkdd->alokasi_bg - $rap_bg : 0,
             ],
             'Otsus 1,25%' => [
                 'nama' => 'SG 1%',
-                'alokasi' => $tkdd->alokasi_sg,
+                'alokasi' => $tkdd ? $tkdd->alokasi_sg : 0,
                 'pagu' => $rap_sg,
-                'selisih' => $tkdd->alokasi_sg - $rap_sg,
+                'selisih' => $tkdd ? $tkdd->alokasi_sg - $rap_sg : 0,
             ],
             'DTI' => [
                 'nama' => 'DTI',
-                'alokasi' => $tkdd->alokasi_dti,
+                'alokasi' => $tkdd ? $tkdd->alokasi_dti : 0,
                 'pagu' => $rap_dti,
-                'selisih' => $tkdd->alokasi_dti - $rap_dti,
+                'selisih' => $tkdd ? $tkdd->alokasi_dti - $rap_dti : 0,
             ],
             'unknow' => [
                 'nama' => 'UNKNOW',
