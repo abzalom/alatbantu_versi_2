@@ -12,7 +12,6 @@ use App\Http\Controllers\djpk\sinkronSikdDjpkController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
 use App\Http\Controllers\Ref\ReferensiDataController;
 use App\Http\Controllers\TestController;
-use App\Http\Middleware\RoleMustAdmin;
 use App\Http\Middleware\Web\WebAuthenticateUser;
 use App\Http\Middleware\Web\WebRoleMustAdmin;
 
