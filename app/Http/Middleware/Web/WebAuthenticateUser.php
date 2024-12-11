@@ -18,7 +18,7 @@ class WebAuthenticateUser
     {
         if (!Auth::check()) {
             // Redirect user if not authenticated
-            return redirect()->to('/auth/login')->with('pesan', 'Anda harus login terlebih dahulu!');
+            return redirect()->to('/auth/login');
         }
         return $next($request);
     }
