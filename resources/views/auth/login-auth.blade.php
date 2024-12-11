@@ -32,16 +32,16 @@
                 <form method="post">
                     <div class="card-body">
                         @csrf
-                        <div class="mb-3">
-                            <label for="usernameLoginInputForm" class="form-label">Username</label>
+                        <div class="form-floating mb-3">
                             <input name="username" value="{{ old('username') }}" type="text" class="form-control @error('username') is-invalid @enderror" id="usernameLoginInputForm" placeholder="Username">
+                            <label for="usernameLoginInputForm" class="form-label">Username</label>
                             @error('username')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="passwordLoginInputForm" class="form-label">Password</label>
+                        <div class="form-floating mb-3">
                             <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" id="passwordLoginInputForm" placeholder="Password">
+                            <label for="passwordLoginInputForm" class="form-label">Password</label>
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
