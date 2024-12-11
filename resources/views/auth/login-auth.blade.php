@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/mamberamo_raya.ico" type="image/x-icon">
     <link rel="stylesheet" href="/vendors/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendors/fontawesome-free-6.5.1-web/css/all.css">
 
-    <title>Login Page</title>
+    <title>Login Page RAP-APP</title>
     <style>
         body {
             /* background: rgb(207, 223, 255); */
@@ -26,7 +27,7 @@
             @endif
             <div class="card border-primary">
                 <div class="card-header text-center">
-                    <h4 class="card-title">Login Page</h4>
+                    <h4 class="card-title">Login Page RAP-APP</h4>
                 </div>
                 <form method="post">
                     <div class="card-body">
@@ -48,9 +49,10 @@
                         <div class="mb-3">
                             <label for="selectTahunLoginForm" class="form-label">Tahun Anggaran</label>
                             <select name="tahun" class="form-control @error('tahun') is-invalid @enderror" id="selectTahunLoginForm">
-                                <option value="">Pilih...</option>
+                                <option value="2025" selected>2025</option>
+                                {{-- <option value="">Pilih...</option>
                                 <option value="2024" {{ old('tahun') && old('tahun') == 2024 ? 'selected' : '' }}>2024</option>
-                                <option value="2025" {{ old('tahun') && old('tahun') == 2025 ? 'selected' : '' }}>2025</option>
+                                <option value="2025" {{ old('tahun') && old('tahun') == 2025 ? 'selected' : '' }}>2025</option> --}}
                             </select>
                             @error('tahun')
                                 <small class="text-danger">{{ $message }}</small>
