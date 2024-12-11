@@ -12,8 +12,18 @@
     <title>Login Page RAP-APP</title>
     <style>
         body {
-            /* background: rgb(207, 223, 255); */
-            /* background: linear-gradient(0deg, rgba(63, 125, 253, 1) 0%, rgba(87, 140, 253, 1) 37%, rgba(22, 216, 255, 1) 100%); */
+            background: #f2f2f29d
+                /* background: rgb(207, 223, 255); */
+                /* background: linear-gradient(0deg, rgba(63, 125, 253, 1) 0%, rgba(87, 140, 253, 1) 37%, rgba(22, 216, 255, 1) 100%); */
+        }
+
+        .card {
+            background: none !important;
+        }
+
+        .form-input {
+            background: #ffffff !important;
+            border-radius: 15px !important;
         }
     </style>
 </head>
@@ -21,38 +31,35 @@
 <body>
 
     <div id="container" class="container">
-        <div class="col-lg-5 col-md-6 mx-auto" style="margin-top: 3%">
+        <div class="col-lg-4 col-md-6 mx-auto" style="margin-top: 3%">
             @if (session()->has('pesan'))
                 <div class="alert alert-danger">{{ session()->get('pesan') }}</div>
             @endif
-            <div class="card border-primary">
-                <div class="card-header text-center">
+            <div class="card border-0">
+                <div class="card-header text-center border-0" style="background: none !important">
                     <h4 class="card-title">Login Page RAP-APP</h4>
                 </div>
                 <form method="post">
                     <div class="card-body">
                         @csrf
                         <div class="form-floating mb-3">
-                            <input name="username" value="{{ old('username') }}" type="text" class="form-control @error('username') is-invalid @enderror" id="usernameLoginInputForm" placeholder="Username">
+                            <input name="username" value="{{ old('username') }}" type="text" class="form-control form-input @error('username') is-invalid @enderror" id="usernameLoginInputForm" placeholder="Username">
                             <label for="usernameLoginInputForm" class="form-label">Username</label>
                             @error('username')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <div class="form-floating mb-3">
-                            <input name="password" type="password" class="form-control @error('password') is-invalid @enderror" id="passwordLoginInputForm" placeholder="Password">
+                            <input name="password" type="password" class="form-control form-input @error('password') is-invalid @enderror" id="passwordLoginInputForm" placeholder="Password">
                             <label for="passwordLoginInputForm" class="form-label">Password</label>
                             @error('password')
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
                         <div class="mb-3">
-                            <label for="selectTahunLoginForm" class="form-label">Tahun Anggaran</label>
-                            <select name="tahun" class="form-control @error('tahun') is-invalid @enderror" id="selectTahunLoginForm">
+                            {{-- <label for="selectTahunLoginForm" class="form-label">Tahun Anggaran</label> --}}
+                            <select name="tahun" class="form-control form-input @error('tahun') is-invalid @enderror" id="selectTahunLoginForm">
                                 <option value="2025" selected>2025</option>
-                                {{-- <option value="">Pilih...</option>
-                                <option value="2024" {{ old('tahun') && old('tahun') == 2024 ? 'selected' : '' }}>2024</option>
-                                <option value="2025" {{ old('tahun') && old('tahun') == 2025 ? 'selected' : '' }}>2025</option> --}}
                             </select>
                             @error('tahun')
                                 <small class="text-danger">{{ $message }}</small>
@@ -63,7 +70,7 @@
                             <label class="form-check-label" for="rememberChecked">Ingat login saya</label>
                         </div>
                     </div>
-                    <div class="card-footer text-end">
+                    <div class="card-footer text-end border-0" style="background: none !important">
                         <button class="btn btn-primary">Login</button>
                     </div>
                 </form>
