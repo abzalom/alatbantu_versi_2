@@ -1,5 +1,9 @@
 <?php
 
+// Ubah konfigurasi PHP
+@ini_set('upload_max_size', '5M');
+@ini_set('post_max_size', '5M');
+
 use App\Http\Controllers\Alatbantu\BantuPaguSkpdController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
