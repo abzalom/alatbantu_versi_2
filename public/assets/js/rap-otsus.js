@@ -61,6 +61,10 @@ $(document).ready(function () {
             dataName: 'subkegiatan'
         },
         {
+            className: '.copy-targetakitifiats',
+            dataName: 'targetakitifiats'
+        },
+        {
             className: '.copy-anggaran',
             dataName: 'anggaran'
         },
@@ -69,9 +73,12 @@ $(document).ready(function () {
             dataName: 'sumberdana'
         }
     ].map(function (item) {
-        $(document).on(item.className, 'click', function () {
+        $(document).on('click', item.className, function () {
             let text = $(this).data(item.dataName);
             let id = $(this).data('id');
+            console.log(id);
+
+            $('.remove-bg-subkegiatan').removeClass('bg-warning');
             $('.remove-bg-subkegiatan').removeClass('bg-warning');
             $('.remove-bg-sumberdana').removeClass('bg-warning');
             $('.remove-bg-anggaran').removeClass('bg-warning');
@@ -83,6 +90,9 @@ $(document).ready(function () {
             }
             if ($('#show-rap-sumberdana-id-' + id).length) {
                 $('#show-rap-sumberdana-id-' + id).addClass('bg-warning');
+            }
+            if ($('#show-rap-target-atifitas-id-' + id).length) {
+                $('#show-rap-target-atifitas-id-' + id).addClass('bg-warning');
             }
             copyToClipboard(text)
         });

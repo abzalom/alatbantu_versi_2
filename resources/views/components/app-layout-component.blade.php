@@ -19,9 +19,9 @@
 
     <title>
         @isset($app['title'])
-            {{ $app['title'] }}
+            {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}{{ $app['title'] }}
         @else
-            RAP-APP
+            {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}RAP-APP
         @endisset
     </title>
 

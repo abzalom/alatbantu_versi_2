@@ -195,16 +195,25 @@
                                                     @endif
                                                 </ul>
                                             </td>
-                                            <td>{{ $rap->target_aktifitas->text }}</td>
+                                            <td id="show-rap-target-atifitas-id-{{ $rap->id }}" class="remove-bg-subkegiatan">
+                                                <button class="btn btn-sm btn-primary me-2 copy-targetakitifiats" data-targetakitifiats="{{ $rap->target_aktifitas->kode_target_aktifitas }}" data-id="{{ $rap->id }}">
+                                                    <i class="fa-regular fa-clipboard"></i>
+                                                </button>
+                                                {{ $rap->target_aktifitas->text }}
+                                            </td>
                                             <td>{{ $rap->klasifikasi_belanja }}</td>
                                             <td id="show-rap-subkegiatan-id-{{ $rap->id }}" class="remove-bg-subkegiatan">
                                                 <button class="btn btn-sm btn-primary me-2 copy-subkegiatan" data-subkegiatan="{{ $rap->kode_subkegiatan }}" data-id="{{ $rap->id }}">
                                                     <i class="fa-regular fa-clipboard"></i>
                                                 </button>
-                                                {{ $rap->text_subkegiatan }}
+                                                <span class="user-select-all">{{ $rap->kode_subkegiatan }}</span>
+                                                <span class="user-select-all">{{ $rap->nama_subkegiatan }}</span>
                                             </td>
                                             {{-- <td>{{ $rap->indikator_subkegiatan }}</td> --}}
-                                            <td id="show-rap-vol_subkeg-id-{{ $rap->id }}">{{ formatIdr($rap->vol_subkeg, 2) . ' ' . $rap->satuan_subkegiatan }}</td>
+                                            <td id="show-rap-vol_subkeg-id-{{ $rap->id }}">
+                                                <span class="user-select-all">{{ formatIdr($rap->vol_subkeg, 2) }}</span>
+                                                {{ $rap->satuan_subkegiatan }}
+                                            </td>
                                             <td id="show-rap-anggaran-id-{{ $rap->id }}" class="remove-bg-anggaran">
                                                 <div class="d-flex">
                                                     <button class="btn btn-sm btn-primary me-2 copy-anggaran" data-anggaran="{{ $rap->anggaran }}" data-id="{{ $rap->id }}">
@@ -213,7 +222,20 @@
                                                     {{ formatIdr($rap->anggaran, 2) }}
                                                 </div>
                                             </td>
-                                            <td>{{ $rap->lokasi_text }}</td>
+                                            <td>
+                                                @php
+                                                    $jsonData = json_decode($rap->lokus, true);
+                                                @endphp
+                                                @if (is_array($jsonData) && !empty($jsonData))
+                                                    @foreach ($jsonData as $lokusItem)
+                                                        @if ($loop->last)
+                                                            <span class="user-select-all">{{ $lokusItem['kampung'] }}</span>
+                                                        @else
+                                                            <span class="user-select-all">{{ $lokusItem['kampung'] }},</span>
+                                                        @endif
+                                                    @endforeach
+                                                @endif
+                                            </td>
 
                                             <td id="show-rap-sumberdana-id-{{ $rap->id }}" class="remove-bg-sumberdana">
                                                 @php
