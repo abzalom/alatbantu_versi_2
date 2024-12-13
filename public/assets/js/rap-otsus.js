@@ -425,6 +425,9 @@ $(document).ready(function () {
                             <span class="text-primary user-select-all">${lokus.kampung}</span>&nbsp;|
                         `);
                     })
+                    $('#rap-koordinat').html(`
+                        <span class="text-primary user-select-all">${rap.koordinat}</span> &nbsp;
+                    `);
 
                     $('#rap-detail-nama_opd').html(`
                         <span class="text-primary user-select-all">${rap.opd.nama_opd}</span> &nbsp;

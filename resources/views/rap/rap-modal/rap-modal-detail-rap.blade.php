@@ -51,6 +51,10 @@
                         <div class="form-control" id="rap-detail-lokus"></div>
                     </div>
                     <div class="mb-3">
+                        <label for="rap-koordinat" class="form-label">Koordinat</label>
+                        <div class="form-control" id="rap-koordinat"></div>
+                    </div>
+                    <div class="mb-3">
                         <label for="rap-detail-nama_opd" class="form-label">Organisasi/SKPD</label>
                         <div class="form-control" id="rap-detail-nama_opd"></div>
                     </div>
