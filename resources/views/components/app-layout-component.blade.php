@@ -8,6 +8,8 @@
     <meta name="tahun" content="{{ session()->get('tahun') }}">
     <meta name="user-token" content="{{ session()->get('user_token') }}">
 
+    <link rel="shortcut icon" href="/assets/img/mamberamo_raya.ico" type="image/x-icon">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/vendors/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendors/fontawesome-free-6.5.1-web/css/all.css">
