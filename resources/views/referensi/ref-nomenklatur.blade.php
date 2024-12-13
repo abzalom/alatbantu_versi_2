@@ -11,12 +11,14 @@
                             Deskripsi Halaman
                         @endisset
                     </h5>
-                    <div class="ms-md-auto mt-3 mt-md-0">
-                        <form action="/ref/nomenklatur/update/sikd" method="post">
-                            @csrf
-                            <button type="submit" id="sinkron-data" type="button" class="btn btn-secondary">Update Dari SIKD</button>
-                        </form>
-                    </div>
+                    @if (auth()->user()->hasRole('admin'))
+                        <div class="ms-md-auto mt-3 mt-md-0">
+                            <form action="/ref/nomenklatur/update/sikd" method="post">
+                                @csrf
+                                <button type="submit" id="sinkron-data" type="button" class="btn btn-secondary">Update Dari SIKD</button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
                 <div class="card-body">
                     <form action="/ref/nomenklatur/cetak" method="get" target="_blank">

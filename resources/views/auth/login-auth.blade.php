@@ -37,7 +37,8 @@
             @endif
             <div class="card border-0">
                 <div class="card-header text-center border-0" style="background: none !important">
-                    <h4 class="card-title">Login Page RAP-APP</h4>
+                    <img src="/assets/img/mamberamo_raya_resize_250_x_251.png" alt="kabupaten mamberamo raya" style="width: 70px; height: auto;">
+                    <h4 class="card-title mt-2">Login RAP-APP</h4>
                 </div>
                 <form method="post">
                     <div class="card-body">
@@ -71,6 +72,7 @@
                         </div>
                     </div>
                     <div class="card-footer text-end border-0" style="background: none !important">
+                        <a href="https://wa.me/6281247469077" target="_blank" class="me-4">Lupa Password?</a>
                         <button class="btn btn-primary">Login</button>
                     </div>
                 </form>
