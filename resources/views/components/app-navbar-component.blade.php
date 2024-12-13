@@ -1,6 +1,11 @@
 <nav class="navbar fixed-top bg-dark border-bottom navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">RAP OTSUS</a>
+        <div class="navbar-brand">
+            <img src="/assets/img/mamberamo_raya_resize_250_x_251.png" class="p-0 m-0" alt="Logo Kabupaten Mamberamo Raya" style="width: 30px; height: auto;">
+            <a href="/" class="text-decoration-none text-white">
+                RAP OTSUS
+            </a>
+        </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
