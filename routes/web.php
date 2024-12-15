@@ -12,10 +12,12 @@ use App\Http\Controllers\Otsus\OtsusController;
 use App\Http\Controllers\Otsus\RapOtsusController;
 use App\Http\Controllers\Config\ConfigAppController;
 use App\Http\Controllers\Config\ConfigOpdController;
+use App\Http\Controllers\Config\SinkronDataToLocalController;
 use App\Http\Controllers\djpk\sinkronSikdDjpkController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
 use App\Http\Controllers\Ref\ReferensiDataController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\ProductionCheck;
 use App\Http\Middleware\Web\WebAuthenticateUser;
 use App\Http\Middleware\Web\WebRoleMustAdmin;
 
@@ -126,4 +128,6 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::post('/rap/opd/upload-data-dukung', 'rap_upload_data_dukung');
         Route::post('/rap/opd/delete-data-dukung', 'rap_delete_data_dukung');
     });
+
+    Route::middleware(ProductionCheck::class)->controller(SinkronDataToLocalController::class)->group(function () {});
 });

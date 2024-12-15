@@ -640,7 +640,7 @@ class RapOtsusController extends Controller
     public function download_file(Request $request)
     {
         $file = $request->get('file');
-        $name = $request->get('name');
+        $name = str_replace('/', '_', $request->get('name'));
 
         if (!empty($name) && is_file(Storage::disk('public')->path($file))) {
             $file = Storage::disk('public')->path($file);
