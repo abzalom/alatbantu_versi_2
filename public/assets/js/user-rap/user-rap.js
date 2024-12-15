@@ -64,6 +64,8 @@ $(document).ready(function () {
             success: async function (response) {
                 if (response.success) {
                     let data = response.data[0];
+                    console.log(data);
+
                     $('#userUploadFileModalLabel').html(data.kode_subkegiatan + ' ' + data.nama_subkegiatan);
                     $('#user-rap-id-rap').val(data.id);
                     let items = ['kak', 'rab', 'pendukung1', 'pendukung2', 'pendukung3'];
@@ -79,6 +81,7 @@ $(document).ready(function () {
                                 $(`#user-rap-file-${item.filename}`).attr('disabled', true);
                                 $(`#user-rap-file-${item.filename}`).hide();
                                 $(`#user-rap-file-${item.filename}`).data('filename', item.file);
+                                $(`#user-rap-file-${item.filename}`).data('file-exists', true);
                                 $(`#${item.filename}-btn-remove`).data('filename', item.filename);
                                 $(`#${item.filename}-btn-remove`).data('id_rap', data.id);
                                 $(`#${item.filename}-name-show`).html(() => {
@@ -99,6 +102,8 @@ $(document).ready(function () {
                             }
                         })
                     }
+
+                    $('#user-rap-link-file').val(data.link_file_dukung_lain);
 
                     setTimeout(() => {
                         $('#user-rap-file-modal-show-spinner').hide();
@@ -409,20 +414,26 @@ $(document).ready(function () {
         let isValid = true;
 
         if (kak_input == '') {
-            $('#user-rap-file-kak').addClass('fa-bounce is-invalid');
-            $('#file_kak_error').html('File KAK tidak boleh kosong!');
-            setTimeout(() => {
-                $('#user-rap-file-kak').removeClass('fa-bounce');
-            }, 500);
-            isValid = false;
+            let kak_exist = $('#user-rap-file-kak').data('file-exists');
+            if (!kak_exist) {
+                $('#user-rap-file-kak').addClass('fa-bounce is-invalid');
+                $('#file_kak_error').html('File KAK tidak boleh kosong!');
+                setTimeout(() => {
+                    $('#user-rap-file-kak').removeClass('fa-bounce');
+                }, 500);
+                isValid = false;
+            }
         }
         if (rab_input == '') {
-            $('#user-rap-file-rab').addClass('fa-bounce is-invalid');
-            $('#file_rab_error').html('File RAB tidak boleh kosong!');
-            setTimeout(() => {
-                $('#user-rap-file-rab').removeClass('fa-bounce');
-            }, 500);
-            isValid = false;
+            let rab_exist = $('#user-rap-file-rab').data('file-exists');
+            if (!rab_exist) {
+                $('#user-rap-file-rab').addClass('fa-bounce is-invalid');
+                $('#file_rab_error').html('File RAB tidak boleh kosong!');
+                setTimeout(() => {
+                    $('#user-rap-file-rab').removeClass('fa-bounce');
+                }, 500);
+                isValid = false;
+            }
         }
 
         if (isValid) {

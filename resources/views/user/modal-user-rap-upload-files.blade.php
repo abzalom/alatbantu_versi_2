@@ -32,7 +32,7 @@
                         <div class="row">
                             <div id="kak-form-control" class="mb-5 col-sm-12 col-md-12 col-lg-6" #>
                                 <label for="user-rap-file-kak" class="form-label fw-bold">Pilih File Kerangka Acuan Kerja (KAK) (wajib):</label>
-                                <input name="file_kak" class="form-control" type="file" id="user-rap-file-kak" data-filename="">
+                                <input name="file_kak" class="form-control" type="file" id="user-rap-file-kak" data-filename="" data-file-exists="false">
                                 <div id="kak-exists-show" style="display: none">
                                     <div class="row">
                                         <div class="col-1 align-content-center">
@@ -47,7 +47,7 @@
                             </div>
                             <div id="rab-form-control" class="mb-5 col-sm-12 col-md-12 col-lg-6">
                                 <label for="user-rap-file-rab" class="form-label fw-bold">Pilih File Rincian Anggaran Belanja (RAB) (wajib):</label>
-                                <input name="file_rab" class="form-control" type="file" id="user-rap-file-rab" data-filename="">
+                                <input name="file_rab" class="form-control" type="file" id="user-rap-file-rab" data-filename="" data-file-exists="false">
                                 <div id="rab-exists-show" style="display: none">
                                     <div class="row">
                                         <div class="col-1 align-content-center">
@@ -62,7 +62,7 @@
                             </div>
                             <div id="pendukung1-form-control" class="mb-5 col-sm-12 col-md-12 col-lg-6">
                                 <label for="user-rap-file-pendukung1" class="form-label fw-bold">Pilih File Pendukung Lainnya (Pilihan 1):</label>
-                                <input name="file_pendukung1" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung1" data-filename="">
+                                <input name="file_pendukung1" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung1" data-filename="" data-file-exists="false">
                                 <div id="pendukung1-exists-show" style="display: none">
                                     <div class="row">
                                         <div class="col-1 align-content-center">
@@ -76,7 +76,7 @@
                             </div>
                             <div id="pendukung2-form-control" class="mb-5 col-sm-12 col-md-12 col-lg-6">
                                 <label for="user-rap-file-pendukung2" class="form-label fw-bold">Pilih File Pendukung Lainnya (Pilihan 2):</label>
-                                <input name="file_pendukung2" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung2" data-filename="">
+                                <input name="file_pendukung2" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung2" data-filename="" data-file-exists="false">
                                 <div id="pendukung2-exists-show" style="display: none">
                                     <div class="row">
                                         <div class="col-1 align-content-center">
@@ -90,7 +90,7 @@
                             </div>
                             <div id="pendukung3-form-control" class="mb-5 col-sm-12 col-md-12 col-lg-6">
                                 <label for="user-rap-file-pendukung3" class="form-label fw-bold">Pilih File Pendukung Lainnya (Pilihan 3):</label>
-                                <input name="file_pendukung3" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung3" data-filename="">
+                                <input name="file_pendukung3" class="form-control user-rap-file-pendukung" type="file" id="user-rap-file-pendukung3" data-filename="" data-file-exists="false">
                                 <div id="pendukung3-exists-show" style="display: none">
                                     <div class="row">
                                         <div class="col-1 align-content-center">
