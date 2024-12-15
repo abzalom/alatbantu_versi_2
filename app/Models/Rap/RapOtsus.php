@@ -14,10 +14,11 @@ use App\Models\Otsus\Data\B3TargetKeluaranStrategisOtsus;
 use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
 use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RapOtsus extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
     protected $casts = [
         'dana_lain' => 'array',

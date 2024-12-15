@@ -74,6 +74,7 @@ return new class extends Migration
             $table->text('catatan')->nullable();
             $table->year('tahun')->nullable();
             $table->timestamps();
+            $table->dropSoftDeletes();
         });
     }
 
