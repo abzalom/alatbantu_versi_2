@@ -65,7 +65,7 @@
                             <div class="col-lg-6 col-sm-6">
                                 <div class="mb-3">
                                     <label for="edit-rap-vol_subkeg" class="form-label">Target</label>
-                                    <input name="vol_subkeg" type="number" class="form-control" id="edit-rap-vol_subkeg" placeholder="Target">
+                                    <input name="vol_subkeg" type="text" class="form-control" id="edit-rap-vol_subkeg" placeholder="Target">
                                     <span class="text-danger" id="vol_subkeg_error"></span>
                                 </div>
                             </div>
