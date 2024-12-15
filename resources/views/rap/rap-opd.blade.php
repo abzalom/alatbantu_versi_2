@@ -201,7 +201,7 @@
                                                 </button>
                                                 {{ $rap->target_aktifitas->text }}
                                             </td>
-                                            <td>{{ $rap->subkegiatan->klasifikasi_belanja }}</td>
+                                            <td>{{ $rap->klasifikasi_belanja }}</td>
                                             <td id="show-rap-subkegiatan-id-{{ $rap->id }}" class="remove-bg-subkegiatan">
                                                 <button class="btn btn-sm btn-primary me-2 copy-subkegiatan" data-subkegiatan="{{ $rap->kode_subkegiatan }}" data-id="{{ $rap->id }}">
                                                     <i class="fa-regular fa-clipboard"></i>

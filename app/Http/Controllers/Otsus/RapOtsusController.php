@@ -140,7 +140,7 @@ class RapOtsusController extends Controller
         $opd = Opd::with([
             'raps.target_aktifitas',
             'raps' => fn($q) => $q->where('rap_otsuses.tahun', session()->get('tahun'))->orderBy('kode_subkegiatan'),
-            'raps.subkegiatan',
+            // 'raps.subkegiatan',
         ])
             ->withSum([
                 'raps as alokasi_bg' => function ($q) {

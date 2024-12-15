@@ -3,8 +3,10 @@
 namespace App\Jobs;
 
 use App\Models\Nomenklatur\NomenklaturSikd;
+use App\Models\Rap\RapOtsus;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Log;
 
 class SinkronDataSikd implements ShouldQueue
 {
@@ -41,6 +43,15 @@ class SinkronDataSikd implements ShouldQueue
     public function nomenklatur()
     {
         foreach ($this->data as $item) {
+            $rap = RapOtsus::where('kode_subkegiatan', $item['kode_subkegiatan'])->get();
+
+            if ($rap->isNotEmpty()) { // Gunakan isNotEmpty() sebagai alternatif yang lebih jelas
+                foreach ($rap as $r) {
+                    Log::info("Updating RapOtsus", ['data' => $r->toArray()]);
+                    $r->klasifikasi_belanja = $item['klasifikasi_belanja'];
+                    $r->save();
+                }
+            }
             $create = NomenklaturSikd::updateOrCreate(
                 [
                     'id_subkegiatan' => $item['id_subkegiatan'],
