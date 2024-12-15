@@ -99,9 +99,9 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::controller(sinkronSikdDjpkController::class)->group(function () {
             Route::get('/sinkron/djpk/sikd/{jenis}', 'request_sikd_djpk');
             Route::get('/sinkron/djpk/sikd/{jenis}/{sumberdana}', 'request_sumberdana_sikd_djpk');
-            Route::post('/sinkron/djpk/sikd/{jenis}/{sumberdana}', 'insert_raquest_sumberdana_sikd_djpk');
-            Route::post('/sinkron/djpk/sikd/request/create-link', 'create_link_sikd_djpk');
-            Route::post('/sinkron/djpk/sikd/request/update-link', 'update_link_sikd_djpk');
+            // Route::post('/sinkron/djpk/sikd/{jenis}/{sumberdana}', 'insert_raquest_sumberdana_sikd_djpk');
+            Route::post('/sinkron/djpk/insert/create-link', 'create_link_sikd_djpk');
+            Route::post('/sinkron/djpk/insert/update-link', 'update_link_sikd_djpk');
         });
 
         Route::get('/portfolio/aboutme', function () {

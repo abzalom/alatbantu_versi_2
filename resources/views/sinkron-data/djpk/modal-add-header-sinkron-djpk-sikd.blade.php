@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5" id="headerSinkronDjpkSikdModalLabel">Header Request</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="/sinkron/djpk/sikd/request/create-link" method="POST">
+            <form action="/sinkron/djpk/insert/create-link" method="POST">
                 <div class="modal-body">
                     @csrf
                     <div class="mb-3">

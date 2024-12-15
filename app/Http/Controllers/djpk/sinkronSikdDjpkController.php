@@ -162,6 +162,6 @@ class sinkronSikdDjpkController extends Controller
 
     public function insert_raquest_sumberdana_sikd_djpk(Request $request)
     {
-        return $request->all();
+        return __METHOD__;
     }
 }
