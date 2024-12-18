@@ -66,9 +66,11 @@
                                             @endif
                                         </td>
                                         <td>{{ $user->name }}</td>
-                                        <td>{{ $user->username }} @if ($user->deleted_at)
+                                        <td>
+                                            @if ($user->deleted_at)
                                                 <i class="fa-solid fa-user-lock"></i>
                                             @endif
+                                            {{ $user->username }}
                                         </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
