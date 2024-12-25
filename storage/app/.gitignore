@@ -1,3 +1,4 @@
-data/
-file-rap/
-!app/*
+*
+!private/
+!public/
+!.gitignore
