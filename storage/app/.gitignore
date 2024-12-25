@@ -1,6 +1,5 @@
-*
 !private/
 !public/
 !.gitignore
-
 !/public/app/menus.json
+*
