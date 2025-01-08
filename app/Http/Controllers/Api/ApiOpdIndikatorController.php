@@ -119,23 +119,33 @@ class ApiOpdIndikatorController extends Controller
             ], 422);
         }
 
+        $unik_dana = $request->sumberdana_indikator == 'Otsus 1%' ? 'bg' : ($request->sumberdana_indikator == 'Otsus 1,25%' ? 'sg' : 'dti');
+
+        $data = [
+            'kode_unik_opd_tag_otsus' => $opd->kode_unik_opd . '-' . $target->kode_target_aktifitas . '-' . $unik_dana,
+            'kode_unik_opd' => $opd->kode_unik_opd,
+            'kode_opd' => $opd->kode_opd,
+            'kode_tema' => $target->kode_tema,
+            'kode_program' => $target->kode_program,
+            'kode_keluaran' => $target->kode_keluaran,
+            'kode_aktifitas' => $target->kode_aktifitas,
+            'kode_target_aktifitas' => $target->kode_target_aktifitas,
+            'satuan' => $target->satuan,
+            'volume' => $request->volume_indikator,
+            'sumberdana' => $request->sumberdana_indikator,
+            'catatan' => $request->has('catatan') ? $request->catatan : null,
+            'tahun' => $request->tahun,
+        ];
+
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'Data berhasil di simpan!',
+        //     'alert' => 'success',
+        //     'data' => $data,
+        // ], 200);
+
         try {
             DB::beginTransaction();
-            $data = [
-                'kode_unik_opd_tag_otsus' => $opd->kode_unik_opd . '-' . $target->kode_target_aktifitas,
-                'kode_unik_opd' => $opd->kode_unik_opd,
-                'kode_opd' => $opd->kode_opd,
-                'kode_tema' => $target->kode_tema,
-                'kode_program' => $target->kode_program,
-                'kode_keluaran' => $target->kode_keluaran,
-                'kode_aktifitas' => $target->kode_aktifitas,
-                'kode_target_aktifitas' => $target->kode_target_aktifitas,
-                'satuan' => $target->satuan,
-                'volume' => $request->volume_indikator,
-                'sumberdana' => $request->sumberdana_indikator,
-                'catatan' => $request->has('catatan') ? $request->catatan : null,
-                'tahun' => $request->tahun,
-            ];
             $create = OpdTagOtsus::create($data);
             DB::commit();
             return response()->json([
