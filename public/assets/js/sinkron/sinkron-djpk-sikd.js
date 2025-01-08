@@ -97,7 +97,6 @@ $(document).ready(function () {
             </tr>
         `);
 
-
         let totalData = data.length;
         let no = 0;
 
@@ -139,6 +138,56 @@ $(document).ready(function () {
             }
         }, 1000);
         // Sembunyikan spinner dan tampilkan tabel setelah data selesai dimuat
+    }
+
+    function appendRap(data) {
+        $('#table-header-show-data-sinkron').html(`
+            <tr>
+                <th>id</th>
+                <th>Klasifikasi Belanja</th>
+                <th>Sub Kegiatan</th>
+                <th>Indikator</th>
+                <th>Target</th>
+                <th>Anggaran</th>
+                <th>Lokasi</th>
+            </tr>
+        `);
+        let totalData = data.length;
+        let no = 0;
+
+        setTimeout(() => {
+            for (const item of data) {
+                no++;
+                console.log(typeof item.lokus);
+
+                $('#table-body-show-data-sinkron').append(`
+                    <tr>
+                        <td>${item.id_rap}</td>
+                        <td>${item.klasifikasi_belanja}</td>
+                        <td class="text-wrap" style="width: 2px !important;">
+                            ${item.text_subkegiatan}
+                        </td>
+                        <td class="text-wrap">
+                            ${item.indikator_keluaran}
+                        </td>
+                        <td class="text-wrap">
+                            ${item.target_keluaran + ' ' + item.satuan}
+                        </td>
+                        <td class="text-wrap">
+                            ${item.pagu_alokasi}
+                        </td>
+                        <td>
+                            ${ item.lokus.map((item) => item).join(', ') }
+                        </td>
+                    </tr>
+                `);
+
+                if (no == totalData) {
+                    $('#spinner-tampil-data-show').hide();
+                    $('#table-show-data-sinkron').show();
+                }
+            }
+        }, 1000);
     }
 
     $('#request-select-data').on('change', function (params) {
@@ -197,14 +246,20 @@ $(document).ready(function () {
                         jenis: req_jenis,
                         data: JSON.stringify(data),
                     })
-
                     if (sinkronData.success) {
                         console.log(sinkronData);
-                        appendNomenklatur(sinkronData.data.data);
+                        console.log(req_jenis);
+
+                        if (req_jenis === 'nomenklatur') {
+                            appendNomenklatur(sinkronData.data.data);
+                        }
+
+                        if (req_jenis === 'rap') {
+                            appendRap(sinkronData.data.data);
+                        }
                     } else {
                         showToast('Data gagal tersimpan!', 'danger');
                     }
-
                 });
             }
         }

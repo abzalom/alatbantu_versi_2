@@ -9,14 +9,15 @@ use Illuminate\Support\Facades\Validator;
 
 class sinkronSikdDjpkController extends Controller
 {
-    public $tableName = 'request_sikd_djpks';
+    public $tabelSikdRequest = 'request_sikd_djpks';
+    public $tableSikdRap = 'sikd_publish_raps';
 
     public function request_sikd_djpk(Request $request, $jenis)
     {
         if ($jenis !== 'nomenklatur' && $jenis !== 'rap') {
             return redirect()->to('/sinkron/djpk/sikd/nomenklatur');
         }
-        $data = DB::table($this->tableName)
+        $data = DB::table($this->tabelSikdRequest)
             ->where('jenis', $jenis)
             ->where('tahun', session()->get('tahun'))
             ->get();
@@ -30,18 +31,18 @@ class sinkronSikdDjpkController extends Controller
         ]);
     }
 
-    public function request_sumberdana_sikd_djpk(Request $request, $jenis, $jenis_dana)
+    public function request_sumberdana_sikd_djpk(Request $request, $jenis, $sumberdana)
     {
-        // return $jenis_dana;
+        // return $sumberdana;
         if ($jenis !== 'nomenklatur' && $jenis !== 'rap') {
             return redirect()->to('/sinkron/djpk/sikd/nomenklatur');
         }
-        if ($jenis_dana !== 'bg' && $jenis_dana !== 'sg' && $jenis_dana !== 'dti') {
+        if ($sumberdana !== 'bg' && $sumberdana !== 'sg' && $sumberdana !== 'dti') {
             return redirect()->to('/sinkron/djpk/sikd/nomenklatur');
         }
-        $data = DB::table($this->tableName)
+        $data = DB::table($this->tabelSikdRequest)
             ->where('jenis', $jenis)
-            ->where('sumberdana', $jenis_dana)
+            ->where('sumberdana', $sumberdana)
             ->where('tahun', session()->get('tahun'))
             ->get();
 
@@ -54,7 +55,7 @@ class sinkronSikdDjpkController extends Controller
             ],
             'data' => $data,
             'jenisRequest' => $jenis,
-            'jenis_dana' => $jenis_dana,
+            'sumberdana' => $sumberdana,
         ]);
     }
 
@@ -63,7 +64,7 @@ class sinkronSikdDjpkController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:' . $this->tableName . ',name',
+                'name' => 'required|unique:' . $this->tabelSikdRequest . ',name',
                 'sumberdana' => 'required|in:bg,sg,dti',
                 'jenis' => 'required|in:nomenklatur,rap',
                 'method' => 'required|in:get,post',
@@ -92,7 +93,7 @@ class sinkronSikdDjpkController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan')
                 ->withErrors($validator);
         }
-        DB::table($this->tableName)->insert([
+        DB::table($this->tabelSikdRequest)->insert([
             'name' => $request->name,
             'sumberdana' => $request->sumberdana,
             'jenis' => $request->jenis,
@@ -112,7 +113,7 @@ class sinkronSikdDjpkController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:' . $this->tableName . ',name,' . $request->id,
+                'name' => 'required|unique:' . $this->tabelSikdRequest . ',name,' . $request->id,
                 'sumberdana' => 'required|in:bg,sg,dti',
                 'jenis' => 'required|in:nomenklatur,rap',
                 'method' => 'required|in:get,post',
@@ -141,11 +142,11 @@ class sinkronSikdDjpkController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan')
                 ->withErrors($validator);
         }
-        $data = DB::table($this->tableName)->find($request->id);
+        $data = DB::table($this->tabelSikdRequest)->find($request->id);
         if (!$data) {
             return redirect()->back()->with('error', 'Data gagal tersimpan!');
         }
-        DB::table($this->tableName)
+        DB::table($this->tabelSikdRequest)
             ->where('id', $request->id)
             ->update([
                 'name' => $request->name,

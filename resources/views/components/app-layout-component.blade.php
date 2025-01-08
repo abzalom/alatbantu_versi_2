@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/vendors/select2-4.0.rc/css/select2.min.css">
     <link rel="stylesheet" href="/vendors/select2-bootstrap-5-theme-1.3.0/select2-bootstrap-5-theme.min.css">
     <link rel="stylesheet" href="/vendors/summernote-0.8.18-dist/summernote.min.css">
+    <link rel="stylesheet" href="/assets/styles/app_style.css">
 
     <title>
         @isset($app['title'])
@@ -61,11 +62,11 @@
 <body>
 
 
-    <div style="margin-bottom: 15vh">
-        <x-app-navbar-component></x-app-navbar-component>
-    </div>
+    {{-- <div style="margin-bottom: 15vh">
+    </div> --}}
+    <x-app-navbar-component></x-app-navbar-component>
 
-    <div class="mx-4" style="margin-bottom: 20vh">
+    <div id="content" class="mx-4" style="margin-bottom: 20vh; margin-top: 15vh">
         {{ $slot }}
     </div>
 
@@ -130,6 +131,24 @@
     </footer>
 
     <script>
+        const navbar = document.getElementById("top-navbar");
+        const content = document.getElementById("content");
+
+        function adjustContentMargin() {
+            const navbarHeight = navbar.offsetHeight; // Get the current height of the navbar
+            content.style.marginTop = `${navbarHeight + 20}px`; // Set the margin-top of content dynamically
+        }
+
+        // Adjust on load
+        adjustContentMargin();
+
+        // Adjust on window resize
+        window.addEventListener("resize", adjustContentMargin);
+
+        // Optional: Observe changes in the navbar (if the height changes dynamically)
+        const observer = new ResizeObserver(adjustContentMargin);
+        observer.observe(navbar);
+
         $.ajaxSetup({
             headers: {
                 'x-token': userToken

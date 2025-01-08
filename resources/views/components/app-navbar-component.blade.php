@@ -1,4 +1,4 @@
-<nav class="navbar fixed-top bg-dark border-bottom navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
+<nav id="top-navbar" class="navbar fixed-top bg-dark border-bottom navbar-expand-lg bg-body-tertiary mb-4" data-bs-theme="dark">
     <div class="container-fluid">
         <div class="navbar-brand">
             <img src="/assets/img/mamberamo_raya_resize_250_x_251.png" class="p-0 m-0" alt="Logo Kabupaten Mamberamo Raya" style="width: 30px; height: auto;">

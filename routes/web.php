@@ -13,6 +13,7 @@ use App\Http\Controllers\Otsus\RapOtsusController;
 use App\Http\Controllers\Config\ConfigAppController;
 use App\Http\Controllers\Config\ConfigOpdController;
 use App\Http\Controllers\Config\SinkronDataToLocalController;
+use App\Http\Controllers\Data\DataPublishSikdController;
 use App\Http\Controllers\djpk\sinkronSikdDjpkController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
 use App\Http\Controllers\Ref\ReferensiDataController;
@@ -115,6 +116,10 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::controller(RekapIndikatorOtsusController::class)->group(function () {
             Route::get('/rekap/indikator', 'rekap_indikator');
             Route::get('/rekap/indikator/rap', 'rekap_rap_indikator');
+        });
+
+        Route::controller(DataPublishSikdController::class)->group(function () {
+            Route::get('/data/sikd/rap/otsus_bg', 'rap_otsus_bg');
         });
 
         Route::controller(TestController::class)->group(function () {
