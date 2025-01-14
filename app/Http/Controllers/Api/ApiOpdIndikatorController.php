@@ -119,7 +119,19 @@ class ApiOpdIndikatorController extends Controller
             ], 422);
         }
 
-        $unik_dana = $request->sumberdana_indikator == 'Otsus 1%' ? 'bg' : ($request->sumberdana_indikator == 'Otsus 1,25%' ? 'sg' : 'dti');
+        $unik_dana = null;
+
+        if ($request->sumberdana_indikator === 'otsus 1%') {
+            $unik_dana = 'bg';
+        }
+
+        if ($request->sumberdana_indikator === 'otsus 1,25%') {
+            $unik_dana = 'sg';
+        }
+
+        if ($request->sumberdana_indikator === 'DTI') {
+            $unik_dana = 'dti';
+        }
 
         $data = [
             'kode_unik_opd_tag_otsus' => $opd->kode_unik_opd . '-' . $target->kode_target_aktifitas . '-' . $unik_dana,

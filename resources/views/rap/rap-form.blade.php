@@ -31,7 +31,10 @@
                                     <select name="opd_tag_otsus" class="form-control select2 @error('opd_tag_otsus') is-invalid @enderror" id="rap-select-target-aktifitas" data-placeholder="Pilih...">
                                         <option></option>
                                         @foreach ($opd->tag_otsus as $tagging)
-                                            <option value="{{ $tagging->id }}" data-kode="{{ $tagging->kode_target_aktifitas }}" data-sumberdana="{{ $tagging->sumberdana }}" data-volume="{{ $tagging->volume }}" data-satuan="{{ $tagging->satuan }}">{{ $tagging->target_aktifitas->text }}</option>
+                                            @php
+                                                $tagging_text = $tagging->target_aktifitas->text . ' (' . $tagging->sumberdana . ')';
+                                            @endphp
+                                            <option value="{{ $tagging->id }}" data-kode="{{ $tagging->kode_target_aktifitas }}" data-sumberdana="{{ $tagging->sumberdana }}" data-volume="{{ $tagging->volume }}" data-satuan="{{ $tagging->satuan }}">{{ $tagging_text }}</option>
                                         @endforeach
                                     </select>
                                     @error('opd_tag_otsus')
