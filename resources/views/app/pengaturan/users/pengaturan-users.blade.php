@@ -42,12 +42,12 @@
                             <thead class="table-info">
                                 <tr>
                                     <th>#</th>
-                                    <th>SKPD</th>
                                     <th>Nama</th>
                                     <th>Username</th>
                                     <th>Email</th>
                                     <th>Telepon</th>
                                     <th>Roles</th>
+                                    <th>SKPD</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -58,13 +58,6 @@
                                 @foreach ($data as $user)
                                     <tr>
                                         <td>{{ $no++ }}</td>
-                                        <td>
-                                            @if (!$user->deleted_at)
-                                                <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tangging SKPD">
-                                                    <button class="btn btn-sm btn-primary btn-tagging-skpd-user" value="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#userTaggingSkpdModal"><i class="fa-solid fa-list"></i></button>
-                                                </div>
-                                            @endif
-                                        </td>
                                         <td>{{ $user->name }}</td>
                                         <td>
                                             @if ($user->deleted_at)
@@ -81,6 +74,13 @@
                                                 @endphp
                                                 <span class="badge text-bg-{{ $color }}">{{ $role }}</span>
                                             @endforeach
+                                        </td>
+                                        <td>
+                                            @if (!$user->deleted_at)
+                                                <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tangging SKPD">
+                                                    <button class="btn btn-sm btn-primary btn-tagging-skpd-user" value="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#userTaggingSkpdModal"><i class="fa-solid fa-list"></i></button>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="text-center" style="width: 2%">
                                             <div class="d-flex gap-1 justify-content-center">
