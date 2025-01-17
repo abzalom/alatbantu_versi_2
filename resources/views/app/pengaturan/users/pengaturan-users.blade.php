@@ -75,7 +75,7 @@
                                                 <span class="badge text-bg-{{ $color }}">{{ $role }}</span>
                                             @endforeach
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             @if (!$user->deleted_at)
                                                 <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tangging SKPD">
                                                     <button class="btn btn-sm btn-primary btn-tagging-skpd-user" value="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#userTaggingSkpdModal"><i class="fa-solid fa-list"></i></button>
