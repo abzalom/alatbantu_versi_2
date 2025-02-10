@@ -284,11 +284,12 @@ class ApiUsersController extends Controller
                 'alert' => 'danger',
             ], 400);
         }
+        // return $request->all();
         try {
             DB::beginTransaction();
-            $user = User::find($request->id);
-            if ($user) {
-                $user->delete();
+            $users = User::whereIn('id', $request->id);
+            if ($users) {
+                $users->delete();
                 DB::commit();
                 return response()->json([
                     'success' => true,
@@ -324,7 +325,7 @@ class ApiUsersController extends Controller
         }
         try {
             DB::beginTransaction();
-            $user = User::onlyTrashed()->find($request->id);
+            $user = User::onlyTrashed()->whereIn('id', $request->id);
             if ($user) {
                 $user->restore();
                 DB::commit();

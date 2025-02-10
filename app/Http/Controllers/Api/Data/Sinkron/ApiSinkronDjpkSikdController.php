@@ -42,16 +42,16 @@ class ApiSinkronDjpkSikdController extends Controller
 
         $seond = (int) $endOfSegmentUrl / 1000;
         $timeStamp = Carbon::createFromTimestamp($seond);
-        $date = $timeStamp->format('Y-m-d H:i:s');
-        $year = $timeStamp->format('Y');
+        // $date = $timeStamp->format('Y-m-d H:i:s');
+        // $year = $timeStamp->format('Y');
 
         if ($response->successful()) {
             $responseData = json_decode($response->body(), true);
 
             $returnData = $responseData['data'];
             if ($data->jenis == 'rap') {
-                $dataWithYear = array_map(function ($item) use ($year) {
-                    $item['tahun'] = $year;
+                $dataWithYear = array_map(function ($item) use ($data) {
+                    $item['tahun'] = $data->tahun;
                     return $item;
                 }, $responseData['data']);
                 $returnData = $dataWithYear;
@@ -115,6 +115,7 @@ class ApiSinkronDjpkSikdController extends Controller
             foreach ($array as $item) {
                 $kode_subkegiatan_full = $item['kode_urusan'] . '.' . $item['kode_bidang_urusan'] . '.' . $item['kode_program'] . '.' . $item['kode_kegiatan'] . '.' . $item['kode_subkegiatan'];
                 $data[] = [
+                    'sumberdana' => $request->sumberdana,
                     'id_rap' => $item['id'],
                     'rencanaanggaranprogram_id' => $item['rencanaanggaranprogram_id'],
                     'subkegiatan_id' => $item['subkegiatan_id'],
@@ -136,7 +137,6 @@ class ApiSinkronDjpkSikdController extends Controller
                     'keterangan' => $item['keterangan'],
                     'created_at' => $item['created_at'],
                     'updated_at' => $item['updated_at'],
-                    'tagging' => $item['tagging'],
                     'link_file_dukung' => $item['link_file_dukung'],
                     'helper_id' => $item['helper_id'],
                     'aktivitas_id' => $item['aktivitas_id'],

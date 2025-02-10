@@ -1,4 +1,18 @@
 $(document).ready(function () {
+
+    function userChecked() {
+        let checked = $('.user-selected:checked').map(function () {
+            return this.value;
+        }).get(); // `.get()` mengubah objek jQuery menjadi array JavaScript
+        return checked;
+    }
+
+    if (userChecked().length) {
+        $('#user-action').show();
+    } else {
+        $('#user-action').hide();
+    }
+
     $('#search-user-input').on('focus', function () {
         $(this).removeClass('border-primary');
     });
@@ -300,7 +314,6 @@ $(document).ready(function () {
         let dataForm = $(this).serialize();
         console.log(dataForm);
 
-
         $('#modal-lock-user-show-spinner').show();
         $('#modal-lock-user-show-content').hide();
 
@@ -360,7 +373,7 @@ $(document).ready(function () {
             type: "POST",
             url: "/api/data/user/unlock-user",
             data: {
-                id: user_id
+                id: [user_id]
             },
             dataType: "json", // Perbaikan: Sesuaikan dengan format data dari server
             success: function (response) {
@@ -608,7 +621,125 @@ $(document).ready(function () {
                 },
             });
         }
+    });
 
+    $('.user-selected').on('change', function () {
+        if ($(this).is(':checked')) {
+            console.log($(this).val());
+        }
+        if (userChecked().length) {
+            $('#user-action').show();
+        } else {
+            $('#user-action').hide();
+        }
+        console.log(userChecked());
+    });
+
+    $('#select-user-all').on('change', function () {
+        if (this.checked) {
+            $('.user-selected').each(function () {
+                this.checked = true;
+                $('#user-action').show();
+            });
+        } else {
+            $('.user-selected').each(function () {
+                this.checked = false;
+                $('#user-action').hide();
+            });
+        }
+    });
+
+    $('#btn-lock-all-user').on('click', function () {
+        $('#modal-lock-all-user-show-spinner').hide();
+        $('#modal-lock-all-user-show-content').show();
+    });
+
+    $('#form-lock-all-user').on('submit', function (e) {
+        e.preventDefault();
+        let user_selected_id = userChecked();
+        console.log(user_selected_id);
+
+
+        $('#modal-lock-user-show-spinner').show();
+        $('#modal-lock-user-show-content').hide();
+
+        $.ajax({
+            type: "POST",
+            url: "/api/data/user/lock-user",
+            data: {
+                id: user_selected_id
+            },
+            dataType: "JSON",
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, response.alert);
+                    setTimeout(() => {
+                        $('#modal-lock-user-all-show-spinner').show();
+                        $('#modal-lock-user-all-show-content').hide();
+                    }, 500);
+                    setTimeout(() => {
+                        return window.location.href = '/config/user';
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        $('#modal-lock-user-all-show-spinner').hide();
+                        $('#modal-lock-user-all-show-content').show();
+                    }, 500);
+                    showToast('Gagal reset password!', 'danger');
+                }
+            },
+            error: function (xhr) {
+                let errorResponse = handleAjaxError(xhr);
+                showToast(errorResponse.message, errorResponse.alert);
+                setTimeout(() => {
+                    $('#modal-lock-user-all-show-spinner').hide();
+                    $('#modal-lock-user-all-show-content').show();
+                }, 500);
+            },
+            complete: function () {
+                setTimeout(() => {
+                    $('#modal-lock-user-all-show-spinner').show();
+                    $('#modal-lock-user-all-show-content').hide();
+                }, 500);
+            }
+        });
+    });
+
+    $('#btn-unlock-all-user').on('click', function () {
+        user_id = userChecked();
+        if (!confirm('Aktifkan kembali user yang dipilih?')) {
+            return; // Batalkan jika user tidak mengonfirmasi
+        }
+        $('#unlockAllUserModal').show();
+        $.ajax({
+            type: "POST",
+            url: "/api/data/user/unlock-user",
+            data: {
+                id: user_id
+            },
+            dataType: "json", // Perbaikan: Sesuaikan dengan format data dari server
+            success: function (response) {
+                if (response.success) {
+                    showToast(response.message, response.alert);
+                    setTimeout(() => {
+                        $('#unlockAllUserModal').modal('hide');
+                        window.location.href = '/config/user';
+                    }, 500);
+                } else {
+                    showToast('Gagal mengaktifkan user!', 'danger');
+                }
+            },
+            error: function (xhr) {
+                let errorResponse = handleAjaxError(xhr);
+                showToast(errorResponse.message, errorResponse.alert);
+            },
+            complete: function () {
+                // Tutup modal setelah permintaan selesai
+                setTimeout(() => {
+                    $('#unlockAllUserModal').modal('hide');
+                }, 500);
+            }
+        });
     });
 
 });

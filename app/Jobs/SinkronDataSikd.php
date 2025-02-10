@@ -87,6 +87,7 @@ class SinkronDataSikd implements ShouldQueue
                     'id_rap' => $item['id_rap']
                 ],
                 [
+                    'sumberdana' => $item['sumberdana'],
                     'rencanaanggaranprogram_id' => $item['rencanaanggaranprogram_id'],
                     'subkegiatan_id' => $item['subkegiatan_id'],
                     'subkegiatan_history_id' => $item['subkegiatan_history_id'],
@@ -107,7 +108,6 @@ class SinkronDataSikd implements ShouldQueue
                     'keterangan' => $item['keterangan'],
                     'created_at' => $item['created_at'],
                     'updated_at' => $item['updated_at'],
-                    'tagging' => $item['tagging'],
                     'link_file_dukung' => $item['link_file_dukung'],
                     'helper_id' => $item['helper_id'],
                     'aktivitas_id' => $item['aktivitas_id'],

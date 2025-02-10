@@ -37,11 +37,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-2">
+                        <div class="col-sm" id="user-action" style="display: none">
+                            <div class="btn-group">
+                                {{-- <button class="btn btn-sm btn-warning"><i class="fa-solid fa-arrows-rotate"></i></button> --}}
+                                <button id="btn-unlock-all-user" class="btn btn-sm btn-info"><i class="fa-solid fa-lock-open"></i></button>
+                                <button id="btn-lock-all-user" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#lockAllUserModal"><i class="fa-solid fa-user-lock"></i></button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped">
                             <thead class="table-info">
                                 <tr>
-                                    <th>#</th>
+                                    <th># <input type="checkbox" class="form-check-input" name="user_select_all" id="select-user-all"> </th>
                                     <th>Nama</th>
                                     <th>Username</th>
                                     <th>Email</th>
@@ -57,13 +66,12 @@
                                 @endphp
                                 @foreach ($data as $user)
                                     <tr>
-                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $no++ }} <input type="checkbox" class="form-check-input user-selected" name="user_select_all" value="{{ $user->id }}"> </td>
                                         <td>{{ $user->name }}</td>
                                         <td>
                                             @if ($user->deleted_at)
                                                 <i class="fa-solid fa-user-lock"></i>
-                                            @endif
-                                            {{ $user->username }}
+                                            @endif {{ $user->username }}
                                         </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
@@ -118,5 +126,9 @@
     @include('app.pengaturan.users.modal-lock-pengaturan-user')
     @include('app.pengaturan.users.modal-unlock-pengaturan-user')
     @include('app.pengaturan.users.modal-tagging-skpd-pengaturan-user')
+
+    @include('app.pengaturan.users.modal-lock-all-user')
+    @include('app.pengaturan.users.modal-unlock-all-user')
+
     @include('app.pengaturan.users.script-pengaturan-user')
 </x-app-layout-component>

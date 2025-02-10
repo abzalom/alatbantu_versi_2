@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('sikd_publish_raps', function (Blueprint $table) {
             $table->id();
+            $table->enum("sumberdana", ['bg', 'sg', 'dti'])->nullable()->index();
             $table->bigInteger("id_rap")->nullable()->index();
             $table->bigInteger("rencanaanggaranprogram_id")->nullable()->index();
             $table->bigInteger("subkegiatan_id")->nullable()->index();
@@ -32,7 +33,6 @@ return new class extends Migration
             $table->string("jadwal_kegiatan_awal")->nullable()->index();
             $table->string("jadwal_kegiatan_akhir")->nullable()->index();
             $table->text("keterangan")->nullable();
-            $table->string("tagging")->nullable()->index();
             $table->text("link_file_dukung")->nullable();
             $table->bigInteger("helper_id")->nullable()->index();
             $table->bigInteger("aktivitas_id")->nullable()->index();

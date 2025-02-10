@@ -119,7 +119,7 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         });
 
         Route::controller(DataPublishSikdController::class)->group(function () {
-            Route::get('/data/sikd/rap/otsus_bg', 'rap_otsus_bg');
+            Route::get('/data/sikd/rap/{sumberdana}', 'rap_otsus_bg');
         });
 
         Route::controller(TestController::class)->group(function () {
