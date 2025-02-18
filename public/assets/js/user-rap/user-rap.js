@@ -1,5 +1,8 @@
 $(document).ready(function () {
 
+    console.log(jadwal_aktif);
+
+
     $(`.btn-remove-file`).mouseover(function () {
         $(this).css('cursor', 'pointer');
     });

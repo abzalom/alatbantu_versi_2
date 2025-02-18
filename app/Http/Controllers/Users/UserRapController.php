@@ -93,6 +93,7 @@ class UserRapController extends Controller
             'klasBel' => $klasBel,
             'lokasi' => $lokasi,
             'opd_id' => $opd_id,
+            'jadwal' => session('jadwal_aktif'),
         ]);
     }
 }

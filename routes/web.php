@@ -12,15 +12,24 @@ use App\Http\Controllers\Otsus\OtsusController;
 use App\Http\Controllers\Otsus\RapOtsusController;
 use App\Http\Controllers\Config\ConfigAppController;
 use App\Http\Controllers\Config\ConfigOpdController;
+use App\Http\Controllers\Config\ScheduleController;
+use App\Http\Controllers\Config\SessionController;
 use App\Http\Controllers\Config\SinkronDataToLocalController;
 use App\Http\Controllers\Data\DataPublishSikdController;
 use App\Http\Controllers\djpk\sinkronSikdDjpkController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
 use App\Http\Controllers\Ref\ReferensiDataController;
 use App\Http\Controllers\TestController;
+use App\Http\Middleware\PrivateRouteMiddleware;
 use App\Http\Middleware\ProductionCheck;
 use App\Http\Middleware\Web\WebAuthenticateUser;
 use App\Http\Middleware\Web\WebRoleMustAdmin;
+
+Route::middleware(PrivateRouteMiddleware::class)->group(function () {
+    Route::controller(SessionController::class)->group(function () {
+        Route::post('/private/session/set_timezone', 'set_timezone');
+    });
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/auth/login', 'login_auth');
@@ -56,6 +65,14 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 
         Route::controller(UserController::class)->group(function () {
             Route::get('/config/user', 'user_config');
+        });
+
+        Route::controller(ScheduleController::class)->group(function () {
+            Route::get('/config/schedule', 'schedule_config');
+            Route::post('/config/schedule', 'action_schedule');
+            Route::post('/config/schedule/new', 'new_schedule');
+            Route::post('/config/schedule/update', 'update_schedule');
+            Route::post('/config/schedule/lock', 'lock_schedule');
         });
 
         Route::controller(OtsusController::class)->group(function () {

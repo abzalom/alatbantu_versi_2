@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="icon" href="/assets/img/mamberamo_raya.ico" type="image/x-icon">
@@ -84,7 +85,19 @@
     <script src="/vendors/jquery-3.7.1.min.js"></script>
     <script src="/vendors/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
 
-    <script></script>
+    <script>
+        // $.ajax({
+        //     url: "/private/session/set_timezone",
+        //     type: 'POST',
+        //     data: JSON.stringify({
+        //         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        //     }),
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        //     }
+        // });
+    </script>
 
 
     @if (session()->has('success') || session()->has('error') || session()->has('info'))

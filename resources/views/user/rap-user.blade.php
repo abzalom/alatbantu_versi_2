@@ -56,16 +56,16 @@
                         @endforeach
                     </div>
 
-                    {{-- <div class="mb-3 mt-3">
-                        <button id="test-token" class="btn btn-danger">Test Token</button>
-                    </div> --}}
-
                     <div class="table-responsive">
                         <table class="table table-sm table-bordered table-striped" style="font-size: 90%">
                             <thead class="table-dark align-middle">
                                 <tr>
                                     <th class="text-center">#</th>
-                                    <th></th>
+                                    @if ($jadwal['status'] == '1' && now()->diffInDays($jadwal['selesai']) >= 0)
+                                        @if ($jadwal['penginputan'] == '1')
+                                            <th></th>
+                                        @endif
+                                    @endif
                                     <th>KLASIFIKASI BELANJA</th>
                                     <th>SUB KEGIATAN</th>
                                     <th>INDIKATOR</th>
@@ -91,13 +91,17 @@
                                     @endphp
                                     <tr>
                                         <td class="text-center">{{ $no++ }}</td>
-                                        <td class="text-center">
-                                            <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary btn-user-edit-rap text-nowrap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#userEditRapModal">
-                                                    <i class="fa-solid fa-pen-to-square"></i> Edit RAP
-                                                </button>
-                                            </div>
-                                        </td>
+                                        @if ($jadwal['status'] == '1' && now()->diffInDays($jadwal['selesai']) >= 0)
+                                            @if ($jadwal['penginputan'] == '1')
+                                                <td class="text-center">
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-primary btn-user-edit-rap text-nowrap" value="{{ $rap->id }}" data-bs-toggle="modal" data-bs-target="#userEditRapModal">
+                                                            <i class="fa-solid fa-pen-to-square"></i> Edit RAP
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            @endif
+                                        @endif
                                         <td>{{ $rap->klasifikasi_belanja }}</td>
                                         <td>{{ $rap->text_subkegiatan }}</td>
                                         <td>{{ $rap->indikator_subkegiatan }}</td>
