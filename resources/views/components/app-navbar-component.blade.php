@@ -3,7 +3,7 @@
         <div class="navbar-brand">
             <img src="/assets/img/mamberamo_raya_resize_250_x_251.png" class="p-0 m-0" alt="Logo Kabupaten Mamberamo Raya" style="width: 30px; height: auto;">
             <a href="/" class="text-decoration-none text-white">
-                E-RAPOT
+                e-RAPOT MR
             </a>
         </div>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
