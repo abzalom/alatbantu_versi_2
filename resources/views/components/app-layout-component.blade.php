@@ -108,7 +108,7 @@
         </div> --}}
 
         <div id="card_timer">
-            <div id="card_timer_body">
+            {{-- <div id="card_timer_body">
                 <div class="countdown_section">
                     <div id="days" class="value">00</div>
                     <div class="countdown_label">HARI</div>
@@ -131,60 +131,60 @@
         </div>
 
         <div class="row">
+        </div> --}}
+            {{ $slot }}
         </div>
-        {{ $slot }}
-    </div>
 
-    <div class="toast-container position-fixed top-0 end-0 p-3 mt-5">
-        <div id="alertBsToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
-            <div id="bodyBsToast" class="toast-body mx-0">
+        <div class="toast-container position-fixed top-0 end-0 p-3 mt-5">
+            <div id="alertBsToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+                <div id="bodyBsToast" class="toast-body mx-0">
+                </div>
             </div>
         </div>
-    </div>
 
-    <x-app-footer-component></x-app-footer-component>
+        <x-app-footer-component></x-app-footer-component>
 
-    <script>
-        const navbar = document.getElementById("top-navbar");
-        const content = document.getElementById("content");
+        <script>
+            const navbar = document.getElementById("top-navbar");
+            const content = document.getElementById("content");
 
-        function adjustContentMargin() {
-            const navbarHeight = navbar.offsetHeight; // Get the current height of the navbar
-            content.style.marginTop = `${navbarHeight + 20}px`; // Set the margin-top of content dynamically
-        }
-
-        // Adjust on load
-        adjustContentMargin();
-
-        // Adjust on window resize
-        window.addEventListener("resize", adjustContentMargin);
-
-        // Optional: Observe changes in the navbar (if the height changes dynamically)
-        const observer = new ResizeObserver(adjustContentMargin);
-        observer.observe(navbar);
-
-        $.ajaxSetup({
-            headers: {
-                'x-token': userToken
+            function adjustContentMargin() {
+                const navbarHeight = navbar.offsetHeight; // Get the current height of the navbar
+                content.style.marginTop = `${navbarHeight + 20}px`; // Set the margin-top of content dynamically
             }
-        });
-        let auth_username = @json(auth()->user()->username);
-        let auth = @json(auth()->user());
 
-        function copyToClipboard(text) {
-            // Create a temporary input element to hold the text
-            const tempInput = document.createElement('input');
-            tempInput.value = text; // Set the value to the text you want to copy
-            document.body.appendChild(tempInput); // Append it to the document body
-            tempInput.select(); // Select the text
-            document.execCommand('copy'); // Execute the copy command
-            document.body.removeChild(tempInput); // Remove the temporary input element
-        }
+            // Adjust on load
+            adjustContentMargin();
 
-        // Fungsi untuk menampilkan toast notifikasi
-        function showToast(message, alertType) {
-            var alertIcon = alertType == 'success' ? '<i class="fa-solid fa-circle-check fa-lg fa-bounce"></i>' : '<i class="fa-solid fa-triangle-exclamation fa-lg fa-beat"></i>';
-            $('#bodyBsToast').html(`
+            // Adjust on window resize
+            window.addEventListener("resize", adjustContentMargin);
+
+            // Optional: Observe changes in the navbar (if the height changes dynamically)
+            const observer = new ResizeObserver(adjustContentMargin);
+            observer.observe(navbar);
+
+            $.ajaxSetup({
+                headers: {
+                    'x-token': userToken
+                }
+            });
+            let auth_username = @json(auth()->user()->username);
+            let auth = @json(auth()->user());
+
+            function copyToClipboard(text) {
+                // Create a temporary input element to hold the text
+                const tempInput = document.createElement('input');
+                tempInput.value = text; // Set the value to the text you want to copy
+                document.body.appendChild(tempInput); // Append it to the document body
+                tempInput.select(); // Select the text
+                document.execCommand('copy'); // Execute the copy command
+                document.body.removeChild(tempInput); // Remove the temporary input element
+            }
+
+            // Fungsi untuk menampilkan toast notifikasi
+            function showToast(message, alertType) {
+                var alertIcon = alertType == 'success' ? '<i class="fa-solid fa-circle-check fa-lg fa-bounce"></i>' : '<i class="fa-solid fa-triangle-exclamation fa-lg fa-beat"></i>';
+                $('#bodyBsToast').html(`
             <div class="container mx-0">
                 <div class="row">
                     <div class="col-2 d-flex align-items-center" style="font-size: 180%">
@@ -197,72 +197,72 @@
                 </div>
             </div>
         `);
-            $('#alertBsToast').removeClass().addClass(`toast align-items-center text-bg-${alertType} border-0`);
-            $('#alertBsToast').toast('show');
-        }
-
-        // Fungsi untuk menangani error response dari AJAX
-        function handleAjaxError(xhr) {
-            try {
-                return JSON.parse(xhr.responseText);
-            } catch (e) {
-                console.error('Response bukan JSON:', xhr.responseText);
-                return {
-                    message: 'Terjadi kesalahan, silakan coba lagi.'
-                };
+                $('#alertBsToast').removeClass().addClass(`toast align-items-center text-bg-${alertType} border-0`);
+                $('#alertBsToast').toast('show');
             }
-        }
 
-        // Fungsi untuk menampilkan animasi perubahan warna latar belakang
-        function highlightRow(rowId) {
-            let $row = document.querySelector(rowId);
-            $row.querySelectorAll('td').forEach(function(td) {
-                td.style.backgroundColor = '#e2f7a9';
+            // Fungsi untuk menangani error response dari AJAX
+            function handleAjaxError(xhr) {
+                try {
+                    return JSON.parse(xhr.responseText);
+                } catch (e) {
+                    console.error('Response bukan JSON:', xhr.responseText);
+                    return {
+                        message: 'Terjadi kesalahan, silakan coba lagi.'
+                    };
+                }
+            }
+
+            // Fungsi untuk menampilkan animasi perubahan warna latar belakang
+            function highlightRow(rowId) {
+                let $row = document.querySelector(rowId);
+                $row.querySelectorAll('td').forEach(function(td) {
+                    td.style.backgroundColor = '#e2f7a9';
+                });
+
+                setTimeout(function() {
+                    $row.querySelectorAll('td').forEach(function(td) {
+                        td.style.backgroundColor = '';
+                    });
+                }, 1000);
+            }
+
+            $('.select2').each(function() {
+                $(this).select2({
+                    theme: "bootstrap-5",
+                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                    placeholder: $(this).data('placeholder'),
+                    dropdownParent: $(this).parent(),
+                    allowClear: true,
+                })
             });
 
-            setTimeout(function() {
-                $row.querySelectorAll('td').forEach(function(td) {
-                    td.style.backgroundColor = '';
-                });
-            }, 1000);
-        }
+            $('.select2-multiple').each(function() {
+                $(this).select2({
+                    theme: "bootstrap-5",
+                    width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+                    placeholder: $(this).data('placeholder'),
+                    dropdownParent: $(this).parent(),
+                    closeOnSelect: false,
+                    allowClear: true,
+                })
+            });
 
-        $('.select2').each(function() {
-            $(this).select2({
-                theme: "bootstrap-5",
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                dropdownParent: $(this).parent(),
-                allowClear: true,
-            })
-        });
+            const toastTrigger = document.getElementById('liveToastBtn')
+            const toastLiveExample = document.getElementById('liveToast')
 
-        $('.select2-multiple').each(function() {
-            $(this).select2({
-                theme: "bootstrap-5",
-                width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
-                placeholder: $(this).data('placeholder'),
-                dropdownParent: $(this).parent(),
-                closeOnSelect: false,
-                allowClear: true,
-            })
-        });
+            if (toastTrigger) {
+                const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                toastTrigger.addEventListener('click', () => {
+                    toastBootstrap.show()
+                })
+            }
 
-        const toastTrigger = document.getElementById('liveToastBtn')
-        const toastLiveExample = document.getElementById('liveToast')
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+            const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+        </script>
 
-        if (toastTrigger) {
-            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-            toastTrigger.addEventListener('click', () => {
-                toastBootstrap.show()
-            })
-        }
-
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    </script>
-
-    @include('alert.bs.toast')
+        @include('alert.bs.toast')
 </body>
 
 </html>
