@@ -1,0 +1,740 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+
+:root {
+    /* Warna Primary */
+    --primary-light: #007bff;
+    --primary-dark: #0056b3;
+    --primary-border: #004494;
+
+    /* Warna Secondary */
+    --secondary-light: #6c757d;
+    --secondary-dark: #4e555b;
+    --secondary-border: #3a3f44;
+
+    /* Warna Success */
+    --success-light: #28a745;
+    --success-dark: #1e7e34;
+    --success-border: #155724;
+
+    /* Warna Danger */
+    --danger-light: #dc3545;
+    --danger-dark: #a71d2a;
+    --danger-border: #7d0f1b;
+
+    /* Warna Info */
+    --info-light: #17a2b8;
+    --info-dark: #117a8b;
+    --info-border: #0f6674;
+
+    /* Warna Warning */
+    --warning-light: #ffc107;
+    --warning-dark: #d39e00;
+    --warning-border: #b8860b;
+
+    /* Warna Dark */
+    --dark-light: #343a40;
+    --dark-dark: #23272b;
+    --dark-border: #1d2124;
+
+    /* Warna Light */
+    --light-light: #f8fcff;
+    --light-dark: #d7e3ef;
+    --light-border: #91b8df;
+
+    /* Warna Purple */
+    --purple-light: #6f42c1;
+    --purple-dark: #5936a5;
+    --purple-border: #4a2b85;
+
+    /* Warna Teal */
+    --teal-light: #20c997;
+    --teal-dark: #198f74;
+    --teal-border: #146c5d;
+
+    --bg-color: #ffffff;
+    --text-color: #333;
+    --card-bg: #f8f9fa;
+    --card-border: #ddd;
+
+    --card-text-warning: #856404;
+    --card-text-dark: #1b1e21;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #dcdcdc;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+header {
+    height: 70px;
+    background: #3e387d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: #fff;
+}
+
+header a {
+    color: #fff;
+}
+
+#burger-menu {
+    color: #fff;
+    font-size: 40px;
+    margin-right: 20px;
+    display: none;
+}
+
+#header-logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+#header-logo img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+#header-logo a {
+    text-decoration: none;
+}
+
+#header-logo a:hover {
+    color: #dedede;
+}
+
+#header-end {
+    display: flex;
+    gap: 25px;
+}
+
+#header-end a {
+    text-decoration: none;
+}
+
+/* Sidebar */
+#container aside {
+    width: 230px;
+    background: #f8f9fa;
+    transition: width 0.3s;
+    position: fixed;
+    height: 100%;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+#sidebar-header {
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 10px 0 10px;
+    border-bottom: 1.8px solid #bababa;
+    font-weight: 500;
+}
+
+#sidebar-header span {
+    font-size: 1rem;
+    display: block;
+    color: #575757;
+    margin-bottom: 10px;
+}
+
+#container aside::-webkit-scrollbar {
+    width: 6px;
+}
+
+#container aside::-webkit-scrollbar-thumb {
+    background: #b7bdc2bd;
+    border-radius: 10px;
+}
+
+#container aside::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+#container aside.expanded {
+    width: 230px;
+}
+
+#container aside ul {
+    list-style: none;
+    padding: 0;
+}
+
+#container aside ul:not(.sidebar-submenu) {
+    margin-bottom: 100px;
+}
+
+#container aside ul:not(.sidebar-submenu) li:not(.sidebar-submenu-link):last-child {
+    margin-bottom: 100px;
+}
+
+#container aside ul li:not(.sidebar-submenu-link) {
+    border-bottom: 1px solid #cbcbcb;
+    cursor: pointer;
+}
+
+#container aside ul li .sidebar-menu-link {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#container aside ul li .sidebar-menu-link .icon-menu {
+    /* border: 1px solid #000; */
+    width: 50px;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+}
+
+
+#container aside ul li.menu-item .sidebar-menu-link a .icon-expand {
+    margin-right: 20px;
+    transition: transform 0.3s ease-in-out;
+    /* transform: rotate(90deg); */
+}
+
+#container aside ul li.menu-item .sidebar-menu-link a .icon-expand.rotate {
+    transform: rotate(-90deg);
+}
+
+/* 
+#container aside ul li.menu-item .sidebar-menu-link a .icon-expand.rotate.icon-active {
+    transform: rotate(90deg);
+} */
+
+#container aside ul li .sidebar-menu-link a {
+    /* border: 1px solid #000; */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+}
+
+#container aside ul li:not(.sidebar-submenu-link):hover {
+    background: #cdd0d3;
+}
+
+#container aside ul li.active:not(.sidebar-submenu-link) {
+    background: #000dff;
+    color: #fff;
+}
+
+#container aside ul li.active:not(.sidebar-submenu-link) a {
+    color: #fff;
+}
+
+#container aside ul.sidebar-submenu {
+    background: #e3e3e3;
+}
+
+#container aside ul.sidebar-submenu li {
+    border: 0;
+}
+
+#container aside ul.sidebar-submenu li a {
+    /* border: 1px solid #000; */
+    display: block;
+    padding: 8px 0 8px 42.8px;
+    color: #000;
+    text-decoration: none;
+}
+
+#container aside ul.sidebar-submenu li.sidebar-submenu-link a {
+    background: #e3e3e3;
+    color: #000;
+}
+
+#container aside ul.sidebar-submenu li.sidebar-submenu-link a.active {
+    background: #bdbdbd;
+    color: #5833fd;
+}
+
+#container aside ul.sidebar-submenu li a:hover {
+    background: #7682f1;
+    color: #fff;
+}
+
+#container main {
+    height: 100%;
+    overflow: auto;
+    transition: margin-left 0.3s;
+    position: absolute;
+    margin-left: 230px;
+    width: calc(100% - 230px);
+    padding: 25px;
+    padding-bottom: 100px;
+    /* font-size: 14px; */
+}
+
+/* Grid Layout untuk Cards */
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Style Dasar untuk Card */
+.dashboard-card {
+    font-size: 50%;
+    /*  */
+    border-radius: 10px;
+    padding: 20px;
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.204);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    width: calc(50% - 10px);
+    /* Agar pas dalam 2 kolom */
+    max-width: 230px;
+    /* Batasi ukuran */
+    background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+}
+
+.dashboard-card h5 {
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    font-size: 12px;
+}
+
+/* Efek Hover */
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Garis Samping Kiri */
+.dashboard-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    background-color: var(--border-color);
+}
+
+/* Variasi Warna (Menggunakan CSS Variables) */
+.dashboard-card-primary {
+    --bg-light: var(--primary-light);
+    --bg-dark: var(--primary-dark);
+    --border-color: var(--primary-border);
+}
+
+.dashboard-card-secondary {
+    --bg-light: var(--secondary-light);
+    --bg-dark: var(--secondary-dark);
+    --border-color: var(--secondary-border);
+}
+
+.dashboard-card-success {
+    --bg-light: var(--success-light);
+    --bg-dark: var(--success-dark);
+    --border-color: var(--success-border);
+}
+
+.dashboard-card-danger {
+    --bg-light: var(--danger-light);
+    --bg-dark: var(--danger-dark);
+    --border-color: var(--danger-border);
+}
+
+.dashboard-card-info {
+    --bg-light: var(--info-light);
+    --bg-dark: var(--info-dark);
+    --border-color: var(--info-border);
+}
+
+.dashboard-card-warning {
+    --bg-light: var(--warning-light);
+    --bg-dark: var(--warning-dark);
+    --border-color: var(--warning-border);
+}
+
+.dashboard-card-dark {
+    --bg-light: var(--dark-light);
+    --bg-dark: var(--dark-dark);
+    --border-color: var(--dark-border);
+}
+
+.dashboard-card-light {
+    --bg-light: var(--light-light);
+    --bg-dark: var(--light-dark);
+    --border-color: var(--light-border);
+    color: #333;
+}
+
+.dashboard-card-purple {
+    --bg-light: var(--purple-light);
+    --bg-dark: var(--purple-dark);
+    --border-color: var(--purple-border);
+}
+
+.dashboard-card-teal {
+    --bg-light: var(--teal-light);
+    --bg-dark: var(--teal-dark);
+    --border-color: var(--teal-border);
+}
+
+#schedule-float {
+    display: none;
+}
+
+#schedule-float-label {
+    font-size: 12px;
+    color: #333;
+    text-align: center;
+}
+
+#timer-float {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#timer-float .timer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 5px;
+}
+
+#timer-float .timer .count {
+    border-radius: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#timer-float .timer .label {
+    font-size: 12px;
+}
+
+/* Style RAP ALL untuk Admin */
+
+.klas-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 20px;
+}
+
+.klas-card {
+    /* padding: 0 !important; */
+    width: 200px;
+}
+
+.klas-card-body {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.klas-card {
+    border-left: 4px solid #4b71fb !important;
+}
+
+.klas-card-body {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.klas-content-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.klas-content-text h5 {
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    /* Mencegah teks turun ke baris berikutnya */
+    overflow: hidden;
+    /* Menyembunyikan teks yang melebihi lebar */
+    text-overflow: ellipsis;
+    /* Menampilkan "..." jika teks terlalu panjang */
+    max-width: 140px;
+    /* Sesuaikan lebar maksimum agar teks terpotong */
+}
+
+.klas-content-text h4 {
+    margin: 0;
+    display: flex;
+    font-size: 12px;
+}
+
+.klas-icon {
+    color: #738ab2;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+/* Akhir dari style untuk RAP ALL untuk ADMIN */
+
+
+
+/* style untuk RAP OPD */
+
+.custom-container {
+    display: flex;
+    gap: 15px;
+    max-width: 80%;
+    margin: auto;
+    margin-bottom: 15px;
+}
+
+/* Card Container */
+.custom-card-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 200px;
+    /* Lebih kecil */
+}
+
+/* Card */
+.custom-card {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    padding: 8px 12px;
+    /* Padding lebih kecil */
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    /* Font lebih kecil */
+}
+
+/* Icon dalam Card */
+.custom-card-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    /* Icon lebih kecil */
+    margin-right: 8px;
+}
+
+/* Warna icon berdasarkan kategori */
+.green {
+    background-color: #2d995b;
+}
+
+.red {
+    background-color: #c0392b;
+}
+
+.yellow {
+    background-color: #f1c40f;
+}
+
+.black {
+    background-color: #2d3436;
+}
+
+.blue {
+    background-color: #1abc9c;
+}
+
+/* Table Container */
+.custom-table-container {
+    flex: 1;
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table */
+.custom-table {
+    width: 100%;
+    font-size: 12px;
+    /* Font lebih kecil */
+    border-collapse: collapse;
+}
+
+/* Table Row */
+.custom-table tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-table tr:nth-child(even) {
+    background-color: #ececec;
+}
+
+/* Table Data */
+.custom-table td {
+    padding: 6px 8px;
+}
+
+/* Badge Persentase */
+.custom-badge {
+    padding: 3px 6px;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+/* Akhir dari Style Untuk RAP OPD */
+
+@media (max-width: 780px) {
+    #burger-menu {
+        display: block;
+    }
+
+    #header-logo {
+        margin-right: auto;
+    }
+
+    #container aside {
+        width: 0;
+        z-index: 100;
+        ;
+    }
+
+    #container main {
+        margin-left: 0;
+        width: 100%;
+        padding-top: 90px;
+    }
+
+    #schedule-header {
+        display: none;
+    }
+
+    #schedule-float {
+        display: flex;
+        background-color: #ffffff;
+        border: thin solid #ddd;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 99;
+        position: fixed;
+        top: 70px;
+        padding: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        height: 60px;
+        width: 200px;
+        border-radius: 0 0 5px 5px;
+    }
+
+    .dashboard-card {
+        width: calc(50% - 10px) !important;
+    }
+
+    .custom-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .custom-card-container {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .custom-card {
+        width: 180px;
+    }
+
+    .table-container {
+        width: 100%;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    #container aside {
+        width: 0;
+    }
+
+    #container main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #burger-menu {
+        display: block;
+    }
+
+    .dashboard-card {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+}
+
+@media (max-width: 520px) {
+    #header-logo {
+        margin-right: auto;
+    }
+
+    #header-logo a {
+        display: none;
+    }
+
+    #header-logo img {
+        display: block;
+    }
+}
+
+@media (max-width: 480px) {
+    #burger-menu {
+        margin-right: 0;
+    }
+
+    #header-logo {
+        display: none;
+    }
+}
+
+@media (max-width: 375px) {
+    #header-logo a {
+        display: none;
+    }
+
+    #header-logo img {
+        display: block;
+    }
+}

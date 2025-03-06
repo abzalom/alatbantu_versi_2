@@ -16,7 +16,7 @@ class ScheduleController extends Controller
             'user_create',
             'user_update',
         ])
-            ->withTrashed()
+            ->orderBy('created_at', 'desc')
             ->get();
         // return $jadwals;
         return view('app.pengaturan.schedule.pengaturan-schedule', [
@@ -30,12 +30,13 @@ class ScheduleController extends Controller
 
     public function new_schedule(Request $request)
     {
+        // return $request->all();
         $request->validate(
             [
-                'tahapan' => 'required|in:ranwal, rancangan, final, perubahan, pelaporan',
+                'tahapan' => 'required|in:ranwal,rancangan,final,perubahan,pelaporan',
                 'keterangan' => 'required',
                 'tahun' => 'required|numeric',
-                'mulai' => 'required|date_time_format:Y-m-d\TH:i',
+                'mulai' => 'required|date_format:Y-m-d\TH:i',
                 'selesai' => 'required|date_format:Y-m-d\TH:i',
             ],
             [
@@ -49,9 +50,21 @@ class ScheduleController extends Controller
             ]
         );
 
-        $cekAktif = Schedule::where('status', 1)->get();
+        $shceduleClass = Schedule::class;
+
+        $cekAktif = $shceduleClass::where('status', 1)->get();
         if ($cekAktif->isNotEmpty()) {
             return redirect()->back()->with('error', 'Jadwal aktif masih ada');
+        }
+
+
+        $duplikat = $shceduleClass::where([
+            'tahapan' => $request->tahapan,
+            'tahun' => $request->tahun,
+        ])->exists();
+
+        if ($duplikat) {
+            return redirect()->back()->with('error', "Jadwal dengan tahapan {$request->tahapan} dan tahun {$request->tahun} sudah ada");
         }
 
         $user = User::find($request->created_by);

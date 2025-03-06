@@ -2,8 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="tahun" content="{{ session()->get('tahun') }}">
@@ -11,63 +10,53 @@
 
     <link rel="shortcut icon" href="/assets/img/mamberamo_raya.ico" type="image/x-icon">
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/vendors/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendors/fontawesome-free-6.5.1-web/css/all.css">
     <link rel="stylesheet" href="/vendors/select2-4.0.rc/css/select2.min.css">
     <link rel="stylesheet" href="/vendors/select2-bootstrap-5-theme-1.3.0/select2-bootstrap-5-theme.min.css">
     <link rel="stylesheet" href="/vendors/summernote-0.8.18-dist/summernote.min.css">
-    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/styles/app_style.css">
+
+    <script type="module" src="/assets/js/class/Schedule.js"></script>
+
     <title>
         @isset($app['title'])
             {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}{{ $app['title'] }}
         @else
-            {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}eRAPOT-MR
+            {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}RAP-APP
         @endisset
     </title>
 
     <script>
         var cient_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        console.log(cient_timezone);
         (async () => {
             const {
                 default: Schedule
             } = await import(`${window.location.origin}/assets/js/class/Schedule.js`);
-            let schedule = new Schedule(new Date(jadwal_aktif.selesai ? jadwal_aktif.selesai : 0).getTime());
+            let schedule = new Schedule(new Date(jadwal_aktif.selesai).getTime());
             let x = setInterval(function() {
                 let time = schedule.updateCountDown();
-                if (time.countDownDate) {
-                    $('.count-down-time').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
-                    $('#card_timer_title').html(`
-                        ${capWords(jadwal_aktif.tahapan)} <br> ${jadwal_aktif.keterangan}
-                    `);
-                    $('#schedule-float-label').html('Tahapan ' + capWords(jadwal_aktif.tahapan));
-                    $('#timer-header-label').html(`Tahapan :  ${capWords(jadwal_aktif.tahapan)} <small class="badge text-bg-secondary">${jadwal_aktif.status ? 'berlangsung' : ''}</small>`);
-                    $('#days > .count').html(time.days);
-                    $('#hours > .count').html(time.hours);
-                    $('#minutes > .count').html(time.minutes);
-                    $('#seconds > .count').html(time.seconds);
-                    $('#timer-header').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
-                    if (time.distance < 0) {
-                        clearInterval(x);
-                        $('.count-down-time').html('Waktu Habis');
-                        $('#days > .count').html('00');
-                        $('#hours > .count').html('00');
-                        $('#minutes > .count').html('00');
-                        $('#seconds > .count').html('00');
-                        $('#timer-header').html(`waktu habis`);
-                        $('#timer-float-info').show();
-                        $('#timer-float').hide();
-                        $('#timer-float-info').html('waktu habis');
-                    }
+                $('.count-down-time').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
+                $('#card_timer_title').html(`
+                    ${jadwal_aktif.tahapan} <br> ${jadwal_aktif.keterangan}
+                `);
+                $('#days').html(time.days);
+                $('#hours').html(time.hours);
+                $('#minutes').html(time.minutes);
+                $('#seconds').html(time.seconds);
+                if (time.distance < 0) {
+                    clearInterval(x);
+                    $('.count-down-time').html('Waktu Habis');
+                    $('#days').html('00');
+                    $('#hours').html('00');
+                    $('#minutes').html('00');
+                    $('#seconds').html('00');
                 }
                 if (!time.countDownDate) {
                     clearInterval(x);
-                    $('#timer-float').hide();
-                    $('#timer-float-info').show();
-                    $('#timer-float-info').html('Tidak Ada Jadwal Aktif');
                     $('.count-down-time').html('Tidak Ada Jadwal Aktif');
-                    $('#schedule-float-label').html('Belum ada tahapan');
-                    $('#timer-header-label').html(`Tahapan : belum ada tahapan`);
-                    $('#timer-header').html(`Tidak Ada Jadwal Aktif`);
                 }
             }, 1000);
         })();
@@ -99,10 +88,6 @@
             return integerPart; // Jika tidak, tampilkan hanya bagian integer
         }
 
-        function capWords(text) {
-            return text.replace(/\b\w/g, (char) => char.toUpperCase());
-        }
-
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const tahunAnggaran = document.querySelector('meta[name="tahun"]').getAttribute('content');
         const userToken = document.querySelector('meta[name="user-token"]').getAttribute('content');
@@ -111,18 +96,36 @@
 </head>
 
 <body>
-    <x-app-navbar-component />
-    <div id="container">
-        <x-app-sidebar-component :app="$app" />
-        <main class="schedule-active">
-            @include('mobile-component.schedule-float')
-            {{ $slot }}
-            <div id="content">
+    <x-app-navbar-component></x-app-navbar-component>
+
+    <div id="content" class="mx-4" style="margin-bottom: 20vh; margin-top: 15vh">
+        <div id="card_timer">
+            <div id="card_timer_body">
+                <div class="countdown_section">
+                    <div id="days" class="value">00</div>
+                    <div class="countdown_label">HARI</div>
+                </div>
+                <div class="countdown_section">
+                    <div id="hours" class="value">00</div>
+                    <div class="countdown_label">JAM</div>
+                </div>
+                <div class="countdown_section">
+                    <div id="minutes" class="value">00</div>
+                    <div class="countdown_label">MENIT</div>
+                </div>
+                <div class="countdown_section">
+                    <div id="seconds" class="value">00</div>
+                    <div class="countdown_label">DETIK</div>
+                </div>
+                <h2 id="card_timer_title" class="card_title">
+                </h2>
             </div>
-        </main>
+        </div>
+
+        <div class="row">
+        </div>
+        {{ $slot }}
     </div>
-    <footer></footer>
-    @include('alert.bs.toast')
 
     <div class="toast-container position-fixed top-0 end-0 p-3 mt-5">
         <div id="alertBsToast" class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
@@ -130,10 +133,27 @@
             </div>
         </div>
     </div>
-    <script src="/assets/js/new_template/home.js"></script>
+
+    <x-app-footer-component></x-app-footer-component>
+
     <script>
         const navbar = document.getElementById("top-navbar");
         const content = document.getElementById("content");
+
+        function adjustContentMargin() {
+            const navbarHeight = navbar.offsetHeight; // Get the current height of the navbar
+            content.style.marginTop = `${navbarHeight + 20}px`; // Set the margin-top of content dynamically
+        }
+
+        // Adjust on load
+        adjustContentMargin();
+
+        // Adjust on window resize
+        window.addEventListener("resize", adjustContentMargin);
+
+        // Optional: Observe changes in the navbar (if the height changes dynamically)
+        const observer = new ResizeObserver(adjustContentMargin);
+        observer.observe(navbar);
 
         $.ajaxSetup({
             headers: {
@@ -233,6 +253,8 @@
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     </script>
+
+    @include('alert.bs.toast')
 </body>
 
 </html>

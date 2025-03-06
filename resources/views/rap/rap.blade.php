@@ -149,6 +149,17 @@
         </div>
     </div>
 
+    {{-- <div class="klas-card-container">
+        <div class="card klas-card" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Belanja card Pemberdayaan Ekonomi Masyarakat">
+            <div class="card-body klas-card-body">
+                <div class="klas-content-text text-nowrap">
+                    <h5>Belanja Pendidikan</h5>
+                    <h4>Rp. 22.301.784.000,00</h4>
+                </div>
+                <i class="fa-solid fa-chart-simple klas-icon"></i>
+            </div>
+        </div>
+    </div> --}}
 
 
     <div class="row mb-3">

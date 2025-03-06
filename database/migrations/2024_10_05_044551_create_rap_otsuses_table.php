@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('kode_unik_opd')->index();
             $table->string('kode_unik_opd_tag_bidang')->index();
             $table->string('kode_unik_opd_tag_otsus')->index();
+            $table->string('kode_unik_sikd')->index();
             $table->string('kode_opd')->index();
             $table->string('kode_tema')->index();
             $table->string('kode_program')->index();
+            $table->string('kode_kegiatan')->index();
             $table->string('kode_keluaran')->index();;
             $table->string('kode_aktifitas')->index();
             $table->string('kode_target_aktifitas')->index();

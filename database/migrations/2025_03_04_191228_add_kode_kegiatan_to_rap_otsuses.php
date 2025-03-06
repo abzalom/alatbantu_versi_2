@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('a2_bidangs', function (Blueprint $table) {
-            $table->id();
-            $table->string('kode_urusan')->index();
-            $table->string('kode_bidang')->index();
-            $table->text('uraian');
-            $table->year('tahun');
-            $table->timestamps();
+        Schema::table('rap_otsuses', function (Blueprint $table) {
+            $table->string('kode_kegiatan')->index()->after('kode_program');
         });
     }
 
@@ -26,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('a2_bidangs');
+        Schema::table('rap_otsuses', function (Blueprint $table) {
+            $table->dropColumn('kode_kegiatan');
+        });
     }
 };

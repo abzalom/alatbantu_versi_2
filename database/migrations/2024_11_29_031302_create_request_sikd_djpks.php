@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->year('tahun');
             $table->string('url');
-            $table->string('param_key');
-            $table->string('param_value');
+            $table->text('param_key');
+            $table->text('param_value');
             $table->enum('method', ['get', 'post']);
             $table->enum('jenis', ['nomenklatur', 'rap']);
             $table->enum('sumberdana', ['bg', 'sg', 'dti']);

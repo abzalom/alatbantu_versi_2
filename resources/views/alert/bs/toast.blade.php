@@ -4,7 +4,7 @@
         // $alert_icon = session()->has('success') ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-triangle-exclamation"></i>';
     @endphp
 
-    <div class="toast-container position-fixed top-0 end-0 p-3 mt-5">
+    <div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 9999">
         <div id="alertToast" class="toast align-items-center {{ $bg_alert }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
             <div class="toast-body mx-0">
                 <div class="container mx-0">

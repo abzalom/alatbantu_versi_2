@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('kode_bidang')->index();
             $table->string('kode_program')->index();
             $table->string('kode_kegiatan')->index();
-            $table->string('kode_subkegiatan')->unique();
+            $table->string('kode_subkegiatan')->index();
             $table->text('uraian');
             $table->text('indikator');
             $table->text('kinerja');

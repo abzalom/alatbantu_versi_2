@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Data\Opd;
 use App\Models\Nomenklatur\A5Subkegiatan;
+use App\Models\Nomenklatur\NomenklaturSikd;
+use App\Models\Otsus\DanaAlokasiOtsus;
 use App\Models\Rap\RapOtsus;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,25 +19,22 @@ class TestController extends Controller
 {
     public function testing(Request $request)
     {
-        date_default_timezone_set('Asia/Jayapura');
-        echo date_default_timezone_get();
-        echo "<br>";
-        $jadwal = DB::table('schedules')->where('status', 1)->first();
-        $current = date('Y-m-d H:i:s');
-        echo $current . "<br>";
-        $diff = date_diff(date_create($current), date_create($jadwal->selesai));
-        echo $diff->format('%R%a hari %H jam %I menit %s detik');
+        $sumberdana = $request->jenis == 'bg' ? 'Otsus 1%' : ($request->jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
+        $alokasiKolom = 'alokasi_' . $request->jenis;
+        $alokasi_otsus = DanaAlokasiOtsus::where('tahun', session()->get('tahun'))
+            ->first();
+        $pagu_alokasi = $alokasi_otsus->$alokasiKolom;
 
-        // $api_url = "http://worldtimeapi.org/api/ip";
-        // $response = file_get_contents($api_url);
-        // $data = json_decode($response, true);
-
-        // if ($data && isset($data['timezone'])) {
-        //     date_default_timezone_set($data['timezone']);
-        //     echo "Zona Waktu: " . date_default_timezone_get() . "<br>";
-        //     echo "Waktu Sekarang: " . date('Y-m-d H:i:s');
-        // } else {
-        //     echo "Gagal mengambil zona waktu.";
-        // }
+        $data = DB::table('rap_otsuses')
+            ->select(
+                'klasifikasi_belanja',
+                DB::raw('SUM(anggaran) as total_anggaran'),
+                DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
+            ) // Menggunakan SUM dengan alias
+            ->where('tahun', session()->get('tahun'))
+            ->where('sumberdana', $sumberdana)
+            ->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
+            ->get();
+        return $data;
     }
 }

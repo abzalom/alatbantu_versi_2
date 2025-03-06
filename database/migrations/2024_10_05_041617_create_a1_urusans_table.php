@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('a1_urusans', function (Blueprint $table) {
             $table->id();
-            $table->string('kode_urusan')->unique();
+            $table->string('kode_urusan')->index();
             $table->text('uraian');
             $table->year('tahun');
             $table->timestamps();

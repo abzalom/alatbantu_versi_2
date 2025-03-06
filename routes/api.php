@@ -80,6 +80,7 @@ Route::middleware(ApiAuthToken::class)->group(function () {
             Route::post('/data/sinkron/djpk/sikd/create', 'create_data_djpk_sikd');
         });
         Route::controller(ApiScheduleController::class)->group(function () {
+            Route::post('/schedule/get_schedule', 'get_schedule');
             Route::post('/schedule/get/active', 'get_schedule_active');
         });
     });

@@ -17,6 +17,7 @@ use App\Http\Controllers\Config\SessionController;
 use App\Http\Controllers\Config\SinkronDataToLocalController;
 use App\Http\Controllers\Data\DataPublishSikdController;
 use App\Http\Controllers\djpk\sinkronSikdDjpkController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
 use App\Http\Controllers\Ref\ReferensiDataController;
 use App\Http\Controllers\TestController;
@@ -42,7 +43,7 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
     });
 
     Route::controller(ReferensiDataController::class)->group(function () {
-        Route::get('/ref/data', 'ref_data');
+        Route::get('/ref/bantuan', 'ref_data');
         Route::get('/ref/nomenklatur', 'ref_nomenklatur');
         Route::get('/ref/nomenklatur/cetak', 'ref_cetak_nomenklatur');
         Route::post('/ref/nomenklatur/update/sikd', 'update_nomenklatur_sikd');
@@ -54,13 +55,8 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 
     Route::middleware(WebRoleMustAdmin::class)->group(function () {
 
-        Route::get('/', function () {
-            return view('home', [
-                'app' => [
-                    'title' => 'RAP OTSUS',
-                    'desc' => 'Halaman Home',
-                ],
-            ]);
+        Route::controller(HomeController::class)->group(function () {
+            Route::get('/', 'home');
         });
 
         Route::controller(UserController::class)->group(function () {
@@ -83,7 +79,8 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         });
 
         Route::controller(RapOtsusController::class)->group(function () {
-            Route::get('/rap', 'rap');
+            Route::get('/rap/{jenis}', 'rap');
+            Route::get('/rap/{jenis}/renja', 'renja_rap');
             Route::get('/rap/opd', 'rap_opd');
             Route::get('/rap/indikator', 'rap_indikator');
             Route::post('/rap/indikator/upload', 'rap_upload_indikator_opd');

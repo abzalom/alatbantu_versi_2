@@ -7,6 +7,7 @@ use App\Models\Otsus\DanaAlokasiOtsus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ApiAlokasiOtsusController extends Controller
 {
@@ -113,7 +114,6 @@ class ApiAlokasiOtsusController extends Controller
 
     public function api_update_alokasi_dana(Request $request)
     {
-
         $data = null;
         if ($request->has('id')) {
             $data = DanaAlokasiOtsus::find($request->id);
@@ -122,14 +122,12 @@ class ApiAlokasiOtsusController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'tahun' => 'unique:dana_alokasi_otsuses,tahun,' . $request->id,
                 'alokasi_bg' => 'nullable|numeric',
                 'alokasi_sg' => 'nullable|numeric',
                 'alokasi_dti' => 'nullable|numeric',
                 'status' => 'required|in:realisasi,indikatif,perkiraan',
             ],
             [
-                'tahun.unique' => 'Tahun anggaran sudah ada!',
                 'alokasi_bg.numeric' => 'Alokasi BG 1% harus berupa angka yang benar!',
                 'alokasi_sg.numeric' => 'AlokasiSG 1,25% harus berupa angka yang benar!',
                 'alokasi_dti.numeric' => 'Alokasi DTI harus berupa angka yang benar!',

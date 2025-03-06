@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm mb-2">
-                            <button id="btn-create-schedule" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-square-plus"></i></button>
+                            <button id="btn-create-schedule" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-square-plus"></i> Jadwal Baru</button>
                         </div>
                     </div>
 
@@ -48,27 +48,23 @@
                                     $no = 1;
                                 @endphp
                                 @foreach ($jadwals as $jadwal)
+                                    @php
+                                        $textMuted = '';
+                                        if (!$jadwal->status) {
+                                            $textMuted = 'text-muted';
+                                        }
+                                    @endphp
                                     <tr>
-                                        <td>{{ $no++ }}</td>
-                                        <td>{{ $jadwal->tahapan }}</td>
-                                        <td>
+                                        <td class="{{ $textMuted }}">{{ $no++ }}</td>
+                                        <td class="{{ $textMuted }}">{{ $jadwal->tahapan }}</td>
+                                        <td class="{{ $textMuted }}">
                                             {{ $jadwal->keterangan }}
-                                            <br>
-                                            <small class="text-muted">dibuat oleh : {{ $jadwal->user_create->username }}</small>
-                                            @if ($jadwal->user_update)
-                                                <br>
-                                                <small class="text-muted">diupdate oleh : {{ $jadwal->user_update->username }}</small>
-                                            @endif
                                         </td>
-                                        <td>
-                                            Tanggal : {{ explode(' ', $jadwal->mulai)[0] }}
-                                            <br>
-                                            Pukul : {{ explode(' ', $jadwal->mulai)[1] }}
+                                        <td class="{{ $textMuted }}">
+                                            {{ $jadwal->mulai }}
                                         </td>
-                                        <td>
-                                            Tanggal : {{ explode(' ', $jadwal->selesai)[0] }}
-                                            <br>
-                                            Pukul : {{ explode(' ', $jadwal->selesai)[1] }}
+                                        <td class="{{ $textMuted }}">
+                                            {{ $jadwal->selesai }}
                                         </td>
                                         <form method="post">
                                             @csrf
@@ -118,9 +114,9 @@
                                             </td>
                                         @endif
                                         <td>
-                                            @if (!$jadwal->deleted_at)
+                                            @if ($jadwal->status)
                                                 <div class="btn-group">
-                                                    <button class="btn btn-sm btn-primary btn-edit-schedule" value="{{ $jadwal }}" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                    <button class="btn btn-sm btn-primary btn-edit-schedule" value="{{ $jadwal->id }}" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-pen-to-square"></i></button>
                                                     <form action="/config/schedule/lock" method="post">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $jadwal->id }}">

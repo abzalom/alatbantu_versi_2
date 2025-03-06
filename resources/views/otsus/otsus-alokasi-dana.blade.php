@@ -66,7 +66,7 @@
                             <tfoot class="table-dark">
                                 <tr>
                                     <th colspan="4" class="text-end">TOTAL</th>
-                                    <th id="total-otsus" class="text-end">{{ formatIdr($data->sum('alokasi_bg') + $data->sum('alokasi_sg') + $data->sum('alokasi_dti'), 2) }}</th>\
+                                    <th id="total-otsus" class="text-end">{{ formatIdr($data->sum('alokasi_bg') + $data->sum('alokasi_sg') + $data->sum('alokasi_dti'), 2) }}</th>
                                     <th></th>
                                     <th></th>
                                 </tr>

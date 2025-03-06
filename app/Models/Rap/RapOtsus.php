@@ -4,6 +4,7 @@ namespace App\Models\Rap;
 
 use App\Models\Data\Opd;
 use App\Models\Nomenklatur\A5Subkegiatan;
+use App\Models\Nomenklatur\NomenklaturSikd;
 use App\Models\Otsus\Data\B1TemaOtsus;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Otsus\Data\B4AktifitasUtamaOtsus;
@@ -30,12 +31,10 @@ class RapOtsus extends Model
         return $this->kode_subkegiatan . ' ' . $this->nama_subkegiatan;
     }
 
-    // protected function sumberdana(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn(?string $value) => $value ? strtolower($value) : null,
-    //     );
-    // }
+    public function getKinerjaSubkegiatanAttribute()
+    {
+        return $this->vol_subkeg . ' ' . $this->satuan_subkegiatan;
+    }
 
     public function getDanaLainTextAttribute()
     {
@@ -99,5 +98,10 @@ class RapOtsus extends Model
     public function subkegiatan(): BelongsTo
     {
         return $this->belongsTo(A5Subkegiatan::class, 'kode_subkegiatan', 'kode_subkegiatan');
+    }
+
+    public function nomen_sikd(): BelongsTo
+    {
+        return $this->belongsTo(NomenklaturSikd::class, 'kode_unik_sikd', 'kode_unik_subkegiatan');
     }
 }

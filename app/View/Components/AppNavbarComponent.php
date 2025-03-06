@@ -22,9 +22,6 @@ class AppNavbarComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        $navbar_menus = json_decode(Storage::disk('public')->get('app/menus.json'), true);
-        return view('components.app-navbar-component', [
-            'navbar_menus' => $navbar_menus,
-        ]);
+        return view('components.app-navbar-component');
     }
 }

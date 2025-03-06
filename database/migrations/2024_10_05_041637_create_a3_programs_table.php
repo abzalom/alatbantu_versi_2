@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_urusan')->index();
             $table->string('kode_bidang')->index();
-            $table->string('kode_program')->unique();
+            $table->string('kode_program')->index();
             $table->text('uraian');
             $table->year('tahun');
             $table->timestamps();

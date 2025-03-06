@@ -1,10 +1,11 @@
 <?php
 if (!function_exists('formatIdr')) {
-    function formatIdr($number, $decimals = 0)
+    function formatIdr($number, $decimals = 2)
     {
         return number_format($number, $decimals, ',', '.');
     }
 }
+
 if (!function_exists('clearFloatFormat')) {
     function clearFloatFormat($input)
     {
