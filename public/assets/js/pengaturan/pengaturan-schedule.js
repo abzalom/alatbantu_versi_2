@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    async function getAllSchedules() {
+    async function getAllSchedules(url) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: '/api/schedule/get_schedule',
@@ -28,30 +28,87 @@ $(document).ready(function () {
         $('#modal-schedule-show-content').hide();
     });
 
+
+
     $('#btn-create-schedule').on('click', async function () {
-        let schedule = await getAllSchedules('/api/schedule/get/active', 'POST');
-        let tahapan = schedule.data.map((item) => item.tahapan);
-        let active = schedule.data.some((item) => item.status == 1);
+        let year = tahunAnggaran - new Date().getFullYear();
+        let schedule = await getAllSchedules();
+
+        let active = schedule.data.some(item => item.status == 1);
 
         if (!active) {
             $('#scheduleModalLabel').html('Buat Jadwal');
             ['tahapan', 'keterangan', 'mulai', 'selesai'].forEach(element => {
-                $(`#schedule-${element}`).val('');
-                $(`#schedule-${element}`).removeAttr('disabled');
-                $(`#schedule-${element}`).removeAttr('readonly');
+                $(`#schedule-${element}`).val('').removeAttr('disabled readonly');
             });
-            $('#schedule-tahapan').html(`
-                <option value="">Pilih...</option>
-                ${tahapan.includes('ranwal') ? '<option disabled readonly>Rancangan Awal</option>' : '<option value="ranwal">Rancangan Awal</option>'}
-                ${tahapan.includes('rancangan') ? '<option disabled readonly>Rancangan</option>' : '<option value="rancangan">Rancangan</option>'}
-                ${tahapan.includes('final') ? '<option disabled readonly>Finalisasi</option>' : '<option value="final">Finalisasi</option>'}
-                ${tahapan.includes('perubahan') ? '<option disabled readonly>Perubahan</option>' : '<option value="perubahan">Perubahan</option>'}
-                ${tahapan.includes('pelaporan') ? '<option disabled readonly>Pelaporan</option>' : '<option value="pelaporan">Pelaporan</option>'}
-            `);
+
+            let rakortek = schedule.data.find(item => item.tahapan === 'rakortek'); // Ambil satu saja
+            let ranwal = schedule.data.find(item => item.tahapan === 'ranwal'); // Ambil satu saja
+            let rancangan = schedule.data.find(item => item.tahapan === 'rancangan'); // Ambil satu saja
+            let final = schedule.data.find(item => item.tahapan === 'final'); // Ambil satu saja
+            let perubahan = schedule.data.find(item => item.tahapan === 'perubahan'); // Ambil satu saja
+
+            if (typeof rakortek == "undefined" && typeof ranwal == "undefined" && typeof rancangan == "undefined" && typeof final == "undefined" && typeof perubahan == "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option value="rakortek">Rakortek</option>
+                    <option disabled readonly>Ranwal</option>
+                    <option disabled readonly>Rancangan</option>
+                    <option disabled readonly>Final</option>
+                    <option disabled readonly>Perubahan</option>
+                `);
+            } else if (typeof rakortek !== "undefined" && typeof ranwal == "undefined" && typeof rancangan == "undefined" && typeof final == "undefined" && typeof perubahan == "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option value="rakortek">Rakortek</option>
+                    <option value="ranwal">Ranwal</option>
+                    <option disabled readonly>Rancangan</option>
+                    <option disabled readonly>Final</option>
+                    <option disabled readonly>Perubahan</option>
+                `);
+            } else if (typeof rakortek !== "undefined" && typeof ranwal != "undefined" && typeof rancangan == "undefined" && typeof final == "undefined" && typeof perubahan == "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option disabled readonly>Rakortek</option>
+                    <option value="ranwal">Ranwal</option>
+                    <option value="rancangan">Rancangan</option>
+                    <option disabled readonly>Final</option>
+                    <option disabled readonly>Perubahan</option>
+                `);
+            } else if (typeof rakortek !== "undefined" && typeof ranwal != "undefined" && typeof rancangan != "undefined" && typeof final == "undefined" && typeof perubahan == "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option disabled readonly>Rakortek</option>
+                    <option disabled readonly>Ranwal</option>
+                    <option value="rancangan">Rancangan</option>
+                    <option value="final">Final</option>
+                    <option disabled readonly>Perubahan</option>
+                `);
+            } else if (typeof rakortek !== "undefined" && typeof ranwal != "undefined" && typeof rancangan != "undefined" && typeof final != "undefined" && typeof perubahan == "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option disabled readonly>Rakortek</option>
+                    <option disabled readonly>Ranwal</option>
+                    <option disabled readonly>Rancangan</option>
+                    <option value="final">Final</option>
+                    <option value="perubahan">Perubahan</option>
+                `);
+            } else if (typeof rakortek !== "undefined" && typeof ranwal != "undefined" && typeof rancangan != "undefined" && typeof final != "undefined" && typeof perubahan != "undefined") {
+                $('#schedule-tahapan').html(`
+                    <option value="" selected>Pilih...</option>
+                    <option disabled readonly>Rakortek</option>
+                    <option disabled readonly>Ranwal</option>
+                    <option disabled readonly>Rancangan</option>
+                    <option disabled readonly>Final</option>
+                    <option value="perubahan">Perubahan</option>
+                `);
+            }
+
+
             $('#modal-schedule-show-spinner').hide();
             $('#modal-schedule-show-content').show();
         } else {
-            showToast('jadwal sebelumnya masih aktif', 'danger');
+            showToast('Jadwal sebelumnya masih aktif', 'danger');
             $('#scheduleModal').modal('hide');
         }
     });
@@ -89,7 +146,7 @@ $(document).ready(function () {
                     $('#schedule-keterangan').val(data.keterangan);
                     $('#schedule-mulai').val(data.mulai);
                     $('#schedule-selesai').val(data.selesai);
-                    $('#schedule-form').attr('action', '/config/schedule/update');
+                    $('#schedule-form').attr('action', '/config/schedule/rap/update');
 
                     $('#modal-schedule-show-spinner').hide();
                     $('#modal-schedule-show-content').show();

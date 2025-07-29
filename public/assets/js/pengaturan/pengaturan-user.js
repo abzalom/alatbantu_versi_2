@@ -435,7 +435,8 @@ $(document).ready(function () {
             success: function (response) {
                 if (response.success) {
                     let userdata = response.data;
-                    let opd_data = userdata.opds.sort((a, b) => a.kode_opd.localeCompare(b.kode_opd));
+                    console.log(userdata);
+                    let opd_data = Object.values(userdata.opds).sort((a, b) => a.kode_opd.localeCompare(b.kode_opd));
                     $('#user-tagging-skpd-username').html(userdata.username);
 
                     if (opd_data.length) {
@@ -485,6 +486,7 @@ $(document).ready(function () {
         $('#show-list-select-skpd').html('');
         $('#search-user-select-skpd').val('');
         let user_id = $(this).val();
+        let tahun = $(this).data('tahun');
         console.log(user_id);
 
         // Menampilkan daftar OPD yang belum ditandai
@@ -494,6 +496,7 @@ $(document).ready(function () {
             url: appApiUrl + "/api/data/user/skpd",
             data: {
                 id: user_id,
+                tahun: tahun
             },
             dataType: "JSON",
             success: function (response) {

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class DataPublishSikdController extends Controller
 {
-    public function rap_otsus_bg(Request $request, $sumberdana)
+    public function rap_otsus(Request $request, $sumberdana)
     {
         if (!in_array($sumberdana, ['bg', 'sg', 'dti'])) {
             return redirect()->to('/')->with('error', 'Sumber Dana tidak ditemukan!');
@@ -22,7 +22,19 @@ class DataPublishSikdController extends Controller
                 'desc' => 'Data Publish RAP pada Aplikasi SIKD Otsus DJPK',
             ],
             'data' => $data,
+            'sumberdana' => $sumberdana,
             'pendanaan' => $sumberdana == 'bg' ? 'Dana Otonomi Khusus Block Grant 1%' : ($sumberdana == 'sg' ? 'Dana Otonomi Khusus Spesific Grant 1%' : 'Dana Tambahan Infrastruktur'),
         ]);
+    }
+
+    public function destroy_rap_otsus(Request $request, $sumberdana)
+    {
+        if (!in_array($sumberdana, ['bg', 'sg', 'dti'])) {
+            return redirect()->to('/')->with('error', 'Sumber Dana tidak ditemukan!');
+        }
+        $data = SikdPublishRap::where('sumberdana', $sumberdana)
+            ->where('tahun', tahun())
+            ->delete();
+        return redirect()->to("/data/sikd/rap/$sumberdana")->with('success', 'Data Publish RAP pada Aplikasi SIKD Otsus DJPK berhasil dihapus!');
     }
 }

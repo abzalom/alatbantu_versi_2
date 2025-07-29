@@ -33,7 +33,7 @@ class RapOtsus extends Model
 
     public function getKinerjaSubkegiatanAttribute()
     {
-        return $this->vol_subkeg . ' ' . $this->satuan_subkegiatan;
+        return formatNumber($this->vol_subkeg) . ' ' . $this->satuan_subkegiatan;
     }
 
     public function getDanaLainTextAttribute()

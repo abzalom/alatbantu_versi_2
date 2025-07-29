@@ -33,7 +33,7 @@ class AppSidebarComponent extends Component
                 $sidebarHeaderName = $menu['name'];
                 if (isset($menu['subs'])) {
                     foreach ($menu['subs'] as $sub) {
-                        if ($sub['path'] == '/' . request()->path()) {
+                        if (request()->is($sub['current']) || request()->is($sub['current'] . '/*')) {
                             $sidebarHeaderSubName = $sub['name'];
                         }
                     }
@@ -42,8 +42,8 @@ class AppSidebarComponent extends Component
         }
         return view('components.app-sidebar-component', [
             'menus' => $menus,
-            'sidebarHeaderName' => $sidebarHeaderName,
-            'sidebarHeaderSubName' => $sidebarHeaderSubName,
+            'sidebarHeaderName' => $sidebarHeaderName ? $sidebarHeaderName : 'Header',
+            'sidebarHeaderSubName' => $sidebarHeaderSubName ? $sidebarHeaderSubName : 'Sub Header',
         ]);
     }
 }

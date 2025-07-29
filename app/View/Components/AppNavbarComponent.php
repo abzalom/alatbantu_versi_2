@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Component;
 
@@ -22,6 +23,9 @@ class AppNavbarComponent extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.app-navbar-component');
+        $selectTahunAnggaran = DB::table('tahun_anggaran')->get();
+        return view('components.app-navbar-component', [
+            'selectTahunAnggaran' => $selectTahunAnggaran,
+        ]);
     }
 }

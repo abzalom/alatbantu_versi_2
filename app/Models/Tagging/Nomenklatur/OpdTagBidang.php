@@ -2,6 +2,8 @@
 
 namespace App\Models\Tagging\Nomenklatur;
 
+use App\Models\Data\Opd;
+use App\Models\Data\Perencanaan\IndikatorUrusanPemda;
 use App\Models\Nomenklatur\A1Urusan;
 use App\Models\Nomenklatur\A2Bidang;
 use App\Models\Nomenklatur\A3Program;
@@ -27,7 +29,6 @@ class OpdTagBidang extends Model
         return $this->belongsTo(A2Bidang::class, 'kode_bidang', 'kode_bidang');
     }
 
-
     public function program(): HasMany
     {
         return $this->hasMany(A3Program::class, 'kode_bidang', 'kode_bidang');
@@ -41,5 +42,15 @@ class OpdTagBidang extends Model
     public function subkegiatan(): HasMany
     {
         return $this->hasMany(A5Subkegiatan::class, 'kode_bidang', 'kode_bidang');
+    }
+
+    public function indikators(): HasMany
+    {
+        return $this->hasMany(IndikatorUrusanPemda::class, 'kode_bidang', 'kode_bidang');
+    }
+
+    public function opd(): BelongsTo
+    {
+        return $this->belongsTo(Opd::class, 'kode_unik_opd', 'kode_unik_opd');
     }
 }

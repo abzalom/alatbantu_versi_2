@@ -16,7 +16,7 @@ class ApiAuthToken
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         if (!$request->hasHeader('x-token')) {
             return response()->json([
@@ -37,7 +37,7 @@ class ApiAuthToken
         if (!Auth::loginUsingId($userData['user_id'])) {
             return response()->json(['User tidak ditemukan'], 401);
         };
-        $request->merge(['tahun' => $userData['tahun']]);
+        $request->merge(['token_tahun' => $userData['tahun']]);
         return $next($request);
     }
 }

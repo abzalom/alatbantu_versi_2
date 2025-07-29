@@ -6,18 +6,18 @@
                 <div class="card-header">
                     <h5 class="card-title">
                         @isset($app['desc'])
-                            {{ $app['desc'] }}
+                        {{ $app['desc'] }}
                         @else
-                            Deskripsi Halaman
+                        Deskripsi Halaman
                         @endisset
                     </h5>
                 </div>
                 <div class="card-body">
                     <h4>Selamat Datang</h4>
                     @if (auth()->user()->hasRole('user'))
-                        <h4>Anda login sebagai User Perangkat Daerah</h4>
+                    <h4>Anda login sebagai User Perangkat Daerah</h4>
                     @else
-                        <h4>Anda login sebagai {{ auth()->user()->name }}</h4>
+                    <h4>Anda login sebagai {{ auth()->user()->name }}</h4>
                     @endif
 
                     {{-- <button id="test_api" class="btn btn-danger mb-3 mt-3">Test Api</button> --}}

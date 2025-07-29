@@ -10,19 +10,18 @@ use App\Models\Data\Sumberdana;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InsertRapRequest;
+use App\Http\Requests\UpdateRapRequest;
 use App\Imports\OpdTagOtsusImport;
 use App\Imports\Rap\RapSubkegiatanImport;
 use App\Models\Otsus\DanaAlokasiOtsus;
 use App\Models\Otsus\Data\B1TemaOtsus;
 use App\Models\Nomenklatur\A5Subkegiatan;
 use App\Models\Nomenklatur\NomenklaturSikd;
+use App\Models\Tagging\Nomenklatur\OpdTagBidang;
 use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
 class RapOtsusController extends Controller
@@ -128,72 +127,181 @@ class RapOtsusController extends Controller
         ]);
     }
 
-    public function rap(Request $referensi, $jenis)
+    public function rap(Request $request, $jenis)
     {
         $sumberdana = $jenis == 'bg' ? 'Otsus 1%' : ($jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
-        $opds = Opd::whereHas('raps', function ($q) use ($sumberdana) {
-            $q->where('rap_otsuses.sumberdana', $sumberdana);
-        })
-            ->withSum([
-                'raps as alokasi' => function ($q) use ($sumberdana) {
-                    $q->where([
-                        'rap_otsuses.sumberdana' => $sumberdana,
-                        'rap_otsuses.tahun' => session()->get('tahun'),
+        $data = Opd::whereHas('tag_otsus', function ($query) use ($jenis) {
+            $query->where([
+                'alias_dana' => $jenis,
+                'validasi' => true,
+                'pembahasan' => 'setujui',
+            ]);
+        })->with('pagu')
+            ->withSum(['raps as alokasi' => function ($query) use ($jenis, $sumberdana) {
+                $query->whereHas('tagging', function ($query) use ($jenis) {
+                    $query->where([
+                        'alias_dana' => $jenis,
+                        'validasi' => true,
+                        'pembahasan' => 'setujui',
                     ]);
-                }
-            ], 'anggaran')
-            ->get();
+                })
+                    ->where([
+                        'rap_otsuses.sumberdana' => $sumberdana,
+                    ]);
+            }], 'anggaran')
+            ->orderBy('kode_opd');
+        if (auth()->user()->opds()->count() > 0) {
+            $data = $data->whereIn('id', auth()->user()->opds()->pluck('id'));
+        }
+        $data = $data->get();
+
+        // return $data;
 
         $alokasiKolom = 'alokasi_' . $jenis;
         $alokasi_otsus = DanaAlokasiOtsus::where('tahun', session()->get('tahun'))
             ->first();
-        $pagu_alokasi = $alokasi_otsus->$alokasiKolom;
+        // return $alokasi_otsus;
+        $pagu_alokasi = $alokasi_otsus ? $alokasi_otsus->$alokasiKolom : 0;
 
-        $dataKlasBel = DB::table('rap_otsuses')
+        if (auth()->user()->hasRole('user')) {
+            $pagu_alokasi = 0;
+            foreach ($data as $itemOpd) {
+                $pagu_alokasi += $itemOpd->pagu ? $itemOpd->pagu->$jenis : 0;
+            }
+        }
+
+        // return $pagu_alokasi;
+
+        $dataKlasBel = RapOtsus::whereHas('tagging', function ($query) use ($jenis) {
+            $query->where([
+                'alias_dana' => $jenis,
+                'validasi' => true,
+                'pembahasan' => 'setujui',
+            ]);
+        })
+            ->where('tahun', session()->get('tahun'))
+            ->where('sumberdana', $sumberdana)
             ->select(
                 'klasifikasi_belanja as nama',
                 DB::raw('SUM(anggaran) as anggaran'),
                 DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
             ) // Menggunakan SUM dengan alias
-            ->where('tahun', session()->get('tahun'))
-            ->where('sumberdana', $sumberdana)
-            ->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
+            ->where([
+                'tahun' => session()->get('tahun'),
+                'sumberdana' => $sumberdana,
+                'deleted_at' => null
+            ]);
+        if (auth()->user()->hasRole('user')) {
+            $dataKlasBel = $dataKlasBel->whereIn('kode_unik_opd', auth()->user()->opds->pluck('kode_unik_opd'));
+        }
+        $dataKlasBel = $dataKlasBel->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
             ->get();
 
         // return $dataKlasBel;
 
-        return view('v1-1.admin.rap.admin-rap', [
+        $total_input_rap = RapOtsus::whereHas('tagging', function ($query) use ($jenis) {
+            $query->where([
+                'alias_dana' => $jenis,
+                'validasi' => true,
+                'pembahasan' => 'setujui',
+            ]);
+        })
+            ->where([
+                'tahun' => session()->get('tahun'),
+                'sumberdana' => $sumberdana,
+                'deleted_at' => null
+            ]);
+        if (auth()->user()->opds->count() > 0) {
+            $total_input_rap =  $total_input_rap->whereIn('kode_unik_opd', auth()->user()->opds->pluck('kode_unik_opd'));
+        }
+        $total_input_rap =  $total_input_rap->sum('anggaran');
+
+        // return $total_input_rap;
+
+        return view('v1-1.rap.rap', [
             'app' => [
                 'title' => 'RAP',
                 'desc' => 'RAP Perangkat Daerah',
             ],
             'jenis' => $jenis,
-            'opds' => $opds,
+            'data' => $data,
             'dataKlasBel' => $dataKlasBel,
+            'pagu_alokasi' =>  $pagu_alokasi,
+            'total_input_rap' => $total_input_rap,
+            'selisih_input' => $pagu_alokasi - $total_input_rap,
+            'sumberdana' => $sumberdana,
         ]);
     }
 
     public function renja_rap(Request $request, $jenis)
     {
         $sumberdana = $jenis == 'bg' ? 'Otsus 1%' : ($jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
-        $opd = Opd::with([
-            'raps' => fn($q) => $q->where([
-                'rap_otsuses.sumberdana' => $sumberdana,
-                'rap_otsuses.tahun' => session()->get('tahun'),
-            ])->orderBy('kode_subkegiatan'),
+        $opd = Opd::whereHas('tag_otsus', function ($q) use ($jenis) {
+            $q->where('alias_dana', $jenis)
+                ->where('pembahasan', 'setujui')
+                ->where('validasi', true)
+            ;
+        })->with([
+            'tag_bidang',
+            'target_aktifitas.taggings',
+            'raps' => fn($q) => $q->whereHas('tagging', function ($query) use ($jenis) {
+                $query->where('alias_dana', $jenis)
+                    ->where('pembahasan', 'setujui')
+                    ->where('validasi', true)
+                ;
+            })
+                ->where([
+                    'rap_otsuses.sumberdana' => $sumberdana,
+                    'rap_otsuses.tahun' => session()->get('tahun'),
+                ])->withTrashed()->orderBy('kode_subkegiatan'),
+            'raps.tagging' => fn($q) => $q->select('kode_unik_opd_tag_otsus', 'sumberdana', 'kode_target_aktifitas', 'volume', 'satuan'),
+            'raps.tagging.target_aktifitas' => fn($q) => $q->select('kode_target_aktifitas', 'uraian'),
         ])
             ->withSum([
-                'raps as alokasi' => function ($q) use ($sumberdana) {
-                    $q->where([
-                        'rap_otsuses.sumberdana' => $sumberdana,
-                        'rap_otsuses.tahun' => session()->get('tahun'),
-                    ]);
+                'raps as alokasi' => function ($q) use ($sumberdana, $jenis) {
+                    $q->whereHas('tagging', function ($query) use ($jenis) {
+                        $query->where('alias_dana', $jenis)
+                            ->where('pembahasan', 'setujui')
+                            ->where('validasi', true)
+                        ;
+                    })
+                        ->where([
+                            'rap_otsuses.sumberdana' => $sumberdana,
+                            'rap_otsuses.tahun' => session()->get('tahun'),
+                        ]);
                 }
             ], 'anggaran')
-            ->find($request->skpd);
+            ->where('id', $request->skpd)
+            ->first();
         if (!$opd) {
             return redirect('/rap/' . $jenis)->with('error', 'Perangkat Daerah tidak ditemukan!');
         }
+
+        // return $opd;
+
+        $nomen_sikd = NomenklaturSikd::whereIn('kode_bidang', $opd->tag_bidang->pluck('kode_bidang'))
+            ->where('sumberdana', $jenis)
+            ->get();
+        // return $jenis;
+        // dd($nomen_sikd);
+        // return $opd->tag_bidang->pluck('kode_bidang');
+
+        $taggings = DB::table('opd_tag_otsuses as tag')
+            ->select([
+                'tag.id',
+                'tag.volume',
+                'tag.satuan',
+                'tag.sumberdana',
+                'tag.alias_dana',
+                DB::raw("CONCAT(target.kode_target_aktifitas, ' ', target.uraian) as target_text")
+            ])
+            ->join('b5_target_aktifitas_utama_otsuses as target', 'tag.kode_target_aktifitas', '=', 'target.kode_target_aktifitas')
+            ->where([
+                'tag.kode_unik_opd' => $opd->kode_unik_opd,
+                'tag.alias_dana' => $jenis,
+                'tag.pembahasan' => 'setujui',
+                'tag.validasi' => true,
+            ])->get();
 
         $jumlah_program = $opd->raps->groupBy('kode_program')->count();
         $jumlah_kegiatan = $opd->raps->groupBy('kode_keluaran')->count();
@@ -202,34 +310,383 @@ class RapOtsusController extends Controller
         $alokasiKolom = 'alokasi_' . $jenis;
         $alokasi_otsus = DanaAlokasiOtsus::where('tahun', session()->get('tahun'))
             ->first();
-        $pagu_alokasi = $alokasi_otsus->$alokasiKolom;
-        $dataKlasBel = DB::table('rap_otsuses')
-            ->select(
-                'klasifikasi_belanja as nama',
-                DB::raw('SUM(anggaran) as anggaran'),
-                DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
-            ) // Menggunakan SUM dengan alias
-            ->where('tahun', session()->get('tahun'))
-            ->where('sumberdana', $sumberdana)
-            ->where('kode_unik_opd', $opd->kode_unik_opd)
-            ->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
-            ->get();
+        $pagu_alokasi = $alokasi_otsus ? $alokasi_otsus->$alokasiKolom : 0;
+        $dataKlasBel = RapOtsus::whereHas('tagging', function ($query) use ($jenis) {
+            $query->where('alias_dana', $jenis)
+                ->where('pembahasan', 'setujui')
+                ->where('validasi', true)
+            ;
+        })->select(
+            'klasifikasi_belanja as nama',
+            DB::raw('SUM(anggaran) as anggaran'),
+            DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
+        )->where([ // Menggunakan SUM dengan alias
+            'tahun' => session()->get('tahun'),
+            'sumberdana' => $sumberdana,
+            'kode_unik_opd' => $opd->kode_unik_opd,
+            'deleted_at' => null
+        ])->groupBy('klasifikasi_belanja')->get(); // Grup berdasarkan klasifikasi belanja
 
-        // dd($opd);
+        $lokasi = Lokus::select(
+            'id',
+            DB::raw('CONCAT(kecamatan, " | ", kampung) as lokasi'),
+        )->get();
 
-        return view('v1-1.admin.rap.admin-rap-opd', [
+        $dana_lain = Sumberdana::whereNot('uraian', $sumberdana)->get();
+
+        // return $dataKlasBel;
+
+        // $view = auth()->user()->opds->count() > 0 ? 'v1-1.user.rap.user-rap-opd' : 'v1-1.admin.rap.admin-rap-opd';
+
+        return view('v1-1.rap.rap-opd', [
             'app' => [
                 'title' => 'RAP',
                 'desc' => 'RAP ' . $opd->text,
             ],
             'opd' => $opd,
             'jenis' => $jenis,
+            'sumberdana' => $sumberdana,
             'dataKlasBel' => $dataKlasBel,
             'jumlah_program' => $jumlah_program,
             'jumlah_kegiatan' => $jumlah_kegiatan,
             'jumlah_subkegiatan' => $jumlah_subkegiatan,
+            'lokasi' => $lokasi,
+            'dana_lain' => $dana_lain,
+            'taggings' => $taggings,
+            'nomen_sikd' => $nomen_sikd,
         ]);
     }
+
+    public function renja_form_rap(Request $request, $jenis, $id_opd)
+    {
+        $opd = Opd::whereHas('tag_otsus', function ($q) use ($jenis) {
+            $q->where('alias_dana', $jenis)
+                ->where('pembahasan', 'setujui')
+                ->where('validasi', true);
+        });
+
+        if ($request->has('edit')) {
+            if (!$request->edit) {
+                return redirect('/rap/' . $jenis . '/renja?skpd=' . $id_opd)->with('error', 'RAP Belum Dipilih!');
+            }
+
+            $opd = $opd->with([
+                'raps' => fn($q) => $q->where([
+                    'rap_otsuses.id' => $request->edit,
+                ]),
+                'raps.tagging.target_aktifitas' => fn($q) => $q->select([
+                    'kode_target_aktifitas',
+                    'uraian',
+                    DB::raw("CONCAT(kode_target_aktifitas, ' ', uraian) as target_text")
+                ]),
+                'raps.nomen_sikd' => fn($q) => $q->select([
+                    'kode_unik_subkegiatan',
+                    'indikator',
+                    'klasifikasi_belanja',
+                    'satuan',
+                    'text',
+                ]),
+            ]);
+
+            // ✅ Eksekusi query builder menjadi instance model
+            $opd = $opd->find($id_opd);
+
+            if (!$opd || !$opd->raps || !$opd->raps->count()) {
+                return redirect('/rap/' . $jenis . '/renja?skpd=' . $id_opd)->with('error', 'RAP tidak ditemukan!');
+            }
+        } else {
+            // Jika tidak ada edit, baru panggil find di sini
+            $opd = $opd->find($id_opd);
+
+            if (!$opd) {
+                return redirect('/rap/' . $jenis)->with('error', 'Perangkat Daerah tidak ditemukan!');
+            }
+        }
+
+        // return gettype(json_decode($opd->raps->first()->dana_lain, true));
+
+        $taggings = DB::table('opd_tag_otsuses as tag')
+            ->select([
+                'tag.id',
+                'tag.volume',
+                'tag.satuan',
+                'tag.sumberdana',
+                'tag.alias_dana',
+                'tag.kode_unik_opd_tag_otsus',
+                DB::raw("CONCAT(target.kode_target_aktifitas, ' ', target.uraian) as target_text")
+            ])
+            ->join('b5_target_aktifitas_utama_otsuses as target', 'tag.kode_target_aktifitas', '=', 'target.kode_target_aktifitas')
+            ->where([
+                'tag.kode_unik_opd' => $opd->kode_unik_opd,
+                'tag.alias_dana' => $jenis,
+                'tag.pembahasan' => 'setujui',
+                'tag.validasi' => true,
+            ])->get();
+        $nomen_sikd = DB::table('nomenklatur_sikds')->whereIn('kode_bidang', $opd->tag_bidang->pluck('kode_bidang'))
+            ->where('sumberdana', $jenis)
+            ->get();
+
+        $lokasi = DB::table('lokuses')->select(
+            'id',
+            DB::raw('CONCAT(kecamatan, " | ", kampung) as lokasi'),
+        )->get();
+
+        return view('v1-1.rap.renja-rap.renja-rap-form', [
+            'app' => [
+                'title' => 'RAP',
+                'desc' => 'Form Input RAP',
+            ],
+            'opd' => $opd,
+            'jenis' => $jenis,
+            'sumberdana' => $jenis == 'bg' ? 'OTSUS 1% (bersifat umum)' : ($jenis == 'sg' ? 'OTSUS 1,25% (bersifat khusus)' : 'Dana Tambahan Infrastruktur (DTI)'),
+            'lokasi' => $lokasi,
+            'dana_lains' => Sumberdana::whereNot('uraian', $jenis == 'bg' ? 'Otsus 1%' : ($jenis == 'sg' ? 'Otsus 1,25%' : 'DTI'))->get(),
+            'taggings' => $request->has('edit') && $opd->raps->count() ? $opd->raps->first()->tagging : $taggings,
+            'nomen_sikd' => $nomen_sikd,
+            'edit_rap' => $opd->raps->count() ? $opd->raps->first() : null,
+        ]);
+    }
+
+    public function insert_new_rap(InsertRapRequest $request, $jenis, $id_opd)
+    {
+        $opd = Opd::with([
+            'tag_otsus' => fn($q) => $q->where('id', $request->input('opd_tag_otsus'))
+        ])
+            ->find($id_opd);
+        if (!$opd) {
+            return redirect()->back()->with('error', 'Perangkat Daerah tidak ditemukan! Hubungi Administrator');
+        }
+        if (!$opd->tag_otsus || !$opd->tag_otsus->count()) {
+            return redirect()->back()->with('error', 'Target Aktifitas Utama tidak ditemukan! Hubungi Administrator');
+        }
+        $opd_tag_otsus = $opd->tag_otsus->first();
+        $nomen_sikd = NomenklaturSikd::find($request->input('id_subkegiatan'));
+        if (!$nomen_sikd) {
+            return redirect()->back()->with('error', 'Subkegiatan tidak ditemukan! Hubungi Administrator');
+        }
+        $opd_tag_bidang = OpdTagBidang::where('kode_unik_opd_tag_bidang', $opd->kode_unik_opd . '-' . $nomen_sikd->kode_bidang)->first();
+        if (!$opd_tag_bidang || !$opd_tag_bidang->count()) {
+            return redirect()->back()->with('error', 'Bidang OPD tidak ditemukan! Hubungi Administrator');
+        }
+        $sumberdana = $jenis == 'bg' ? 'otsus 1%' : ($jenis == 'sg' ? 'otsus 1,25' : 'dti');
+        $dana_lain = Sumberdana::whereIn('id', $request->input('dana_lain'))
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'uraian' => $item->uraian,
+                ];
+            })->toJson();
+        $lokus = Lokus::whereIn('id', $request->input('lokus'))
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'kecamatan' => $item->kecamatan,
+                    'kampung' => $item->kampung,
+                ];
+            })->toJson();
+        $rap = [
+            'kode_unik_opd' => $opd->kode_unik_opd,
+            'kode_unik_opd_tag_bidang' => $opd_tag_bidang->kode_unik_opd_tag_bidang,
+            'kode_unik_opd_tag_otsus' => $opd_tag_otsus->kode_unik_opd_tag_otsus,
+            'kode_unik_sikd' => $nomen_sikd->kode_unik_subkegiatan,
+            'kode_opd' => $opd->kode_opd,
+            'kode_tema' => $opd_tag_otsus->kode_tema,
+            'kode_program' => $opd_tag_otsus->kode_program,
+            'kode_keluaran' => $opd_tag_otsus->kode_keluaran,
+            'kode_aktifitas' => $opd_tag_otsus->kode_aktifitas,
+            'kode_target_aktifitas' => $opd_tag_otsus->kode_target_aktifitas,
+
+            'kode_kegiatan' => $nomen_sikd->kode_kegiatan,
+            'nama_kegiatan' => $nomen_sikd->nama_kegiatan,
+            'kode_subkegiatan' => $nomen_sikd->kode_subkegiatan,
+
+            'indikator_subkegiatan' => $nomen_sikd->indikator,
+            'klasifikasi_belanja' => $nomen_sikd->klasifikasi_belanja,
+            'satuan_subkegiatan' => $nomen_sikd->satuan,
+            'nama_subkegiatan' => $nomen_sikd->nama_subkegiatan,
+            'text_subkegiatan' => $nomen_sikd->text,
+            'sumberdana' => $sumberdana,
+            'alias_dana' => $jenis,
+            'penerima_manfaat' => $request->input('penerima_manfaat'),
+            'jenis_layanan' => $request->input('jenis_layanan'),
+            'jenis_kegiatan' => $request->input('jenis_kegiatan'),
+            'dana_lain' => $dana_lain,
+            'lokus' => $lokus,
+            'vol_subkeg' => $request->input('vol_subkeg'),
+            'anggaran' => $request->input('anggaran'),
+            'mulai' => $request->input('mulai'),
+            'selesai' => $request->input('selesai'),
+            'keterangan' => $request->input('keterangan'),
+            'ppsb' => $request->input('ppsb'),
+            'multiyears' => $request->input('multiyears'),
+            'koordinat' => $request->input('koordinat'),
+            'file_path' => 'file-rap/upload/' . session('tahun') . '/skpd/' . $opd->kode_unik_opd . '/',
+            'link_file_dukung_lain' => $request->input('link_file_dukung_lain'),
+            'tahun' => session()->get('tahun'),
+        ];
+        try {
+            DB::beginTransaction();
+            $rap = RapOtsus::create($rap);
+            if ($rap) {
+                // Simpan file upload KAK dan RAB buat menjadi satu execute
+                $inputName = [
+                    [
+                        'name' => 'file_kak_name',
+                        'fileName' => 'kak'
+                    ],
+                    [
+                        'name' => 'file_rab_name',
+                        'fileName' => 'rab'
+                    ],
+                    [
+                        'name' => 'file_pendukung1_name',
+                        'fileName' => 'pendukung1'
+                    ],
+                    [
+                        'name' => 'file_pendukung2_name',
+                        'fileName' => 'pendukung2'
+                    ],
+                    [
+                        'name' => 'file_pendukung3_name',
+                        'fileName' => 'pendukung3'
+                    ],
+                ];
+
+                foreach ($inputName as $key => $value) {
+                    if ($request->hasFile($value['name'])) {
+                        $file = $request->file($value['name']);
+                        $filename = "{$value['fileName']}-rap-{$rap->id}-subkeg-{$nomen_sikd->kode_subkegiatan}-" . now()->format('Ymd_His') . ".pdf"; // Ganti dengan nama file yang sesuai
+                        // Simpan file ke storage/public/file-rap/upload/{tahun}/skpd/{kode_unik_opd}/
+                        Storage::disk('public')->putFileAs(
+                            $rap->file_path,
+                            $file,
+                            $filename
+                        );
+                        $rap->{$value['name']} = $filename;
+                    }
+                }
+            }
+            $rap->save();
+            DB::commit();
+            return redirect()->to("/rap/{$jenis}/renja?skpd={$id_opd}")->with('success', 'RAP Berhasil Disimpan!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->with('error', 'RAP Gagal Disimpan!');
+        }
+    }
+
+    public function update_rap(UpdateRapRequest $request, $jenis, $id_opd)
+    {
+        if (!$request->has('id_rap') || !$request->id_rap) {
+            return redirect()->back()->with('error', 'RAP Belum Dipilih!');
+        }
+        $rap = RapOtsus::find($request->id_rap);
+        if (!$rap) {
+            return redirect()->back()->with('error', 'RAP tidak ditemukan!');
+        }
+        $dana_lain_collection = Sumberdana::whereIn('id', $request->input('dana_lain'))->get();
+
+        if ($dana_lain_collection->isEmpty()) {
+            return redirect()->back()->with('error', 'Sumber Pendanaan Lainnya tidak ditemukan! Hubungi Administrator');
+        }
+
+        $dana_lain = $dana_lain_collection->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'uraian' => $item->uraian,
+            ];
+        })->toJson();
+
+        $lokus_collection = Lokus::whereIn('id', $request->input('lokus'))->get();
+
+        if ($lokus_collection->isEmpty()) {
+            return redirect()->back()->with('error', 'Lokus tidak ditemukan! Hubungi Administrator');
+        }
+
+        $lokus = $lokus_collection->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'kecamatan' => $item->kecamatan,
+                'kampung' => $item->kampung,
+            ];
+        })->toJson();
+        $rap->vol_subkeg = $request->input('vol_subkeg');
+        $rap->anggaran = $request->input('anggaran');
+        $rap->penerima_manfaat = $request->input('penerima_manfaat');
+        $rap->jenis_layanan = $request->input('jenis_layanan');
+        $rap->ppsb = $request->input('ppsb');
+        $rap->multiyears = $request->input('multiyears');
+        $rap->mulai = $request->input('mulai');
+        $rap->selesai = $request->input('selesai');
+        $rap->jenis_kegiatan = $request->input('jenis_kegiatan');
+        $rap->koordinat = $request->input('koordinat');
+        $rap->keterangan = $request->input('keterangan');
+        $rap->link_file_dukung_lain = $request->input('link_file_dukung_lain');
+        $rap->dana_lain = $dana_lain;
+        $rap->lokus = $lokus;
+        // Simpan file upload jika ada
+        $inputName = [
+            [
+                'name' => 'file_kak_name',
+                'fileName' => 'kak'
+            ],
+            [
+                'name' => 'file_rab_name',
+                'fileName' => 'rab'
+            ],
+            [
+                'name' => 'file_pendukung1_name',
+                'fileName' => 'pendukung1'
+            ],
+            [
+                'name' => 'file_pendukung2_name',
+                'fileName' => 'pendukung2'
+            ],
+            [
+                'name' => 'file_pendukung3_name',
+                'fileName' => 'pendukung3'
+            ],
+        ];
+        foreach ($inputName as $key => $value) {
+            if ($request->hasFile($value['name'])) {
+                $file = $request->file($value['name']);
+                $filename = "{$value['fileName']}-rap-{$rap->id}-subkeg-{$rap->kode_subkegiatan}-" . now()->format('Ymd_His') . ".pdf"; // Ganti dengan nama file yang sesuai
+                // Simpan file ke storage/public/file-rap/upload/{tahun}/skpd/{kode_unik_opd}/
+                Storage::disk('public')->putFileAs(
+                    $rap->file_path,
+                    $file,
+                    $filename
+                );
+                $rap->{$value['name']} = $filename;
+            }
+        }
+        $rap->save();
+        return redirect()->to("/rap/{$jenis}/renja?skpd={$id_opd}")->with('success', 'RAP Berhasil Diupdate!');
+    }
+
+    public function restore_rap(Request $request)
+    {
+        if (!$request->has('id') || !$request->id) {
+            return redirect()->back()->with('error', 'RAP Belum Dipilih!');
+        }
+        $raps = RapOtsus::onlyTrashed()->where('id', $request->id)->restore();
+        return redirect()->back()->with('success', 'RAP Berhasil Dikembalikan!');
+    }
+
+    public function destroy_rap(Request $request)
+    {
+        if (!$request->has('id') || !$request->id) {
+            return redirect()->back()->with('error', 'RAP Belum Dipilih!');
+        }
+        $raps = RapOtsus::onlyTrashed()->where('id', $request->id)->forceDelete();
+        return redirect()->back()->with('success', 'RAP Berhasil Dihapus Permanen!');
+    }
+
+    /**
+     * Old Method
+     */
 
     public function rap_opd(Request $request)
     {
@@ -372,16 +829,16 @@ class RapOtsusController extends Controller
                 'sumberdana' => 'required|exists:sumberdanas,uraian',
                 'vol_subkeg' => 'required|numeric',
                 'anggaran' => 'required|numeric',
-                'jenis_kegiatan' => 'required',
                 'mulai' => 'required',
                 'selesai' => 'required',
                 'penerima_manfaat' => 'required',
                 'jenis_layanan' => 'required',
                 'ppsb' => 'required',
                 'multiyears' => 'required',
-                'dana_lain' => 'required',
+                'jenis_kegiatan' => 'required',
                 'lokus' => 'required',
                 'koordinat' => Rule::requiredIf($request->jenis_kegiatan == 'fisik'),
+                'dana_lain' => 'required',
             ],
             [
                 'opd.required' => 'Perangkat Daerah tidak boleh kosong!',
@@ -732,6 +1189,7 @@ class RapOtsusController extends Controller
 
     public function view_file(Request $request)
     {
+        // return $request->all();
         $path = $request->get('path');
         $name = $request->get('name');
 

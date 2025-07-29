@@ -1,20 +1,106 @@
-<li class="menu-item active">
-    <div class="sidebar-menu-link">
-        <i class="fa-solid fa-cog icon-menu"></i>
-        <a href="#config" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="config">
-            Pengaturan
-            <i class="fa-solid fa-chevron-circle-left icon-expand"></i>
-        </a>
-    </div>
-    <ul class="sidebar-submenu collapse" id="config">
-        <li class="sidebar-submenu-link">
-            <a href="/config/user">Users</a>
-        </li>
-        <li class="sidebar-submenu-link">
-            <a href="/config/opd">Perangkat Daerah</a>
-        </li>
-        <li class="sidebar-submenu-link">
-            <a href="/config/schedule">Jadwal</a>
-        </li>
-    </ul>
-</li>
+Antisipasi Generasi Stunting Guna Mencapai Indonesia Emas 2045, merupakan salah satu kebijakan yang diadopsi pada perencanaan pembangunan pada tahun 2025. Sinkronisasi program dan kegiatan pemerintah pusat dan daerah dalam upaya penurunan stunting dilaksanakan dalam proses perencanaan Pembangunan. Hal ini merupakan perwujudan peran pemerintah daerah dalam ikut serta dalam penurunan stunting. Adapun hal-hal yang dipersiapkan oleh Pemerintah Kabupaten Mamberamo Raya yang terdiri dari :
+
+1. Membuat kebijakan dan strategi penurunan stunting yang terintegrasi dengan perencanaan pembangunan daerah.
+2. Meningkatkan kapasitas sumber daya manusia (SDM) dalam penanganan stunting melalui pelatihan, sosialisasi, dan peningkatan pengetahuan tentang gizi dan kesehatan.
+3. Meningkatkan akses dan kualitas layanan kesehatan ibu dan anak, termasuk pemeriksaan kehamilan, persalinan, dan pasca persalinan, serta pelayanan gizi.
+4. Meningkatkan akses dan kualitas layanan pendidikan, terutama pendidikan anak usia dini (PAUD) dan pendidikan dasar, untuk memastikan anak-anak mendapatkan pendidikan yang baik sejak dini.
+5. Meningkatkan akses dan kualitas layanan air bersih, sanitasi, dan kebersihan lingkungan untuk mendukung kesehatan dan pertumbuhan anak.
+6. Meningkatkan kerjasama antara pemerintah, masyarakat, dan sektor swasta dalam penanganan stunting, termasuk dalam penyediaan sumber daya dan dukungan teknis.
+7. Menetapkan program dan kegiatan yang spesifik untuk penanganan stunting, termasuk program pemberian makanan tambahan, program peningkatan gizi, dan program peningkatan kesehatan ibu dan anak.
+8. Melakukan pemantauan dan evaluasi secara berkala terhadap program dan kegiatan penanganan stunting untuk memastikan efektivitas dan efisiensi pelaksanaan.
+9. Melaksanakan 8 aksi konvergensi penurunan stunting.
+
+Pemerintah Kabupaten Mamberamo Raya menargetkan penurunan prevalensi stunting di Kabupaten Mamberamo Raya pada tahun 2025 sebesar 14,9% sesuai dengan target nasional. Hal ini dilakukan melalui berbagai upaya yang telah disebutkan di atas, dengan melibatkan seluruh stakeholder terkait, termasuk masyarakat, sektor swasta, dan lembaga pemerintah lainnya.
+Untuk mencapai target tersebut, maka Pemerintah Kabupaten Mamberamo Raya telah melakukan perencanaan yang dilaksanakan secara terpadu dan terintegrasi dengan perencanaan pembangunan daerah. Hal ini dilakukan dengan melibatkan seluruh stakeholder terkait, termasuk masyarakat, sektor swasta, dan lembaga pemerintah lainnya. Adapun program-program yang telah disusun dalam perencanaan pembangunan daerah meliputi:
+
+PROGRAM PEMENUHAN UPAYA KESEHATAN PERORANGAN DAN UPAYA KESEHATAN MASYARAKAT
+PROGRAM PENINGKATAN KAPASITAS SUMBER DAYA MANUSIA KESEHATAN
+PROGRAM PERLINDUNGAN DAN JAMINAN SOSIAL
+PROGRAM PENGELOLAAN PERSAMPAHAN
+PROGRAM PENGOLAHAN DAN PEMASARAN HASIL PERIKANAN
+PROGRAM PERENCANAAN, PENGENDALIAN DAN EVALUASI PEMBANGUNAN DAERAH
+PROGRAM KOORDINASI DAN SINKRONISASI PERENCANAAN PEMBANGUNAN DAERAH
+PROGRAM PEMENUHAN UPAYA KESEHATAN PERORANGAN DAN UPAYA KESEHATAN MASYARAKAT
+PROGRAM PENYELENGGARAAN PEMERINTAHAN DAN PELAYANAN PUBLIK
+PROGRAM PENGENDALIAN PELAKSANAAN PENANAMAN MODAL
+PROGRAM PEMBERDAYAAN SOSIAL
+PROGRAM PEMBERDAYAAN USAHA MENENGAH, USAHA KECIL, DAN USAHA MIKRO (UMKM)
+PROGRAM PEMERINTAHAN DAN KESEJAHTERAAN RAKYAT
+PROGRAM PEMBINAAN DAN PENGAWASAN PEMERINTAHAN DESA
+PROGRAM PEMBINAAN KELUARGA BERENCANA (KB)
+PROGRAM PENGELOLAAN PENDIDIKAN
+PROGRAM PENGENDALIAN PENDUDUK
+PROGRAM PEMBERDAYAAN DAN PENINGKATAN KELUARGA SEJAHTERA (KS)
+PROGRAM PEMBERDAYAAN LEMBAGA KEMASYARAKATAN, LEMBAGA ADAT DAN MASYARAKAT HUKUM ADAT
+PROGRAM PENGELOLAAN DAN PENGEMBANGAN SISTEM PENYEDIAAN AIR MINUM
+
+
+Dalam rangka konteks perencanaan pembangunan daerah, upaya pencapaian target Tujuan Pembangunan Berkelanjutan (TBP) merupakan hal yang sangat strategis, tidak hanya dikaitkan dengan pengintegrasian dalam dokumen perencanaan pembangunan daerah, akan tetapi juga dintegrasikan dengan potensi daerah yang dikaitkan dengan data di tingkat basis. Berkenaan dengan hal tersebut, maka pengintegrasian Tujuan Pembangunan Berkelanjutan dalam dokumen perencanaan pembangunan, maupun pemetaan terhadap potensi dan permasalahan merupakan suatu keharusan.
+Pada tahun 2025, prioritas pembangunan diarahkan pada hasil evalusi capaian SDG’s tahun 2024. Selanjutnya dilaksanakan sinkronisasi indikatorindikator Tujuan Pembangunan Berkelanjutan dengan dokumen perencanaan daerah. Indikator-indikator sasaran maupun program telah disinkronkan dengan Tujuan Pembangunan Berkelanjutan dengan senantiasa melakukan monitoring dan evaluasi pencapaian tujuan (goal) berdasarkan Indikator yang telah ditetapkan pada Permendagri Nomor 59 Tahun 2017 tentang Pedoman Pelaksanaan TBP
+
+
+Dalam penyusunan rancangan awal RKPD, DPRD memberikan saran dan pendapat berupa pokok-pokok pikiran DPRD berdasarkan hasil reses/penjaringan aspirasi masyarakat sebagai bahan perumusan kegiatan, lokasi kegiatan dan kelompok sasaran yang selaras dengan pencapaian sasaran pembangunan yang telah ditetapkan. Pokok-pokok pikiran DPRD tersebut terangkum ke dalam seluruh urusan kewenangan pemerintah tingkat Kabupaten/Kota yang meliputi urusan wajib dan urusan pilihan. Pokok-pokok pikiran DPRD tersebut disusun berdasarkan hasil reses/penjaringan aspirasi masyarakat yang dilakukan oleh masing-masing anggota DPRD Kabupaten Mamberamo Raya.
+
+Peluang dalam Bisnis Internasional mencakup akses ke pasar global yang lebih luas, diversifikasi risiko, dan peluang inovasi teknologi
+
+Perubahan RKPD adalah penyesuaian dokumen rencana tahunan pembangunan daerah akibat kondisi, kebijakan, atau kebutuhan aktual.
+
+Arah Kebijakan Ekonomi merupakan panduan strategis yang menetapkan fokus, prioritas, dan langkah-langkah pemerintah dalam mengelola kegiatan ekonomi dalam satu periode perencanaan. Kebijakan ini mencakup upaya mendorong pertumbuhan ekonomi, menjaga stabilitas fiskal dan moneter, menciptakan lapangan kerja, meningkatkan kesejahteraan masyarakat, serta mendorong transformasi ekonomi yang berkelanjutan dan inklusif. Arah ini disusun dengan mempertimbangkan kondisi aktual perekonomian, tantangan global, potensi daerah, dan tujuan pembangunan nasional.
+
+Kondisi ekonomi Indonesia di tahun 2025 diproyeksikan tetap solid, dengan pertumbuhan ekonomi sekitar 5 persen dan inflasi yang terkendali. Proyeksi ini didukung oleh pertumbuhan spasial yang relatif baik, inflasi yang rendah, dan permintaan domestik yang kuat. Namun, ada juga tantangan seperti fluktuasi harga komoditas global dan ketidakpastian geopolitik yang perlu diwaspadai.
+
+Ketidakpastian pasar keuangan global tetap tinggi di tengah prospek perekonomian dunia yang masih kuat. Ekonomi global pada 2025 diproyeksikan tumbuh sebesar 3,2% dimana proyeksi ini di bawah rata-rata historis pertumbuhan ekonomi global pada tahun 2000 – 2019 sebesar 3,7%. Perkembangan proyeksi ekonomi tersebut ditopang oleh kinerja ekonomi Amerika Serikat yang tetap kuat. Pertumbuhan ekonomi Amerika Serikat tetap baik ditopang oleh konsumsi yang kuat didukung akselerasi investasi dan peningkatan upah riil tenaga kerja di tengah kebijakan moneter yang tidak terlalu ketat serta arah kebijakan fiskal yang lebih ekspansif. Sementara, pertumbuhan ekonomi Eropa masih lemah dipengaruhi permintaan domestik yang belum kuat serta kinerja eksternal yang menurun dampak dari implementasi kenaikan tarif impor Amerika Serikat. Ketegangan geopolitik yang membebani sentimen konsumen serta ketidakpastian politik dan kebijakan yang meningkat dapat menghambat perekonomian tumbuh lebih tinggi. Di sisi lain, pertumbuhan ekonomi negara berkembang diprakirakan melambat pada 2025 sebesar 4,0% disebabkan oleh perkembangan ekonomi Tiongkok yang masih lemah. Hal ini merupakan dampak dari ketidakpastian kebijakan perdagangan dan pasar properti yang masih lemah. Namun demikian, stimulus fiskal yang diberikan oleh pemerintah dapat menahan perlambatan yang lebih dalam.
+
+Di tengah kondisi ekonomi global yang relatif stagnan, pertumbuhan ekonomi Indonesia akan lebih banyak mengandalkan permintaan domestik. Pemerintah akan menjaga daya beli masyarakat melalui pengendalian inflasi, penciptaan lapangan kerja, dan dukungan program bansos serta subsidi
+Pemerintah akan terus mengupayakan peningkatan produk bernilai tambah yang berorientasi ekspor, serta memberikan insentif fiskal yang kompetitif. Bauran kebijakan fiskal, moneter, dan sektor keuangan akan dimaksimalkan untuk mencapai target pertumbuhan.
+Secara keseluruhan, ekonomi Indonesia pada Triwulan I 2025 menunjukkan pertumbuhan yang positif, tetapi juga ada tantangan dari faktor-faktor eksternal. Pertumbuhan ekonomi yang berkelanjutan akan sangat dipengaruhi oleh bagaimana pemerintah dan pelaku ekonomi merespon tantangan-tantangan tersebut.
+Pada Triwulan I 2025, ekonomi Indonesia diproyeksikan masih menunjukkan pertumbuhan yang positif, meskipun dengan beberapa catatan. Pertumbuhan ekonomi diperkirakan mencapai maksimal sekitar 5%. Ini didukung oleh permintaan domestik yang kuat dan inflasi yang terkendali. Namun, ada juga faktor-faktor eksternal yang dapat mempengaruhi pertumbuhan, seperti perlambatan ekspor sektor riil.
+Tingkat inflasi month to month (m-to-m) Maret 2025 sebesar 1,65 persen dan tingkat inflasi year to date (y-to-d) Maret 2025 sebesar 0,39 persen. Tingkat inflasi y-on-y komponen inti Maret 2025 sebesar 2,48 persen, inflasi m-to-m sebesar 0,24 persen, dan inflasi y-to-d sebesar 0,79 persen
+Kebijakan Ekonomi tahun 2025 tetap diprioritaskan untuk menjaga stabilitas dan mendorong pertumbuhan ekonomi sejalan dengan program Asta Cita Pemerintah. Sinergi dilakukan dalam 7 (tujuh) area kebijakan, yakni (i) kebijakan stabilisasi nilai tukar Rupiah dalam memitigasi gejolak global, (ii) koordinasi kebijakan moneter dan fiskal, (iii) upaya mendorong pembiayaan ekonomi melalui KLM, (iv) dukungan dalam mengakselerasi transformasi digital Pemerintah, (v) upaya memperkuat hilirisasi dan ketahanan pangan, (vi) dukungan dalam mendorong pengembangan ekonomi hijau, syariah, dan inklusi, serta (vii) dukungan dalam pembangunan sumber daya manusia.
+
+Beberapa analisis kondisi perekonomian yang melatabelakangi kebijakan tahun 2025 antara lain adalah :
+
+Ketidakpastian global tetap tinggi akibat kebijakan tarif impor Amerika Serikat (AS) yang makin luas
+Pertumbuhan ekonomi Indonesia terjaga baik di tengah ketidakpastian yang masih tinggi.
+Neraca Pembayaran Indonesia (NPI) tetap baik dan mendukung ketahanan eksternal
+Nilai tukar Rupiah tetap terkendali didukung oleh kebijakan stabilisasi Bank Indonesia.
+Inflasi Indeks Harga Konsumen (IHK) pada Februari 2025 tetap rendah dan mendukung stabilitas perekonomian.
+Strategi dan instrumen operasi moneter pro-market terus diperkuat untuk mendukung stabilisasi nilai tukar Rupiah dan pencapaian sasaran inflasi
+Transmisi kebijakan moneter berjalan baik, terutama ke pasar uang.
+Kredit perbankan tetap tinggi untuk mendukung upaya mendorong pertumbuhan ekonomi.
+
+
+Proyeksi pertumbuhan ekonomi Papua pada tahun 2025 menunjukkan ... , dengan rentansi pertumbuhan antara ... hingga ... persen. 
+
+
+Sesuai dengan rancangan RKPD Provinsi Papua Tahun 2025 disebutkan bahwa Arah kebijakan Pembangunan Provinsi Papua Tahun 2025 adalah "Peningkatan Sumber Daya Manusia Berkarakter Berbasis Ekonomi Inklusif sebagai Modal Dasar Transformasi Pembangunan Papua".
+
+Selanjutnya berdasarkan tema tersebut, Pemerintah Provinsi menetapkan 5 prioritas prioritas pembangunan pada tahun 2025, yaitu;
+
+Peningkatan Kualitas dan Pemerataan SDM
+Pertumbuhan Ekonomi yang Inklusif, Berkeadilan dan Berkelanjutan
+Percepatan Pembangunan Sarana dan Prasarana Infrastruktur dan Konektivitas Wilayah
+Peningkatan Keamanan dan Ketertiban
+Peningkatan Tata Kelola Pemerintahan
+
+Pertumbuhan ekonomi Provinsi Papua selama periode 2020-2023 mengalami fluktuasi, dengan pertumbuhan tertinggi terjadi pada tahun 2021 sebesar 15,16 persen dan pertumbuhan terendah terjadi di tahun 2020 sebesar 2,39 persen. Pertumbuhan ekonomi Provinsi Papua tahun 2022 mengalami perlambatan sebesar 6,19 poin dibandingkan dengan tahun 2021. Namun demikian, tren pertumbuhan ekonomi Provinsi Papua selama periode 2020-2022 masih berada diatas pertumbuhan ekonomi nasional. Untuk tahun 2023, pasca pemekeran, pertumbuhan ekonomi Provinsi Papua sebesar 4,20 persen atau mengalami perlambatan sebesar 4,77 poin jika dibandingkan dengan tahun 2022 dan berada dibawah pertumbuhan ekonomi nasional. Pertumbuhan yang lebih rendah dibandingkan tahun 2022 disebabkan oleh perlambatan pada Lapangan Usaha Pertambangan dan Penggalian. Selain itu, ketidakpastian global masih berlangsung yang menyebabkan tekanan pada nilai tukar sehingga menjadi faktor penahan pertumbuhan yang lebih tinggi di Papua. Namun demikian prospek penguatan pertumbuhan sektor
+
+Kondisi kinerja pertumbuhan ekonomi Provinsi Papua perioda 2023 triwulan IV, seiring dengan gambaran tren pertumbuhan ekonomi diatas. Dalam Laporan Perekonomian Provinsi Papua-BI (Februari 2024), Indikator Penting Provinsi Papua dan DOB-BPS (April 2024), dan BRS-BPS (Mei 2024) dilaporkan kinerja perekonomian wilayah Papua semakin baik dan mengalami pertumbuhan output ekonomi dengan rentang 10,79-17,49% (yoy) dengan tambang. Peningkatan kinerja ini, utamanya bersumber dari meningkatnya kinerja LU pertambangan dan penggalian yang disebabkan oleh peningkatan produksi tembaga dan emas. Sementara itu pertumbuhan ekonomi tanpa tambang bergerak dalam rentang 4,42-5,07% (yoy). Secara keseluruhan, proyeksi pertumbuhan perekonomian wilayah Papua pada tahun 2024 berada dalam rentang 5,30-5,70% (yoy).
+
+Struktur perekonomian Papua didominasi oleh kategori Lapangan Usaha Konstruksi yang memberikan kontribusi sebesar 20,41 persen. Nilai ini diikuti oleh kategori Lapangan Usaha Perdagangan Besar dan Eceran; Reparasi Mobil dan Sepeda Motor sebesar 15,96 persen dan kategori Lapangan Usaha Pertanian, Kehutanan, dan Perikanan yang mampu menyumbang sebesar 14,46 persen. Kategori Lapangan Usaha Administrasi Pemerintahan, Pertahanan dan Jaminan Sosial Wajib menyumbang sebesar 11,60 persen; kategori Lapangan Usaha Transportasi dan Pergudangan menyumbang sebesar 8,05 persen; serta kategori Lapangan Usaha Informasi dan Komunikasi menyumbang sebesar 6,10 persen. Sementara itu, lapangan usaha Pengadaan Air, Pengelolaan Sampah, Limbah dan Daur Ulang menjadi yang terendah yaitu sebesar 0,10 persen.
+
+Lapangan Usaha Konstruksi, Perdagangan Besar dan Eceran, serta Reparasi Mobil danSepeda Motor, bersama dengan Lapangan Usaha Pertanian, Kehutanan, dan Perikanan,menjadi tiga sektor utama dalam pembentukan struktur ekonomi Provinsi Papua. Hal initerjadi karena sebelum pemekaran Daerah Otonomi Baru (DOB), wilayah ini merupakanpusat provinsi dengan pembangunan yang terfokus di ibu kota provinsi, yang menjadi pusatperdagangan grosir dan salah satu sumber utama kebutuhan harian untuk kabupaten/kotadi Provinsi Papua Tengah dan Provinsi Papua Pegunungan.
+
+Selanjutnya Lapangan Usaha Pertanian, Kehutanan, dan Perikanan menduduki peranpenting ketiga dalam struktur ekonomi Provinsi Papua karena adanya daerah pesisir yangkaya akan sumber daya laut di Kabupaten Biak Numfor, Kabupaten Sarmi, Kabupaten Waropen, dan Kabupaten Kepulauan Yapen. Pada tahun 2023, Sail Teluk Cenderawasih di Kabupaten Biak Numfor menjadi peristiwa besar yang menyoroti potensi sektor Perikanan dan Kelautan terbesar di Provinsi Papua.
+
+Sektor Jasa Keuangan dan Asuransi, Transportasi dan Pergudangan, serta Jasa Perusahaan mencatat pertumbuhan tercepat di Provinsi Papua. Hal ini disebabkan oleh status Provinsi Papua sebagai pusat aktivitas ekonomi, di mana Bandara Udara Sentani di Kabupaten Jayapura, bagian dari wilayah kabupaten Provinsi Papua, tetap menjadi pusat lalu lintas udara di wilayah tersebut.
+
+Selama periode 2020-2023, inflasi Provinsi Papua mengalami fluktuasi yang signifikan dengan lonjakan yang tinggi terjadi di tahun 2022 sebesar 5,81 persen. Kelompok pengeluaran penyumbang tertinggi pada inflasi Provinsi Papua tahun 2023 adalah kelompok transportasi (angkutan udara), kelompok makanan, minuman, dan tembakau (beras, ikan ekor kuning, tomat, kangkung, daging ayam ras, dll), dan kelompok pendidikan (biaya sekolah menengah atas, biaya akademi/perguruan tinggi, dan biaya sekolah menengah pertama). Sedangkan kelompok pengeluaran yang mengalami deflasi atau menahan laju inflasi adalah kelompok informasi, komunikasi, dan jasa keuangan serta kelompok perumahan, air, listrik, dan bahan bakar rumah tangga. Faktor lain yang dampaknya juga turut mempengaruhi inflasi adalah status pandemi Covid-19 yang telah berakhir sehingga vaksinasi sebagai syarat melakukan perjalanan dalam negeri tidak lagi diberlakukan (KEPPRES Nomor 17 Tahun 2023), penurunan harga BBM non subsidi, pencabutan Permendagri Nomor 6 Tahun 2023 tentang penetapan harga eceran tertinggi minyak goreng sawit serta pemberlakuan Surat Edaran Direktorat Jenderal Perdagangan Dalam Negeri Kementerian Perdagangan Nomor 03 Tahun 2023 tentang Pedoman Penjualan Minyak Goreng Rakyat terkait penetapan harga eceran tertinggi minyak goreng curah.
+
+Persentase penduduk miskin tertinggi di Provinsi Papua periode 2020-2023 terjadi di tahun 2021 sebesar 26,86 persen dan yang terendah terjadi di tahun 2023 sebesar 26,03 persen. Sedangkan jumlah penduduk miskin tertinggi di Provinsi Papua terjadi di tahun 2020 sebesar 154,79 ribu jiwa dan yang terendah terjadi di tahun 2023 sebesar 149,56 ribu jiwa. Terjadi penurunan jumlah penduduk miskin sebesar 3,55 ribu jiwa ditahun 2023 jika dibandingkan dengan tahun 2022. Terdapat beberapa faktor yang menyebabkan angka kemiskinan yang masih tinggi, antara lain infrastruktur yang masih minim, masih banyak daerah terpencil yang sulit dijangkau, serta tingkat pendidikan yang masih rendah.
+
+Garis kemiskinan Provinsi Papua tahun 2023 sebesar Rp 686.469,00/kapita/bulan. Hal ini menunjukkan bahwa pengeluaran minimum seseorang untuk memenuhi kebutuhan pokok berupa makanan dan non makanan selama sebulan di Provinsi Papua tahun 2023 meningkat sebesar Rp 57.294 dibandingkan tahun 2022 yang sebesar Rp 629.175,- /kapita/bulan. Peningkatan garis kemiskinan ini terjadi seiring dengan terjadinya kenaikan harga barang dari tahun ke tahun. Perkembangan indeks kedalaman kemiskinan (P1) Provinsi Papua selama periode 2020-2023 cenderung mengalami peningkatan. Hal ini mengindikasikan bahwa menjauhnya rata-rata pengeluaran masing-masing penduduk miskin terhadap standar kebutuhan minimum kehidupan layak yang telah ditentukan atau garis kemiskinan. Sementara itu, perkembangan indeks keparahan kemiskinan (P2) Provinsi Papua selama 2020-2023 juga cenderung mengalami peningkatan. Hal ini mengindikasikan ketimpangan pengeluaran diantara penduduk miskin semakin tinggi.
+
+Tingkat Pengangguran Terbuka (TPT) Provinsi Papua periode 2021-2023 terus menurun setiap tahunnya. Untuk tahun 2023, TPT Provinsi Papua sebesar 2,67 persen atau turun 0,16 poin dibandingkan tahun 2022 yang sebesar 2,83 persen. Hal ini menunjukkan bahwa jumlah penduduk yang bekerja terus mengalami peningkatan serta jumlah pengangguran pun menurun. Atau dengan kata lain, tenaga kerja yang terserap dalam lapangan usaha juga semakin besar. Tenaga kerja di Papua mayoritas terserap pada sektor pertanian.
+
+Rasio gini Provinsi Papua selama periode 2020-2023 mengalami fluktuatif dengan nilai rasio gini tertinggi terjadi di tahun 2022 sebesar 0,406 dan yang terendah terjadi di tahun 2023 sebesar 0,386. Rasio gini yang digunakan untuk mengukur tingkat ketimpangan pengeluaran di Provinsi Papua semakin membaik, dari 0,406 di tahun 2022 turun 0,02 poin menjadi 0,386 di tahun 2023. Hal ini mengindikasikan semakin kecilnya tingkat ketimpangan pengeluaran penduduk di Provinsi Papua.

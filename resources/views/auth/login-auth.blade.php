@@ -9,8 +9,10 @@
     <link rel="icon" href="/assets/img/mamberamo_raya.ico" type="image/x-icon">
     <link rel="stylesheet" href="/vendors/bootstrap-5.3.3-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/vendors/fontawesome-free-6.5.1-web/css/all.css">
+    <script src="/vendors/jquery-3.7.1.min.js"></script>
 
-    <title>Login Page RAP-APP</title>
+
+    <title>eRAPOT | Login</title>
     <style>
         body {
             background: #f2f2f29d
@@ -26,7 +28,24 @@
             background: #ffffff !important;
             border-radius: 15px !important;
         }
+
+        #toggle-password {
+            cursor: pointer;
+            position: absolute;
+            right: 7%;
+            color: #868686;
+            z-index: 1;
+        }
     </style>
+
+    @if (session()->has('success') || session()->has('error') || session()->has('info'))
+        <script>
+            let marginBottom = @json($errors->has('password') ? '20px' : '0');
+            $(document).ready(function() {
+                $('#toggle-password').css("margin-bottom", marginBottom);
+            });
+        </script>
+    @endif
 </head>
 
 <body>
@@ -39,7 +58,7 @@
             <div class="card border-0">
                 <div class="card-header text-center border-0" style="background: none !important">
                     <img src="/assets/img/mamberamo_raya_resize_250_x_251.png" alt="kabupaten mamberamo raya" style="width: 70px; height: auto;">
-                    <h4 class="card-title mt-2">Login RAP-APP</h4>
+                    <h4 class="card-title mt-2">Login eRAPOT</h4>
                 </div>
                 <form method="post">
                     <div class="card-body">
@@ -51,17 +70,25 @@
                                 <small class="text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        <div class="form-floating mb-3">
-                            <input name="password" type="password" class="form-control form-input @error('password') is-invalid @enderror" id="passwordLoginInputForm" placeholder="Password">
-                            <label for="passwordLoginInputForm" class="form-label">Password</label>
-                            @error('password')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="form-floating w-100">
+                                <input name="password" type="password" class="form-control form-input @error('password') is-invalid @enderror" id="passwordLoginInputForm" placeholder="Password">
+                                <label for="passwordLoginInputForm" class="form-label">Password</label>
+                                @error('password')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <span id="toggle-password">
+                                <i class="fa-solid fa-eye"></i>
+                            </span>
                         </div>
                         <div class="mb-3">
-                            {{-- <label for="selectTahunLoginForm" class="form-label">Tahun Anggaran</label> --}}
+                            <label for="selectTahunLoginForm" class="form-label">Tahun Anggaran</label>
                             <select name="tahun" class="form-control form-input @error('tahun') is-invalid @enderror" id="selectTahunLoginForm">
-                                <option value="2025" selected>2025</option>
+                                <option value="" selected>Pilih...</option>
+                                @foreach ($tahuns as $tahun)
+                                    <option value="{{ $tahun->tahun }}">{{ $tahun->tahun }}</option>
+                                @endforeach
                             </select>
                             @error('tahun')
                                 <small class="text-danger">{{ $message }}</small>
@@ -73,7 +100,9 @@
                         </div>
                     </div>
                     <div class="card-footer text-end border-0" style="background: none !important">
-                        <a href="https://wa.me/6281247469077" target="_blank" class="me-4">Lupa Password?</a>
+                        <a href="https://wa.me/6281247469077?text=Halo,%20saya%20lupa%20password.%20Mohon%20bantuannya." target="_blank" class="me-4">
+                            Lupa Password?
+                        </a>
                         <button class="btn btn-primary">Login</button>
                     </div>
                 </form>
@@ -81,24 +110,25 @@
         </div>
     </div>
 
-
-    <script src="/vendors/jquery-3.7.1.min.js"></script>
     <script src="/vendors/bootstrap-5.3.3-dist/js/bootstrap.bundle.js"></script>
 
     <script>
-        // $.ajax({
-        //     url: "/private/session/set_timezone",
-        //     type: 'POST',
-        //     data: JSON.stringify({
-        //         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-        //     }),
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        //     }
-        // });
-    </script>
+        $(document).ready(function() {
+            $('#toggle-password').on('click', function() {
+                const input = $('#passwordLoginInputForm');
+                const icon = $(this).find('i');
 
+                // Toggle input type
+                if (input.attr('type') === 'password') {
+                    input.attr('type', 'text');
+                    icon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    input.attr('type', 'password');
+                    icon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+        });
+    </script>
 
     @if (session()->has('success') || session()->has('error') || session()->has('info'))
         @php

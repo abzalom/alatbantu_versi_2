@@ -1,0 +1,12 @@
+POST https://sipd-ri.kemendagri.go.id/rakortek/rakortek_2026/f20d106a36bfb6f8cf9ff58f123ee4e3d1898f12/?m=dashboard
+Content-Type: application/json
+
+{
+    "_token": "MTIzMGQ3YmEyMjBhNTkxNzkwODEzNDUwNjFkZGNmYWM0ZjA5MDE3Yg==",
+    "app": "rakortek",
+    "subdomain": 565,
+    "userX": "196402051990091001",
+    "passX": "mamberamorayakab",
+    "tahun": 2025,
+    "submit": 1
+}

@@ -16,7 +16,7 @@
                     <h1 class="modal-title fs-5" id="scheduleModalLabel">Modal title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="schedule-form" action="/config/schedule/new" method="post">
+                <form id="schedule-form" action="/config/schedule/rap/new" method="post">
                     <div class="modal-body">
                         <div id="schedule-edit-element"></div>
                         @csrf

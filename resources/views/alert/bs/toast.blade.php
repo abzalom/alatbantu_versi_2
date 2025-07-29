@@ -1,11 +1,15 @@
-@if (session()->has('success') || session()->has('error') || session()->has('info'))
+@php
+    $alerts = ['success', 'error', 'info', 'warning'];
+@endphp
+@if (collect($alerts)->contains(fn($type) => session()->has($type)))
     @php
-        $bg_alert = session()->has('success') ? 'text-bg-success' : (session()->has('info') ? 'text-bg-info' : 'text-bg-danger');
+        $bg_alert = session()->has('success') ? 'text-bg-success' : (session()->has('info') ? 'text-bg-info' : (session()->has('warning') ? 'text-bg-warning' : 'text-bg-danger'));
+        $error_msg = session()->has('success') ? 'success' : (session()->has('info') ? 'info' : (session()->has('warning') ? 'warning' : 'error'));
         // $alert_icon = session()->has('success') ? '<i class="fa-solid fa-circle-check"></i>' : '<i class="fa-solid fa-triangle-exclamation"></i>';
     @endphp
 
-    <div class="toast-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 9999">
-        <div id="alertToast" class="toast align-items-center {{ $bg_alert }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
+    <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 100; margin-top: 55px">
+        <div id="sessionAlertToast" class="toast align-items-center {{ $bg_alert }} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="3000">
             <div class="toast-body mx-0">
                 <div class="container mx-0">
                     <div class="row">
@@ -19,13 +23,7 @@
                             @endif
                         </div>
                         <div class="col-8 d-flex align-items-center" style="font-size: 120%">
-                            @if (session()->has('success'))
-                                {{ session()->get('success') }}
-                            @elseif(session()->has('info'))
-                                {{ session()->get('info') }}
-                            @else
-                                {{ session()->get('error') }}
-                            @endif
+                            {!! session()->get($error_msg) !!}
                         </div>
                         <div class="col-2 p-0 d-flex align-items-center">
                             <button type="button" class="btn-close btn-close-white me-2 m-0 h-100 w-100" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -39,7 +37,7 @@
     <script>
         // Menampilkan toast saat halaman dimuat
         $(document).ready(function() {
-            $('#alertToast').toast('show');
+            $('#sessionAlertToast').toast('show');
         });
     </script>
 @endif

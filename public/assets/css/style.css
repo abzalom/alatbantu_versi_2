@@ -75,7 +75,6 @@ body {
     flex-direction: column;
     height: 100vh;
     background-color: #dcdcdc;
-    overflow: hidden;
     font-size: 14px;
 }
 
@@ -87,6 +86,11 @@ header {
     align-items: center;
     padding: 10px;
     color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
 }
 
 header a {
@@ -129,12 +133,21 @@ header a {
     text-decoration: none;
 }
 
+/* Container */
+#container {
+    position: relative;
+    height: calc(100vh - 70px);
+    top: 70px;
+}
+
 /* Sidebar */
 #container aside {
     width: 230px;
     background: #f8f9fa;
     transition: width 0.3s;
-    position: fixed;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     overflow-y: auto;
     z-index: 100;
@@ -282,7 +295,7 @@ header a {
     height: 100%;
     overflow: auto;
     transition: margin-left 0.3s;
-    position: absolute;
+    position: relative;
     margin-left: 230px;
     width: calc(100% - 230px);
     padding: 25px;
@@ -443,7 +456,8 @@ header a {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1rem;
-    padding: 20px;
+    /* padding: top 0, bottom 20px left & right 0 */
+    padding: 0 0 20px 0;
 }
 
 .klas-card {
@@ -512,7 +526,7 @@ header a {
 .custom-container {
     display: flex;
     gap: 15px;
-    max-width: 80%;
+    /* max-width: 80%; */
     margin: auto;
     margin-bottom: 15px;
 }
@@ -522,7 +536,7 @@ header a {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    width: 200px;
+    /* width: 100%; */
     /* Lebih kecil */
 }
 
@@ -535,7 +549,7 @@ header a {
     /* Padding lebih kecil */
     border-radius: 8px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    font-size: 12px;
+    font-size: 11px;
     /* Font lebih kecil */
 }
 
@@ -627,14 +641,20 @@ header a {
 
     #container aside {
         width: 0;
-        z-index: 100;
-        ;
+        z-index: 1000;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+    }
+
+    #container aside.expanded {
+        width: 230px;
     }
 
     #container main {
         margin-left: 0;
         width: 100%;
-        padding-top: 90px;
     }
 
     #schedule-header {
@@ -676,7 +696,7 @@ header a {
     }
 
     .custom-card {
-        width: 180px;
+        width: calc(100% / 3 - 20px);
     }
 
     .table-container {
@@ -688,6 +708,15 @@ header a {
 @media (max-width: 576px) {
     #container aside {
         width: 0;
+        z-index: 1000;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        height: calc(100vh - 70px);
+    }
+
+    #container aside.expanded {
+        width: 230px;
     }
 
     #container main {
@@ -703,6 +732,11 @@ header a {
         width: 100% !important;
         max-width: 100% !important;
     }
+
+    .custom-card {
+        width: calc(100% / 2 - 20px);
+    }
+
 }
 
 @media (max-width: 520px) {
@@ -711,11 +745,17 @@ header a {
     }
 
     #header-logo a {
-        display: none;
+        display: block;
     }
 
     #header-logo img {
         display: block;
+        margin-left: 20px;
+    }
+
+
+    .custom-card {
+        width: 100%;
     }
 }
 
@@ -724,17 +764,25 @@ header a {
         margin-right: 0;
     }
 
-    #header-logo {
+    #header-logo img {
+        display: block;
+    }
+
+    #header-logo a {
         display: none;
     }
 }
 
 @media (max-width: 375px) {
     #header-logo a {
-        display: none;
+        display: block;
     }
 
     #header-logo img {
         display: block;
+    }
+
+    #header-logo a {
+        display: none;
     }
 }

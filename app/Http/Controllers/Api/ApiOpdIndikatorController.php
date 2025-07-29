@@ -15,17 +15,17 @@ class ApiOpdIndikatorController extends Controller
 {
     public function indikator_opd(Request $request)
     {
-        if (!$request->has('tahun')) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan!.',
-                'alert' => 'error',
-            ], 500);
-        }
+        // if (!$request->has('tahun')) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Terjadi kesalahan!.',
+        //         'alert' => 'error',
+        //     ], 500);
+        // }
         $data = OpdTagOtsus::with([
             'opd',
             'target_aktifitas'
-        ])->where('tahun', $request->tahun);
+        ])->where('tahun', $request->token_tahun);
 
         if ($request->has('id')) {
             $data = $data->where('id', $request->id);
@@ -146,7 +146,7 @@ class ApiOpdIndikatorController extends Controller
             'volume' => $request->volume_indikator,
             'sumberdana' => $request->sumberdana_indikator,
             'catatan' => $request->has('catatan') ? $request->catatan : null,
-            'tahun' => $request->tahun,
+            'tahun' => $request->token_tahun,
         ];
 
         // return response()->json([

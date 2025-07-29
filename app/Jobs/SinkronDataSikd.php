@@ -37,6 +37,7 @@ class SinkronDataSikd implements ShouldQueue
     public function handle(): void
     {
         if ($this->jenis == 'nomenklatur') {
+            // Log::debug("Sinkronisasi Nomenklatur SIKD", ['data' => $this->data]);
             $this->nomenklatur();
         }
         if ($this->jenis == 'rap') {
@@ -60,6 +61,7 @@ class SinkronDataSikd implements ShouldQueue
                 [
                     'id_subkegiatan' => $item['id_subkegiatan'],
                     'sumberdana' => $item['sumberdana'],
+                    'tahun' => $item['tahun'],
                 ],
                 [
                     'kode_bidang' => $item['kode_bidang'],
@@ -69,6 +71,7 @@ class SinkronDataSikd implements ShouldQueue
                     'kode_kegiatan' => $item['kode_kegiatan'],
                     'nama_kegiatan' => $item['nama_kegiatan'],
                     'kode_subkegiatan' => $item['kode_subkegiatan'],
+                    'kode_unik_subkegiatan' => $item['kode_subkegiatan'] . '-' . $item['sumberdana'],
                     'nama_subkegiatan' => $item['nama_subkegiatan'],
                     'text' => $item['text'],
                     'indikator' => $item['indikator'],

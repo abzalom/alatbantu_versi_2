@@ -19,6 +19,9 @@ class ApiOpdController extends Controller
         if ($request->has('kode_unik_opd')) {
             $data = $data->where('kode_unik_opd', $request->kode_unik_opd);
         }
+        if ($request->has('tahun')) {
+            $data = $data->where('tahun', $request->tahun);
+        }
         $data = $data->get();
 
         if (!$data) {

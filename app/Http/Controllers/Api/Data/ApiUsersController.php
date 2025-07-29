@@ -242,7 +242,7 @@ class ApiUsersController extends Controller
             DB::beginTransaction();
             $user = User::find($request->id);
             if ($user) {
-                $user->password = Hash::make('password');
+                $user->password = Hash::make($user->username . '123');
                 $user->save();
                 DB::commit();
                 return response()->json([
@@ -375,7 +375,7 @@ class ApiUsersController extends Controller
 
         // Jika hanya data pengguna yang diminta
         if ($request->has('only_user') && $request->only_user) {
-            $opds = $user->opds->map(function ($itemOpd) {
+            $opds = $user->opds->where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->map(function ($itemOpd) {
                 return [
                     'id' => $itemOpd->id,
                     'kode_unik_opd' => $itemOpd->kode_unik_opd,
@@ -397,16 +397,16 @@ class ApiUsersController extends Controller
         }
 
         // Data OPD berdasarkan tahun yang tidak terkait dengan pengguna
-        if (!$request->has('tahun') || !$request->tahun) {
-            return response()->json([
-                'success' => false,
-                'alert' => 'danger',
-                'message' => 'Parameter "tahun" is required!',
-            ], 400);
-        }
+        // if (!$request->has('tahun') || !$request->token_tahun) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'alert' => 'danger',
+        //         'message' => 'Parameter "tahun" is required!',
+        //     ], 400);
+        // }
 
         $tagging = DB::table('opd_user')->where('user_id', $user->id)->get();
-        $opds = Opd::where('tahun', $request->tahun)->whereNotIn('id', $tagging->pluck('opd_id')->toArray())->get();
+        $opds = Opd::where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->whereNotIn('id', $tagging->pluck('opd_id')->toArray())->get();
 
         return response()->json([
             'success' => true,

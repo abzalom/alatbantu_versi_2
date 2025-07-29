@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Data\Lokus;
 use App\Models\Data\Opd;
+use App\Models\Otsus\DanaAlokasiOtsus;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,8 +13,9 @@ use Illuminate\Support\Facades\DB;
 
 class UserRapController extends Controller
 {
-    public function skpd_user(Request $request)
+    public function skpd_user(Request $request, $jenis)
     {
+        $sumberdana = $jenis == 'bg' ? 'Otsus 1%' : ($jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
         $data = Opd::whereHas('users', function ($q) {
             $q->where('id', Auth::user()->id);
         })
@@ -29,7 +31,23 @@ class UserRapController extends Controller
             ->withSum('raps as pagu_rap', 'anggaran')
             ->withCount('raps as jumlah_rap')
             ->get();
-        // return $data;
+
+        $dataKlasBel = DB::table('rap_otsuses')
+            ->select(
+                'klasifikasi_belanja as nama',
+                DB::raw('SUM(anggaran) as anggaran'),
+                // DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
+            ) // Menggunakan SUM dengan alias
+            ->where([
+                'tahun' => session()->get('tahun'),
+                'sumberdana' => $sumberdana,
+                'deleted_at' => null
+            ])
+            // ->where('tahun', session()->get('tahun'))
+            // ->where('sumberdana', $sumberdana)
+            ->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
+            ->get();
+        return $dataKlasBel;
         return view('user.user-skpd', [
             'app' => [
                 'title' => 'RAP-APP | SKPD',
@@ -37,6 +55,57 @@ class UserRapController extends Controller
             ],
             'data' => $data,
         ]);
+    }
+
+    public function skpd_user_xxx(Request $request, $jenis)
+    {
+        $sumberdana = $jenis == 'bg' ? 'Otsus 1%' : ($jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
+        $opds = Opd::whereHas('tag_otsus', function ($q) use ($sumberdana) {
+            $q->where('opd_tag_otsuses.sumberdana', $sumberdana);
+        })
+            ->withSum([
+                'raps as alokasi' => function ($q) use ($sumberdana) {
+                    $q->where([
+                        'rap_otsuses.sumberdana' => $sumberdana,
+                        'rap_otsuses.tahun' => session()->get('tahun'),
+                    ]);
+                }
+            ], 'anggaran')
+            ->orderBy('kode_opd')
+            ->get();
+
+        // return $opds;
+
+        $alokasiKolom = 'alokasi_' . $jenis;
+        $alokasi_otsus = DanaAlokasiOtsus::where('tahun', session()->get('tahun'))
+            ->first();
+        $pagu_alokasi = $alokasi_otsus->$alokasiKolom;
+
+        $dataKlasBel = DB::table('rap_otsuses')
+            ->select(
+                'klasifikasi_belanja as nama',
+                DB::raw('SUM(anggaran) as anggaran'),
+                DB::raw("SUM(anggaran) / $pagu_alokasi as persen")
+            ) // Menggunakan SUM dengan alias
+            ->where([
+                'tahun' => session()->get('tahun'),
+                'sumberdana' => $sumberdana,
+                'deleted_at' => null
+            ])
+            // ->where('tahun', session()->get('tahun'))
+            // ->where('sumberdana', $sumberdana)
+            ->groupBy('klasifikasi_belanja') // Grup berdasarkan klasifikasi belanja
+            ->get();
+
+        $total_input_rap = DB::table('rap_otsuses')
+            ->where([
+                'tahun' => session()->get('tahun'),
+                'sumberdana' => $sumberdana,
+                'deleted_at' => null
+            ])
+            ->sum('anggaran');
+
+        return $opds;
     }
 
     public function rap_user(Request $request, $opd_id)

@@ -2,7 +2,7 @@
 
 namespace App\Models\Data;
 
-use App\Models\Nomenklatur\A2Bidang;
+use App\Models\Config\PaguOpd;
 use App\Models\Nomenklatur\A5Subkegiatan;
 use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
 use App\Models\Rap\RapOtsus;
@@ -13,10 +13,10 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 #[ScopedBy(TahunScope::class)]
 class Opd extends Model
@@ -27,6 +27,12 @@ class Opd extends Model
     public function getTextAttribute()
     {
         return $this->kode_opd . ' ' . $this->nama_opd;
+    }
+
+    // relationships to PaguOpd model using kode_unik_opd
+    public function pagu(): HasOne
+    {
+        return $this->hasOne(PaguOpd::class, 'kode_unik_opd', 'kode_unik_opd');
     }
 
     public function users(): BelongsToMany
@@ -79,4 +85,9 @@ class Opd extends Model
             'kode_unik_opd_tag_otsus' // Local key di tabel perantara (OpdTagOtsus) yang merujuk ke model tujuan
         );
     }
+
+    // public function rakortek_urusan(): HasMany
+    // {
+    //     return $this->hasMany(Rako::class, 'foreign_key', 'local_key');
+    // }
 }

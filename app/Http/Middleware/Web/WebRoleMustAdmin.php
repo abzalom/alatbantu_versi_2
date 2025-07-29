@@ -22,8 +22,7 @@ class WebRoleMustAdmin
 
             // Periksa role pengguna
             if ($user->hasRole('user')) {
-                // Arahkan ke /skpd jika perannya adalah user
-                return redirect('/user/rap');
+                abort(404, 'Page Not Found'); // Mengembalikan 404 jika pengguna bukan admin
             }
         }
         return $next($request);

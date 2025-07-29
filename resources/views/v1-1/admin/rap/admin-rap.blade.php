@@ -1,4 +1,22 @@
 <x-app-layout-component :title="$app['title'] ?? null">
+
+    <div style="font-size: 18px" class="alert alert-warning mb-3 d-flex align-items-center justify-content-start gap-3" role="info">
+        <i class="fa-solid fa-circle-info fa-2xl fa-fade"></i>
+        @if (!auth()->user()->hasRole(['admin']))
+            <span>
+                <i>
+                    Perangkat Daerah akan muncul jika Usulan target Indikator RAPPP telah disetujui dan divalidasi. Silahkan lihat hasil <a href="/pembahasan/rakortek/rappp" class="text-decoration-underline">Pembahasan Indikator RAPPP</a>
+                </i>
+            </span>
+        @else
+            <span>
+                <i>
+                    Aman bro..karena ko admin jadi ko bebas 😉
+                </i>
+            </span>
+        @endif
+    </div>
+
     <div class="klas-card-container">
         @foreach ($dataKlasBel as $klasBel)
             <div class="card klas-card">
@@ -12,8 +30,38 @@
             </div>
         @endforeach
     </div>
+
     <div class="card">
         <div class="card-body">
+            <div class="mb-4">
+                @if (auth()->user()->hasRole('admin'))
+                    <table class="table-sm table-striped">
+                        <tr>
+                            <td>Alokasi Pagu {{ $sumberdana }}</td>
+                            <td>:</td>
+                            <td>Rp. {{ formatIdr($pagu_alokasi) }}</td>
+                        </tr>
+                        <tr>
+                            <td>Input RAP {{ $sumberdana }}</td>
+                            <td>:</td>
+                            <td>Rp. {{ formatIdr($total_input_rap) }}</td>
+                        </tr>
+                        <tr style="border-top: 1px solid rgb(164, 164, 164); color: #333; font-weight: 600;">
+                            <td>Selisih</td>
+                            <td>:</td>
+                            <td>
+                                Rp. {{ formatIdr($selisih_input) }}
+                                @if ($selisih_input < 0)
+                                    <span class="badge bg-secondary">over</span>
+                                @endif
+                                @if ($selisih_input > 0)
+                                    <span class="badge bg-secondary">sisa</span>
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead class="table-primary">
@@ -25,7 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($opds as $opd)
+                        @foreach ($data as $opd)
                             <tr>
                                 <td>{{ $opd->kode_opd }}</td>
                                 <td>{{ $opd->nama_opd }}</td>

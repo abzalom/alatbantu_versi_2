@@ -107,6 +107,7 @@ class ApiSinkronDjpkSikdController extends Controller
                     'satuan' => $item['satuan'],
                     'klasifikasi_belanja' => $item['klasifikasi_belanja'],
                     'sumberdana' => $request->sumberdana,
+                    'tahun' => $request->token_tahun,
                 ];
             }
         }

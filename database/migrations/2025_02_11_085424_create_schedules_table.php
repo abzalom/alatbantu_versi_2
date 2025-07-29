@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->enum('tahapan', ['ranwal', 'rancangan', 'final', 'perubahan', 'pelaporan']);
+            $table->enum('tahapan', ['rakortek', 'ranwal', 'rancangan', 'final', 'perubahan']);
             $table->string('keterangan');
             $table->year('tahun');
             $table->timestamp('mulai');

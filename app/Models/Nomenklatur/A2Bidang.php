@@ -2,6 +2,8 @@
 
 namespace App\Models\Nomenklatur;
 
+use App\Models\Data\Perencanaan\IndikatorUrusanPemda;
+use App\Models\Tagging\Nomenklatur\OpdTagBidang;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,5 +32,15 @@ class A2Bidang extends Model
     public function subkegiatan(): HasMany
     {
         return $this->hasMany(A5Subkegiatan::class, 'kode_bidang', 'kode_bidang');
+    }
+
+    public function indikators(): HasMany
+    {
+        return $this->hasMany(IndikatorUrusanPemda::class, 'kode_bidang', 'kode_bidang');
+    }
+
+    public function tag_bidang(): HasMany
+    {
+        return $this->hasMany(OpdTagBidang::class, 'kode_bidang', 'kode_bidang');
     }
 }

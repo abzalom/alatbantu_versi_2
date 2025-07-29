@@ -1,6 +1,17 @@
 <x-app-layout-component :title="$app['title'] ?? null">
 
-    @include('user.user-skpd-statistik')
+    {{-- @include('user.user-skpd-statistik') --}}
+    <div class="klas-card-container">
+        <div class="card klas-card">
+            <div class="card-body klas-card-body">
+                <div class="klas-content-text">
+                    <h5 class="text-wrap">Belanja Pemeliharaan dan Pelestarian Lingkungan</h5>
+                    <h4>Rp. 1.000.000.000</h4>
+                </div>
+                <span class="klas-persen">100%</span>
+            </div>
+        </div>
+    </div>
 
     <div class="row mb-3">
         <div class="col-lg">

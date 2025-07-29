@@ -66,6 +66,7 @@ Route::middleware(ApiAuthToken::class)->group(function () {
         });
 
         Route::controller(ApiRapController::class)->group(function () {
+            Route::post('/data/rap/create/{jenis}/renja', 'create_renja_rap');
             Route::post('/data/rap/delete/indikator', 'rap_delete_indikator_opd');
             Route::post('/data/rap/update', 'rap_opd_update');
             Route::post('/data/rap/delete', 'rap_opd_delete');
@@ -73,6 +74,9 @@ Route::middleware(ApiAuthToken::class)->group(function () {
 
         Route::controller(ApiTaggingController::class)->group(function () {
             Route::post('/data/tagging/indikator/target_aktifitas/rap', 'indikator_target_aktifitas_tag_rap');
+            Route::post('/data/tagging/opd/otsus/new', 'new_tagging_opd_otsus');
+            Route::post('/data/tagging/opd/otsus/delete', 'delete_tagging_opd_otsus');
+            Route::post('/data/tagging/target/opd_list', 'list_opd_target');
         });
 
         Route::controller(ApiSinkronDjpkSikdController::class)->group(function () {
@@ -104,5 +108,6 @@ Route::middleware(ApiAuthToken::class)->group(function () {
     Route::controller(ApiRapController::class)->group(function () {
         Route::post('/data/rap', 'rap_opd');
         Route::post('/data/rap/file-check', 'rap_file_check');
+        Route::post('/data/rap_by_target_aktifitas', 'rap_by_target_aktifitas');
     });
 });

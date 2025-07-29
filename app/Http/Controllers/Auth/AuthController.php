@@ -7,6 +7,7 @@ use App\Models\Data\Opd;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -18,8 +19,10 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->to('/');
         }
-
-        return view('auth.login-auth');
+        $tahuns = DB::table('tahun_anggaran')->get('tahun');
+        return view('auth.login-auth', [
+            'tahuns' => $tahuns,
+        ]);
     }
 
     public function process_login_auth(Request $request)
@@ -71,9 +74,9 @@ class AuthController extends Controller
             ];
             $userToken = $hasKey . '|' . $keyHalf1 . '|' . base64_encode(json_encode($userData));
             session(['user_token' => $userToken]);
-            if ($user->hasRole('user')) {
-                return redirect()->to('/user/rap')->with('success', "Selamat datang $user->name!");
-            }
+            // if ($user->hasRole('user')) {
+            //     return redirect()->to('/user/rap')->with('success', "Selamat datang $user->name!");
+            // }
             return redirect()->to('/')->with('success', "Selamat datang $user->name!");
         }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Config\PaguOpd;
 use App\Models\Data\Opd;
 use App\Models\Otsus\DanaAlokasiOtsus;
 use App\Models\Rap\RapOtsus;
@@ -13,15 +14,23 @@ class HomeController extends Controller
 {
     public function home(Request $request)
     {
+        // session()->forget('tahun');
+        $user = User::with('opds')->find(Auth::user()->id);
+        // return $user;
         $alokasi_otsus = DanaAlokasiOtsus::where('tahun', session()->get('tahun'))
             ->first();
-        $raps = RapOtsus::where('tahun', session()->get('tahun'))->get();
+        $rapModel = RapOtsus::class;
+        $raps = $user->opds->count() > 0 ? $rapModel::whereIn('kode_unik_opd', $user->opds->pluck('kode_unik_opd'))->get() : $rapModel::where('tahun', session()->get('tahun'))->get();
+        // return $raps;
         $countSkpd = $raps->countBy('kode_unik_opd')->count();
         $countProgram = $raps->countBy('kode_program')->count();
         $countKegiatan = $raps->countBy('kode_kegiatan')->count();
         $countRap = $raps->count();
         $totalInputOtsus = $raps->sum('anggaran');
         // return $totalInputOtsus;
+        $alokasi_bg = $alokasi_otsus ? $alokasi_otsus->alokasi_bg : 0;
+        $alokasi_sg = $alokasi_otsus ? $alokasi_otsus->alokasi_sg : 0;
+        $alokasi_dti = $alokasi_otsus ? $alokasi_otsus->alokasi_dti : 0;
 
         $dataKlasBel = [
             'alokasi_bg' => [
@@ -29,7 +38,7 @@ class HomeController extends Controller
                 'active' => true,
                 'id' => 'pills-bg',
                 'alias' => 'bg',
-                'pagu' => $alokasi_otsus->alokasi_bg,
+                'pagu' => $alokasi_bg,
                 'alokasi_terinput' => 0,
                 'klasifikasi' => []
             ],
@@ -38,7 +47,7 @@ class HomeController extends Controller
                 'active' => false,
                 'id' => 'pills-sg',
                 'alias' => 'sg',
-                'pagu' => $alokasi_otsus->alokasi_sg,
+                'pagu' => $alokasi_sg,
                 'alokasi_terinput' => 0,
                 'klasifikasi' => []
             ],
@@ -47,7 +56,7 @@ class HomeController extends Controller
                 'active' => false,
                 'id' => 'pills-dti',
                 'alias' => 'dti',
-                'pagu' => $alokasi_otsus->alokasi_dti,
+                'pagu' => $alokasi_dti,
                 'alokasi_terinput' => 0,
                 'klasifikasi' => []
             ],
@@ -96,14 +105,15 @@ class HomeController extends Controller
         }
 
 
-        // return $dataKlasBel;
+        // return $alokasi_otsus ? $dataKlasBel['alokasi_bg']['alokasi_terinput'] - $alokasi_otsus->alokasi_bg : 0;
+        // return $alokasi_otsus;
         return view('home', [
             'app' => [
                 'title' => 'RAP OTSUS',
                 'desc' => 'Halaman Home',
             ],
             'alokasi_otsus' => $alokasi_otsus,
-            'totalAlokasiOtsusTkdd' => $alokasi_otsus->alokasi_bg + $alokasi_otsus->alokasi_sg + $alokasi_otsus->alokasi_dti,
+            'totalAlokasiOtsusTkdd' => $alokasi_bg + $alokasi_sg + $alokasi_dti,
             'countSkpd' => $countSkpd,
             'countProgram' => $countProgram,
             'countKegiatan' => $countKegiatan,

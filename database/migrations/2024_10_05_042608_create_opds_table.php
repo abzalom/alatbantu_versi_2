@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_unik_opd')->unique()->index();
             $table->string('kode_opd')->index();
-            $table->string('username')->index()->nullable();
+            // $table->string('username')->index()->nullable();
             $table->text('nama_opd');
             $table->year('tahun');
             $table->timestamps();

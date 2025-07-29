@@ -64,7 +64,7 @@ class ApiAlokasiOtsusController extends Controller
                 DB::beginTransaction();
                 // Melakukan penyimpanan data ke database
                 $data = DanaAlokasiOtsus::create([
-                    'tahun' => $request->tahun,
+                    'tahun' => $request->token_tahun,
                     'alokasi_bg' => $request->alokasi_bg ?? 0,
                     'alokasi_sg' => $request->alokasi_sg ?? 0,
                     'alokasi_dti' => $request->alokasi_dti ?? 0,

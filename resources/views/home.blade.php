@@ -10,27 +10,27 @@
         <div class="dashboard-card dashboard-card-secondary">
             <div class="card-content">
                 <h5>Alokasi Otsus BG 1%</h5>
-                <h5>Rp. {{ formatIdr($alokasi_otsus->alokasi_bg) }}</h5>
+                <h5>Rp. {{ formatIdr($alokasi_otsus ? $alokasi_otsus->alokasi_bg : 0) }}</h5>
             </div>
         </div>
 
         <div class="dashboard-card dashboard-card-success">
             <div class="card-content">
                 <h5>Alokasi Otsus SG 1,25%</h5>
-                <h5>Rp. {{ formatIdr($alokasi_otsus->alokasi_sg) }}</h5>
+                <h5>Rp. {{ formatIdr($alokasi_otsus ? $alokasi_otsus->alokasi_sg : 0) }}</h5>
             </div>
         </div>
 
         <div class="dashboard-card dashboard-card-info">
             <div class="card-content">
                 <h5>Alokasi DTI</h5>
-                <h5>Rp. {{ formatIdr($alokasi_otsus->alokasi_dti) }}</h5>
+                <h5>Rp. {{ formatIdr($alokasi_otsus ? $alokasi_otsus->alokasi_dti : 0) }}</h5>
             </div>
         </div>
 
         <div class="dashboard-card dashboard-card-warning text-dark">
             <div class="card-content">
-                <h5>SKPD Pengelolah Otsus</h5>
+                <h5>Jumlah SKPD</h5>
                 <h5>{{ $countSkpd }} Organisasi</h5>
             </div>
         </div>
@@ -56,94 +56,106 @@
             </div>
         </div>
 
-        <div class="dashboard-card dashboard-card-light">
-            <div class="card-content">
-                <h5>Total Otsus Terinput</h5>
-                <h5>Rp. {{ formatIdr($totalInputOtsus) }}</h5>
+        @if (auth()->user()->hasRole('admin'))
+            <div class="dashboard-card dashboard-card-light">
+                <div class="card-content">
+                    <h5>Total Otsus Terinput</h5>
+                    <h5>Rp. {{ formatIdr($totalInputOtsus) }}</h5>
+                </div>
             </div>
-        </div>
 
-        <div class="dashboard-card dashboard-card-light">
-            <div class="card-content">
-                @php
-                    $selisihInputan = $totalInputOtsus - $totalAlokasiOtsusTkdd;
-                @endphp
-                <h5>
-                    Sisa Input
-                    <span class="badge bg-danger">
+            <div class="dashboard-card dashboard-card-light">
+                <div class="card-content">
+                    @php
+                        $selisihInputan = $totalInputOtsus - $totalAlokasiOtsusTkdd;
+                    @endphp
+                    <h5>
+                        Sisa Input
                         @if ($selisihInputan < 0)
-                            Kurang
-                        @else
-                            Lebih
+                            <span class="{{ $selisihInputan < 0 ? 'badge bg-danger' : ($selisihInputan > 0 ? 'badge bg-danger' : 'badge bg-success') }}">
+                                Kurang
+                                {{ $selisihInputan < 0 ? 'Kurang' : ($selisihInputan > 0 ? 'Lebih' : 'Sama') }}
+                            </span>
                         @endif
-                    </span>
-                </h5>
-                <h5>Rp. {{ formatIdr($selisihInputan) }}</h5>
+                        @if ($selisihInputan > 0)
+                            <span class="badge bg-warning">
+                                Lebih
+                            </span>
+                        @endif
+                        @if ($selisihInputan == 0)
+                            <span class="badge bg-success">
+                                Lebih
+                            </span>
+                        @endif
+                    </h5>
+                    <h5>Rp. {{ formatIdr($selisihInputan) }}</h5>
+                </div>
             </div>
-        </div>
 
-        <div class="dashboard-card dashboard-card-light">
-            <div class="card-content">
-                @php
-                    $selsiihInputBg = $dataKlasBel['alokasi_bg']['alokasi_terinput'] - $alokasi_otsus->alokasi_bg;
-                @endphp
-                <h5>
-                    Sisa Otsus BG 1%
-                    <span class="badge bg-danger">
-                        @if ($selsiihInputBg < 0)
-                            Kurang
-                        @elseif ($selsiihInputBg == 0)
-                            Pass
-                        @else
-                            Lebih
-                        @endif
-                    </span>
-                </h5>
-                <h5>Rp. {{ formatIdr($selsiihInputBg) }}</h5>
+            <div class="dashboard-card dashboard-card-light">
+                <div class="card-content">
+                    @php
+                        $selsiihInputBg = $alokasi_otsus ? $dataKlasBel['alokasi_bg']['alokasi_terinput'] - $alokasi_otsus->alokasi_bg : 0;
+                    @endphp
+                    <h5>
+                        Sisa Otsus BG 1%
+                        <span class="badge bg-danger">
+                            @if ($selsiihInputBg < 0)
+                                Kurang
+                            @elseif ($selsiihInputBg == 0)
+                                Pass
+                            @else
+                                Lebih
+                            @endif
+                        </span>
+                    </h5>
+                    <h5>Rp. {{ formatIdr($selsiihInputBg) }}</h5>
+                </div>
             </div>
-        </div>
 
-        <div class="dashboard-card dashboard-card-light">
-            <div class="card-content">
-                @php
-                    $selisihInputSg = $dataKlasBel['alokasi_sg']['alokasi_terinput'] - $alokasi_otsus->alokasi_sg;
-                @endphp
-                <h5>
-                    Sisa Otsus SG 1,25%
-                    <span class="badge bg-danger">
-                        @if ($selisihInputSg < 0)
-                            Kurang
-                        @elseif ($selisihInputSg == 0)
-                            Pass
-                        @else
-                            Lebih
-                        @endif
-                    </span>
-                </h5>
-                <h5>Rp. {{ formatIdr($selisihInputSg) }}</h5>
+            <div class="dashboard-card dashboard-card-light">
+                <div class="card-content">
+                    @php
+                        $selisihInputSg = $alokasi_otsus ? $dataKlasBel['alokasi_sg']['alokasi_terinput'] - $alokasi_otsus->alokasi_sg : 0;
+                    @endphp
+                    <h5>
+                        Sisa Otsus SG 1,25%
+                        <span class="badge bg-danger">
+                            @if ($selisihInputSg < 0)
+                                Kurang
+                            @elseif ($selisihInputSg == 0)
+                                Pass
+                            @else
+                                Lebih
+                            @endif
+                        </span>
+                    </h5>
+                    <h5>Rp. {{ formatIdr($selisihInputSg) }}</h5>
+                </div>
             </div>
-        </div>
 
-        <div class="dashboard-card dashboard-card-light">
-            <div class="card-content">
-                @php
-                    $selisihInputDti = $dataKlasBel['alokasi_dti']['alokasi_terinput'] - $alokasi_otsus->alokasi_dti;
-                @endphp
-                <h5>
-                    Sisa DTI
-                    <span class="badge bg-danger">
-                        @if ($selisihInputDti < 0)
-                            Kurang
-                        @elseif ($selisihInputDti == 0)
-                            Pass
-                        @else
-                            Lebih
-                        @endif
-                    </span>
-                </h5>
-                <h5>Rp. {{ formatIdr($selisihInputDti) }}</h5>
+            <div class="dashboard-card dashboard-card-light">
+                <div class="card-content">
+                    @php
+                        $selisihInputDti = $alokasi_otsus ? $dataKlasBel['alokasi_dti']['alokasi_terinput'] - $alokasi_otsus->alokasi_dti : 0;
+                    @endphp
+                    <h5>
+                        Sisa DTI
+                        <span class="badge bg-danger">
+                            @if ($selisihInputDti < 0)
+                                Kurang
+                            @elseif ($selisihInputDti == 0)
+                                Pass
+                            @else
+                                Lebih
+                            @endif
+                        </span>
+                    </h5>
+                    <h5>Rp. {{ formatIdr($selisihInputDti) }}</h5>
+                </div>
             </div>
-        </div>
+        @endif
+
     </div>
 
     <div class="card mb-3">
@@ -180,7 +192,7 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-start">{{ $itemKlasBel['name'] }}</td>
-                                            <td class="text-end">Rp. {{ formatIdr($itemKlasBel['total']) }}</td>
+                                            <td class="text-end text-nowrap">Rp. {{ formatIdr($itemKlasBel['total']) }}</td>
                                             <td class="text-center">{{ formatIdr($itemKlasBel['persen']) }}%</td>
                                         </tr>
                                     @endforeach

@@ -17,7 +17,7 @@ class UserController extends Controller
             ->withTrashed()
             ->get();
         $opds = Opd::get();
-        // return $data;
+        // return $opds;
         return view('app.pengaturan.users.pengaturan-users', [
             'app' => [
                 'title' => 'Pengaturan',

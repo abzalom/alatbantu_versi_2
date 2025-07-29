@@ -1,0 +1,3 @@
+Catatan perbaikan terkahir pada 17 Juni 2025:
+ - Menambahkan validasi dan kondisi validasi jika pembahasan sudah ada pada indikator kinerja urusan.
+ - Berikutnya tambahkan validasi jika pembahasan sudah ada pada indikator kinerja RAPPP.

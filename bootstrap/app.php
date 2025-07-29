@@ -18,6 +18,13 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' =>  \Spatie\Permission\Middleware\RoleMiddleware::class
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            '/test',
+            '/test/new_schedule',
+            '/test/get_schedule',
+            '/test/update_schedule',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

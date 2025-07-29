@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Otsus;
 
 use App\Http\Controllers\Controller;
+use App\Models\Data\Opd;
 use App\Models\Data\Sumberdana;
 use App\Models\Otsus\DanaAlokasiOtsus;
 use App\Models\Otsus\Data\B1TemaOtsus;
@@ -18,10 +19,12 @@ class OtsusController extends Controller
     {
         $data = B1TemaOtsus::with([
             'indikator',
-            'program.keluaran.aktifitas.target_aktifitas',
+            'program.keluaran.aktifitas.target_aktifitas.taggings' => fn($q) => $q->withCount('raps')->where('tahun', session()->get('tahun')),
+            'program.keluaran.aktifitas.target_aktifitas.taggings.opd' => fn($q) => $q->where('tahun', session()->get('tahun')),
         ])->get();
         $sumberdanas = Sumberdana::get();
-        // return $data;
+        $opds = Opd::get();
+        // return $opds;
         return view('otsus.otsus-indikator', [
             'app' => [
                 'title' => 'Indikator Otsus',
@@ -29,6 +32,7 @@ class OtsusController extends Controller
             ],
             'data' => $data,
             'sumberdanas' => $sumberdanas,
+            'opds' => $opds,
         ]);
     }
 

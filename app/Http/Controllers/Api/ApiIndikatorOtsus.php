@@ -125,8 +125,8 @@ class ApiIndikatorOtsus extends Controller
         if ($request->has('kode_program')) {
             $data = $data->where('kode_program', $request->kode_program);
         }
-        if ($request->has('kode_keuaran')) {
-            $data = $data->where('kode_keuaran', $request->kode_keuaran);
+        if ($request->has('kode_keluaran')) {
+            $data = $data->where('kode_keluaran', $request->kode_keluaran);
         }
         if ($request->has('kode_aktifitas')) {
             $data = $data->where('kode_aktifitas', $request->kode_aktifitas);

@@ -13,7 +13,7 @@ class ApiScheduleController extends Controller
 {
     public function get_schedule(Request $request)
     {
-        $schedule = Schedule::where('tahun', $request->tahun);
+        $schedule = Schedule::where('tahun', $request->token_tahun);
         $data = [];
         $validator = Validator::class;
         if ($request->has('id') || !empty($request->id)) {
@@ -59,6 +59,7 @@ class ApiScheduleController extends Controller
 
     public function get_schedule_active(Request $request)
     {
+        return $request->all();
         $data = DB::table('schedules')->where('status', 1)->get();
         return response()->json([
             'active' => $data->isNotEmpty() ? true : false,

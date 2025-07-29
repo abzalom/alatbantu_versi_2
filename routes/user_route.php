@@ -13,8 +13,8 @@ Route::middleware([WebAuthenticateUser::class, WebRoleOnlyUser::class])->group(f
         return redirect()->to('/user/rap/skpd');
     });
     Route::controller(UserRapController::class)->group(function () {
-        Route::get('/user/rap/skpd', 'skpd_user');
-        Route::get('/user/rap/skpd/{id}', 'rap_user');
+        Route::get('/user/rap/{jenis}/skpd', 'skpd_user');
+        Route::get('/user/rap/{jenis}/skpd/{id}', 'rap_user');
         // Route::post('/user/rap/update', 'rap_update_user');
     });
 });

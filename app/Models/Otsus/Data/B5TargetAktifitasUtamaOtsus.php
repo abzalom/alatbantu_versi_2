@@ -52,9 +52,9 @@ class B5TargetAktifitasUtamaOtsus extends Model
             Opd::class,
             OpdTagOtsus::class,
             'kode_target_aktifitas',
-            'kode_opd',
+            'kode_unik_opd',
             'kode_target_aktifitas',
-            'kode_opd',
+            'kode_unik_opd',
         );
     }
 

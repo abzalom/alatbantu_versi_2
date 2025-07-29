@@ -66,10 +66,9 @@ $(document).ready(function () {
     });
 
     $('#form-indikator-otsus-opd').submit(function (e) {
+        e.preventDefault();
         $('#opd-tag-indikator-spinner').show();
         $('#opd-tag-indikator-form-body').hide();
-
-        e.preventDefault();
         let dataForm = $(this).serialize();
 
         ['id_target_aktifitas', 'volume_indikator', 'sumberdana_indikator'].forEach(function (field) {

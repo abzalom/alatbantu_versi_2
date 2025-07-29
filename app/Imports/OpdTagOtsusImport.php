@@ -18,13 +18,7 @@ use Maatwebsite\Excel\Concerns\WithValidation;
 use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
 use Maatwebsite\Excel\Concerns\WithCalculatedFormulas;
 
-class OpdTagOtsusImport implements
-    ToModel,
-    WithHeadingRow,
-    WithValidation,
-    SkipsOnFailure,
-    SkipsEmptyRows,
-    WithCalculatedFormulas
+class OpdTagOtsusImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure, SkipsEmptyRows, WithCalculatedFormulas
 {
 
     use Importable, SkipsFailures;

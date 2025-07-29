@@ -17,28 +17,31 @@
             <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Tahun {{ session('tahun') }}
             </a>
-            <ul class="dropdown-menu">
-                <li>
-                    <form action="/config/app/session/tahun" method="post">
-                        @csrf
-                        <input type="hidden" name="tahun" value="2024">
-                        <button type="submit" class="dropdown-item" href="">2024</button>
-                    </form>
-                </li>
-                <li>
-                    <form action="/config/app/session/tahun" method="post">
-                        @csrf
-                        <input type="hidden" name="tahun" value="2025">
-                        <button type="submit" class="dropdown-item" href="">2025</button>
-                    </form>
-                </li>
+            <ul class="dropdown-menu" style="z-index: 101">
+                @foreach ($selectTahunAnggaran as $itemTahunAnggaran)
+                    <li>
+                        <form action="/config/app/session/tahun" method="post">
+                            @csrf
+                            <input type="hidden" name="tahun" value="{{ $itemTahunAnggaran->tahun }}">
+                            <button type="submit" class="dropdown-item" href="">
+                                {{ $itemTahunAnggaran->tahun }}
+                                @if ($itemTahunAnggaran->tahun == session('tahun'))
+                                    <i class="fa-solid fa-check"></i>
+                                @endif
+                                @if ($itemTahunAnggaran->tahun == date('Y'))
+                                    <span class="badge bg-primary">Aktif</span>
+                                @endif
+                            </button>
+                        </form>
+                    </li>
+                @endforeach
             </ul>
         </div>
         <div class="dropdown">
             <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="fa-solid fa-user"></i> {{ Auth::user()->name }}
             </a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu" style="z-index: 101">
                 <li class="dropdown-item">Profile</li>
                 <li>
                     <form action="/auth/logout" method="post">

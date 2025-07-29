@@ -74,58 +74,66 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <h5>Sumber Pendanaan : {{ $pendanaan }}</h5>
-                    <table class="table table-bordered table-hover align-middle">
-                        <thead class="table-dark align-middle text-center">
-                            <tr>
-                                <th rowspan="2"></th>
-                                <th rowspan="2">Klasifikasi Belanja</th>
-                                <th rowspan="2">Kode Sub Kegiatan</th>
-                                <th rowspan="2">Nama Sub Kegiatan</th>
-                                <th colspan="2">Kinerja</th>
-                                <th colspan="2">Anggaran (Rp)</th>
-                                <th rowspan="2"></th>
-                            </tr>
-                            <tr>
-                                <th>Target</th>
-                                <th>Realisasi</th>
-                                <th>Target</th>
-                                <th>Realisasi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data as $rap)
+                    <div class="d-flex justify-content-between mb-3">
+                        <h5>Sumber Pendanaan : {{ $pendanaan }}</h5>
+                        <form action="/data/sikd/rap/{{ $sumberdana }}/destroy" method="post">
+                            @csrf
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Bersihkan</button>
+                        </form>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-dark align-middle text-center">
                                 <tr>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn-show-detail btn btn-secondary" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;" data-bs-animation="{true}" data-bs-toggle="collapse" data-bs-target="#collapseRap{{ $rap->id }}" data-bs-config='{"delay":"1000", "title":"123"}'>
-                                                <i class="fa-solid fa-chevron-down"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>{{ $rap->klasifikasi_belanja }}</td>
-                                    <td>{{ $rap->kode_subkegiatan_full }}</td>
-                                    <td>{{ $rap->subkegiatan_uraian }}</td>
-                                    <td class="text-start">{{ $rap->target_keluaran . ' ' . $rap->satuan }}</td>
-                                    <td class="text-start"></td>
-                                    <td class="text-end">{{ formatIdr($rap->pagu_alokasi) }}</td>
-                                    <td class="text-end">{{ formatIdr(0) }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button class="btn-edit-rap btn btn-sm btn-primary" value="{{ $rap }}" data-bs-toggle="modal" data-bs-target="#editRapModal"><i class="fa-solid fa-pen-to-square"></i></button>
-                                        </div>
-                                    </td>
+                                    <th rowspan="2"></th>
+                                    <th rowspan="2">Klasifikasi Belanja</th>
+                                    <th rowspan="2">Kode Sub Kegiatan</th>
+                                    <th rowspan="2">Nama Sub Kegiatan</th>
+                                    <th colspan="2">Kinerja</th>
+                                    <th colspan="2">Anggaran (Rp)</th>
+                                    <th rowspan="2"></th>
                                 </tr>
-                                <tr class="collapse" id="collapseRap{{ $rap->id }}">
-                                    <td colspan="9">
-                                        <strong>Indikator</strong>
-                                        <p>{{ $rap->indikator_keluaran }}</p>
-                                        <hr>
-                                    </td>
+                                <tr>
+                                    <th>Target</th>
+                                    <th>Realisasi</th>
+                                    <th>Target</th>
+                                    <th>Realisasi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($data as $rap)
+                                    <tr>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn-show-detail btn btn-secondary" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;" data-bs-animation="{true}" data-bs-toggle="collapse" data-bs-target="#collapseRap{{ $rap->id }}" data-bs-config='{"delay":"1000", "title":"123"}'>
+                                                    <i class="fa-solid fa-chevron-down"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>{{ $rap->klasifikasi_belanja }}</td>
+                                        <td>{{ $rap->kode_subkegiatan_full }}</td>
+                                        <td>{{ $rap->subkegiatan_uraian }}</td>
+                                        <td class="text-start">{{ $rap->target_keluaran . ' ' . $rap->satuan }}</td>
+                                        <td class="text-start"></td>
+                                        <td class="text-end">{{ formatIdr($rap->pagu_alokasi) }}</td>
+                                        <td class="text-end">{{ formatIdr(0) }}</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <button class="btn-edit-rap btn btn-sm btn-primary" value="{{ $rap }}" data-bs-toggle="modal" data-bs-target="#editRapModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="collapse" id="collapseRap{{ $rap->id }}">
+                                        <td colspan="9">
+                                            <strong>Indikator</strong>
+                                            <p>{{ $rap->indikator_keluaran }}</p>
+                                            <hr>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,5 +1,9 @@
 <x-app-layout-component :title="$app['title'] ?? null">
 
+    <script>
+        const listOpds = @json($opds);
+    </script>
+
     @if (session()->has('pesan-success'))
         <div class="row mb-3">
             <div class="alert alert-success" role="alert">{{ session()->get('pesan-success') }}</div>
@@ -34,8 +38,8 @@
                                     <th>Satuan</th>
                                     <th>Kondisi Awal</th>
                                     <th>Target Impact</th>
-                                    {{-- <th>Sumber Dana</th> --}}
-                                    {{-- <th></th> --}}
+                                    <th>SKPD</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
@@ -47,8 +51,8 @@
                                         <th style="background: #f7d5d5"></th>
                                         <th style="background: #f7d5d5"></th>
                                         <th style="background: #f7d5d5"></th>
-                                        {{-- <th style="background: #f7d5d5"></th> --}}
-                                        {{-- <th style="background: #f7d5d5"></th> --}}
+                                        <th style="background: #f7d5d5"></th>
+                                        <th style="background: #f7d5d5"></th>
                                     </tr>
                                     @foreach ($tema->indikator as $indikator)
                                         <tr>
@@ -58,8 +62,8 @@
                                             <th>{{ $indikator->satuan }}</th>
                                             <th class="text-center">{{ formatIdr($indikator->kondisi_awal, 2) }}</th>
                                             <th class="text-center">{{ formatIdr($indikator->target_impact, 2) }}</th>
-                                            {{-- <td></td> --}}
-                                            {{-- <td></td> --}}
+                                            <td></td>
+                                            <td></td>
                                         </tr>
                                     @endforeach
                                     @foreach ($tema->program as $program)
@@ -70,8 +74,8 @@
                                             <th></th>
                                             <th></th>
                                             <th></th>
-                                            {{-- <th></th> --}}
-                                            {{-- <th></th> --}}
+                                            <th></th>
+                                            <th></th>
                                         </tr>
                                         @foreach ($program->keluaran as $keluaran)
                                             <tr>
@@ -81,8 +85,8 @@
                                                 <th>{{ $keluaran->satuan }}</th>
                                                 <th></th>
                                                 <th></th>
-                                                {{-- <th></th> --}}
-                                                {{-- <th></th> --}}
+                                                <th></th>
+                                                <th></th>
                                             </tr>
                                             @foreach ($keluaran->aktifitas as $aktifitas)
                                                 <tr>
@@ -92,8 +96,8 @@
                                                     <th></th>
                                                     <th></th>
                                                     <th></th>
-                                                    {{-- <th></th> --}}
-                                                    {{-- <th></th> --}}
+                                                    <th></th>
+                                                    <th></th>
                                                 </tr>
                                                 @foreach ($aktifitas->target_aktifitas as $target_aktifitas)
                                                     <tr id="target-aktifitas-{{ $target_aktifitas->id }}">
@@ -103,19 +107,14 @@
                                                         <td>{{ $target_aktifitas->satuan }}</td>
                                                         <td></td>
                                                         <td id="volume-target-{{ $target_aktifitas->id }}" class="text-center">{{ $target_aktifitas->volume ? formatIdr($target_aktifitas->volume, 2) : '' }}</td>
-                                                        {{-- <td id="sumberdana-target-{{ $target_aktifitas->id }}">{{ $target_aktifitas->sumberdana }}</td> --}}
-                                                        {{-- <td class="text-center" style="width: 10%">
-                                                            <div class="btn-group">
-                                                                <div data-bs-toggle="tooltip" data-bs-title="edit volume">
-                                                                    <button value="{{ $target_aktifitas->id }}" class="btn btn-primary btn-add-volume-target" data-bs-toggle="modal" data-bs-target="#addVolTargetAktifitasMmodal">
-                                                                        <i class="fa-solid fa-pen-to-square"></i>
-                                                                    </button>
-                                                                </div>
-                                                                <div data-bs-toggle="tooltip" data-bs-title="reset volume">
-                                                                    <button class="btn btn-danger btn-reset-volume-target" value="{{ $target_aktifitas->id }}"><i class="fa-solid fa-arrows-rotate"></i></button>
+                                                        <td id="taggingCount{{ $target_aktifitas->id }}">{{ $target_aktifitas->taggings->count() }}</td>
+                                                        <td class="text-nowrap">
+                                                            <div class="btn-group" role="group">
+                                                                <div data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Tagging SKPD">
+                                                                    <button class="btn btn-sm btn-primary btn-tag-skpd" value="{{ $target_aktifitas->id }}" data-bs-toggle="modal" data-bs-target="#tagSkpdModal"><i class="fa-solid fa-list"></i> SKPD</button>
                                                                 </div>
                                                             </div>
-                                                        </td> --}}
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                             @endforeach
@@ -130,6 +129,7 @@
         </div>
     </div>
 
-    @include('otsus.otsus-modals.otsus-modal-add-volume-target-aktifitas')
+    {{-- @include('otsus.otsus-modals.otsus-modal-add-volume-target-aktifitas') --}}
+    @include('v1-1.admin.otsus.modal.modal-tag-skpd')
     @include('otsus.otsus-script')
 </x-app-layout-component>

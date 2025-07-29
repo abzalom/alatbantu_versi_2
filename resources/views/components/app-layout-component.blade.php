@@ -27,56 +27,81 @@
 
     <script>
         var cient_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        (async () => {
-            const {
-                default: Schedule
-            } = await import(`${window.location.origin}/assets/js/class/Schedule.js`);
-            let schedule = new Schedule(new Date(jadwal_aktif.selesai ? jadwal_aktif.selesai : 0).getTime());
-            let x = setInterval(function() {
-                let time = schedule.updateCountDown();
-                if (time.countDownDate) {
-                    $('.count-down-time').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
-                    $('#card_timer_title').html(`
-                        ${capWords(jadwal_aktif.tahapan)} <br> ${jadwal_aktif.keterangan}
-                    `);
-                    $('#schedule-float-label').html('Tahapan ' + capWords(jadwal_aktif.tahapan));
-                    $('#timer-header-label').html(`Tahapan :  ${capWords(jadwal_aktif.tahapan)} <small class="badge text-bg-secondary">${jadwal_aktif.status ? 'berlangsung' : ''}</small>`);
-                    $('#days > .count').html(time.days);
-                    $('#hours > .count').html(time.hours);
-                    $('#minutes > .count').html(time.minutes);
-                    $('#seconds > .count').html(time.seconds);
-                    $('#timer-header').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
-                    if (time.distance < 0) {
-                        clearInterval(x);
-                        $('.count-down-time').html('Waktu Habis');
-                        $('#days > .count').html('00');
-                        $('#hours > .count').html('00');
-                        $('#minutes > .count').html('00');
-                        $('#seconds > .count').html('00');
-                        $('#timer-header').html(`waktu habis`);
-                        $('#timer-float-info').show();
-                        $('#timer-float').hide();
-                        $('#timer-float-info').html('waktu habis');
-                    }
-                }
-                if (!time.countDownDate) {
-                    clearInterval(x);
-                    $('#timer-float').hide();
-                    $('#timer-float-info').show();
-                    $('#timer-float-info').html('Tidak Ada Jadwal Aktif');
-                    $('.count-down-time').html('Tidak Ada Jadwal Aktif');
-                    $('#schedule-float-label').html('Belum ada tahapan');
-                    $('#timer-header-label').html(`Tahapan : belum ada tahapan`);
-                    $('#timer-header').html(`Tidak Ada Jadwal Aktif`);
-                }
-            }, 1000);
-        })();
-
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const hostname = window.location.hostname;
         const port = window.location.port;
         const appApiUrl = `http://${hostname}:${port}`;
         const jadwal_aktif = @json(session('jadwal_aktif'));
+        const jadwal_monev = @json(session('jadwal_monev'));
+
+
+        (async () => {
+            const {
+                default: Schedule
+            } = await import(`${window.location.origin}/assets/js/class/Schedule.js`);
+            let schedule = new Schedule(new Date(jadwal_aktif.selesai ? jadwal_aktif.selesai : 0).getTime());
+            if (!jadwal_monev.status) {
+                let x = setInterval(function() {
+                    let time = schedule.updateCountDown();
+                    if (time.countDownDate) {
+                        $('.count-down-time').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
+                        $('#card_timer_title').html(`
+                            ${capWords(jadwal_aktif.tahapan)} <br> ${jadwal_aktif.keterangan}
+                        `);
+                        $('#schedule-float-label').html('Tahapan ' + capWords(jadwal_aktif.tahapan));
+                        $('#timer-header-label').html(`Tahapan :  ${capWords(jadwal_aktif.tahapan)} <small class="badge text-bg-secondary">${jadwal_aktif.status ? 'berlangsung' : ''}</small>`);
+                        $('#days > .count').html(time.days);
+                        $('#hours > .count').html(time.hours);
+                        $('#minutes > .count').html(time.minutes);
+                        $('#seconds > .count').html(time.seconds);
+                        $('#timer-header').html(`${time.days} Hari ${time.hours} Jam ${time.minutes} Menit ${time.seconds} Detik`);
+                        if (time.distance < 0) {
+                            clearInterval(x);
+                            $('.count-down-time').html('Waktu Habis');
+                            $('#days > .count').html('00');
+                            $('#hours > .count').html('00');
+                            $('#minutes > .count').html('00');
+                            $('#seconds > .count').html('00');
+                            $('#timer-header').html(`waktu habis`);
+                            $('#timer-float-info').show();
+                            $('#timer-float').hide();
+                            $('#timer-float-info').html('waktu habis');
+                        }
+                    }
+                    if (!time.countDownDate) {
+                        clearInterval(x);
+                        $('#timer-float').hide();
+                        $('#timer-float-info').show();
+                        $('#timer-float-info').html('Tidak Ada Jadwal Aktif');
+                        $('#schedule-float-label').html('Belum ada tahapan');
+                        $('#timer-header-label').html(`Tahapan : belum ada tahapan`);
+                        $('#timer-header').html(`Tidak Ada Jadwal Aktif`);
+                        $('.count-down-time').html('Tidak Ada Jadwal Aktif');
+                    }
+                }, 1000);
+            } else {
+                document.getElementById('timer-float').style.display = 'none';
+                document.getElementById('timer-float-info').style.display = 'block';
+                document.getElementById('schedule-float-label').innerHTML = 'Pelaporan Kinerja';
+                document.getElementById('timer-float-info').innerHTML = jadwal_monev.nama;
+                document.getElementById('timer-header-label').innerHTML = jadwal_monev.nama;
+                document.getElementById('timer-header').innerHTML = jadwal_monev.keterangan;
+            }
+        })();
+
+        function formatAngka(value) {
+            // Ubah ke float dulu
+            const number = parseFloat(value);
+            if (isNaN(number)) return '';
+
+            // Jika angka adalah bilangan bulat
+            if (Number.isInteger(number)) {
+                return number.toString();
+            }
+
+            // Jika ada desimal yang signifikan
+            return number.toFixed(2).replace('.', ',');
+        }
 
         function formatIDR(value) {
             value = parseFloat(value);
@@ -87,17 +112,49 @@
             });
         }
 
-        // Fungsi untuk memformat angka sesuai dengan kondisi
+        // Fungsi untuk memformat angka sesuai kondisi
         function formatNumber(number) {
-            // Memisahkan angka menjadi bagian sebelum dan setelah titik desimal
+            // Hapus pemisah ribuan (titik)
+            number = number.replace(/\./g, '');
+
+            // Konversi ke angka
+            number = parseFloat(number);
+
+            // Jika bukan angka valid, kembalikan string kosong
+            if (isNaN(number)) return '';
+
+            // Pisahkan angka menjadi bagian integer dan desimal
             let [integerPart, decimalPart] = number.toString().split('.');
 
-            // Jika bagian desimal ada dan nilainya bukan 00
+            // Jika ada bagian desimal dan bukan "00", format dengan 2 desimal
             if (decimalPart && decimalPart !== '00') {
-                return number.toFixed(2); // Tampilkan dengan dua desimal
+                return number.toFixed(2);
             }
-            return integerPart; // Jika tidak, tampilkan hanya bagian integer
+
+            // Jika tidak, kembalikan angka bulat
+            return integerPart;
         }
+
+        function formatInputAngka(num) {
+            // Hapus karakter selain angka dan titik
+            num = num.replace(/[^0-9.,]/g, '');
+            if (num !== null) {
+                // Pastikan hanya ada satu titik desimal (.)
+                let parts = num.split(',');
+                if (parts.length > 2) {
+                    num = parts[0] + ',' + parts.slice(1).join('');
+                }
+                // Pisahkan angka sebelum dan sesudah desimal
+                let splitNum = num.split(',');
+                let integerPart = splitNum[0].replace(/\D/g, ''); // Pastikan hanya angka di integer
+                let decimalPart = splitNum.length > 1 ? ',' + splitNum[1].replace(/\D/g, '') : '';
+                // Format bagian ribuan
+                let formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                let result = formattedInteger + decimalPart;
+                return result;
+            }
+        }
+
 
         function capWords(text) {
             return text.replace(/\b\w/g, (char) => char.toUpperCase());
@@ -111,9 +168,9 @@
 </head>
 
 <body>
-    <x-app-navbar-component />
+    <x-app-navbar-component></x-app-navbar-component>
     <div id="container">
-        <x-app-sidebar-component :app="$app" />
+        <x-app-sidebar-component :app="$app"></x-app-sidebar-component>
         <main class="schedule-active">
             @include('mobile-component.schedule-float')
             {{ $slot }}
@@ -130,6 +187,7 @@
             </div>
         </div>
     </div>
+
     <script src="/assets/js/new_template/home.js"></script>
     <script>
         const navbar = document.getElementById("top-navbar");
@@ -168,7 +226,7 @@
                     </div>
                 </div>
             </div>
-        `);
+            `);
             $('#alertBsToast').removeClass().addClass(`toast align-items-center text-bg-${alertType} border-0`);
             $('#alertBsToast').toast('show');
         }
@@ -232,6 +290,16 @@
 
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
+        document.querySelectorAll('.format-angka').forEach(function(element) {
+            element.addEventListener('input', function() {
+                let vol = this.value;
+                if (vol) {
+                    let formatAngka = formatInputAngka(vol);
+                    this.value = formatAngka;
+                }
+            });
+        });
     </script>
 </body>
 

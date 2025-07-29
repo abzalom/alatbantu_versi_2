@@ -54,7 +54,7 @@
                                             $textMuted = 'text-muted';
                                         }
                                     @endphp
-                                    <tr>
+                                    <tr @if (!$jadwal->status) class="table-danger" @endif>
                                         <td class="{{ $textMuted }}">{{ $no++ }}</td>
                                         <td class="{{ $textMuted }}">{{ $jadwal->tahapan }}</td>
                                         <td class="{{ $textMuted }}">
@@ -66,18 +66,18 @@
                                         <td class="{{ $textMuted }}">
                                             {{ $jadwal->selesai }}
                                         </td>
-                                        <form method="post">
+                                        <form method="post" action="/config/schedule/rap/input_user">
                                             @csrf
-                                            @if (!$jadwal->deleted_at)
+                                            @if ($jadwal->status)
                                                 <td class="text-nowrap">
                                                     @if ($jadwal->penginputan)
                                                         <input type="hidden" name="id" value="{{ $jadwal->id }}">
                                                         <input type="hidden" name="penginputan" value="false">
-                                                        <span class="badge bg-success">Aktif</span> | <button class="btn btn-sm btn-danger"><i class="fa-solid fa-circle-xmark"></i></button>
+                                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP Aktif">Aktif</span> | <button class="btn btn-sm btn-danger"><i class="fa-solid fa-circle-xmark"></i></button>
                                                     @else
                                                         <input type="hidden" name="id" value="{{ $jadwal->id }}">
                                                         <input type="hidden" name="penginputan" value="true">
-                                                        <span class="badge bg-danger">Tidak Aktif</span> | <button class="btn btn-sm btn-primary"><i class="fa-solid fa-circle-check"></i></button>
+                                                        <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP dikunci. Terkecuali admin">Tidak Aktif</span> | <button class="btn btn-sm btn-primary"><i class="fa-solid fa-circle-check"></i></button>
                                                     @endif
                                                 </td>
                                             @else
@@ -117,7 +117,7 @@
                                             @if ($jadwal->status)
                                                 <div class="btn-group">
                                                     <button class="btn btn-sm btn-primary btn-edit-schedule" value="{{ $jadwal->id }}" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-pen-to-square"></i></button>
-                                                    <form action="/config/schedule/lock" method="post">
+                                                    <form action="/config/schedule/rap/lock" method="post">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $jadwal->id }}">
                                                         <button class="btn btn-sm btn-danger"><i class="fa-solid fa-lock"></i></button>
