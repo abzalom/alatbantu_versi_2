@@ -1,0 +1,9 @@
+.btn-xs {
+    padding: 0.15rem 0.3rem;
+    /* lebih kecil dari btn-sm */
+    font-size: 0.7rem;
+    /* perkecil ukuran font */
+    line-height: 1.2;
+    border-radius: 0.2rem;
+    /* biar nggak terlalu bulat */
+}

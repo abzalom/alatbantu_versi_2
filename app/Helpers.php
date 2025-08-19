@@ -60,3 +60,48 @@ if (!function_exists('showError')) {
         ]);
     }
 }
+
+
+if (!function_exists('terbilang')) {
+    function terbilang($nilai)
+    {
+        $huruf = [
+            '',
+            'satu',
+            'dua',
+            'tiga',
+            'empat',
+            'lima',
+            'enam',
+            'tujuh',
+            'delapan',
+            'sembilan',
+            'sepuluh',
+            'sebelas',
+        ];
+        $terbilang = '';
+        // $nilai = 20;
+        if ($nilai < 12) {
+            $terbilang = $huruf[$nilai];
+        } else if ($nilai < 20) {
+            $terbilang = terbilang($nilai - 10) . ' belas';
+        } else if ($nilai < 100) {
+            $terbilang = terbilang($nilai / 10) . ' puluh ' . terbilang($nilai % 10);
+        } else if ($nilai < 200) {
+            $terbilang = 'seratus ' . terbilang($nilai - 100);
+        } else if ($nilai < 1000) {
+            $terbilang = terbilang($nilai / 100) . ' ratus ' . terbilang($nilai % 100);
+        } else if ($nilai < 2000) {
+            $terbilang = 'seribu ' . terbilang($nilai - 1000);
+        } else if ($nilai < 1000000) {
+            $terbilang = terbilang($nilai / 1000) . ' ribu ' . terbilang($nilai % 1000);
+        } else if ($nilai < 1000000000) {
+            $terbilang = terbilang($nilai / 1000000) . ' juta ' . terbilang($nilai % 1000000);
+        } else if ($nilai < 1000000000000) {
+            $terbilang = terbilang($nilai / 1000000000) . ' milyar ' . terbilang($nilai % 1000000000);
+        } else if ($nilai < 1000000000000000) {
+            $terbilang = terbilang($nilai / 1000000000000) . ' triliun ' . terbilang($nilai % 1000000000000);
+        }
+        return $terbilang;
+    }
+}

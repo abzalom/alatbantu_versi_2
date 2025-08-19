@@ -22,7 +22,7 @@ class WebAuthenticateUser
     {
         if (!Auth::check()) {
             // Redirect user if not authenticated
-            return redirect()->to('/auth/login')->with('error', 'Anda belum login atau anda telah login di perangkat lain.');
+            return redirect()->to('/auth/login')->with('error', 'Silahkan login dulu');
         }
 
         if (Auth::check() && !Auth::user()->hasRole('admin')) {

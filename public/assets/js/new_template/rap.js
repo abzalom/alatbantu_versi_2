@@ -495,6 +495,7 @@ $(document).ready(function () {
         const opd = data.opd;
         const rap = data.rap;
         console.log(data);
+        console.log(typeof data);
         console.log(opd);
         console.log(rap);
         if (!data) {
@@ -508,13 +509,14 @@ $(document).ready(function () {
         }
 
         $('#detailRapOpdModalLabel').text(opd);
+        $('#modal-detail-rap-id').val(rap.id);
 
         $('#modal-detail-rap-target_aktifitas').text(rap.tagging.target_aktifitas.kode_target_aktifitas + ' - ' + rap.tagging.target_aktifitas.uraian);
-        $('#modal-detail-rap-volume_target').text(rap.tagging.volume + ' ' + rap.tagging.satuan);
+        $('#modal-detail-rap-volume_target').text(formatAngka(rap.tagging.volume) + ' ' + rap.tagging.satuan);
         $('#modal-detail-rap-klasifikasi_belanja').text(rap.klasifikasi_belanja);
         $('#modal-detail-rap-subkegiatan').text(rap.text_subkegiatan);
         $('#modal-detail-rap-indikator_subkegiatan').text(rap.indikator_subkegiatan);
-        $('#modal-detail-rap-kinerja_subkegiatan').text(rap.vol_subkeg + ' ' + rap.satuan_subkegiatan);
+        $('#modal-detail-rap-kinerja_subkegiatan').text(formatAngka(rap.vol_subkeg) + ' ' + rap.satuan_subkegiatan);
         $('#modal-detail-rap-anggaran').text('Rp. ' + formatIDR(rap.anggaran));
         $('#modal-detail-rap-penerima_manfaat').text(rap.penerima_manfaat == 'oap' ? 'Khusus Orang Asli Papua' : 'Umum (OAP dan Non OAP)');
         $('#modal-detail-rap-jenis_layanan').text(rap.jenis_layanan == 'terkait' ? 'Terkait langsung ke masyarakat' : 'Kegiatan Pendukung');
@@ -524,7 +526,15 @@ $(document).ready(function () {
         $('#modal-detail-rap-waktu_pelaksanaan').text(rap.mulai + ' s.d. ' + rap.selesai);
         $('#modal-detail-rap-dana_lain').text(rap.dana_lain ? JSON.parse(rap.dana_lain).map(item => item.uraian).join(', ') : 'Tidak ada dana lain');
         $('#modal-detail-rap-lokus').text(rap.lokus ? JSON.parse(rap.lokus).map(item => item.kampung).join(', ') : 'Tidak ada lokasi fokus');
-        $('#modal-detail-rap-koordinat').text(rap.koordinat ? rap.koordinat : 'Tidak ada koordinat');
+        $('#modal-detail-rap-koordinat').html(
+            rap.koordinat ?
+            rap.koordinat.replace(/\\n/g, '<br><br>')
+            .replace(/\\"/g, '"') // kalau ada \" jadi "
+            .replace(/\\'/g, "'") // kalau ada \' jadi '
+            :
+            'Tidak ada koordinat'
+        );
+
         $('#modal-detail-rap-keterangan').text(rap.keterangan ? rap.keterangan : 'Tidak ada keterangan');
         $('#modal-detail-rap-data_dukung').html(`
             <ul>
@@ -556,20 +566,39 @@ $(document).ready(function () {
                 : ''}
             </ul>
         `);
-        let pembahasan = 'Belum dibahas & Belum divalidasi';
 
-        if (rap.pemabahasan) {
-            pembahasan = rap.pemabahasan == 'setujui' ? 'Disetujui' : (rap.pembahasan == 'perbaikan' ? 'Perbaikan' : 'Tidak disetujui');
-            pembahasan += rap.validasi ? ' & Telah divalidasi' : ' & Belum divalidasi';
+        if (!isAdmin) {
+            let pembahasan = 'Belum dibahas & Belum divalidasi';
+            if (rap.pemabahasan) {
+                pembahasan = rap.pemabahasan == 'setujui' ? 'Disetujui' : (rap.pembahasan == 'perbaikan' ? 'Perbaikan' : 'Tidak disetujui');
+                pembahasan += rap.validasi ? ' & Telah divalidasi' : ' & Belum divalidasi';
+            }
+            $('#modal-detail-rap-status').text(pembahasan);
+            $('#modal-detail-rap-catatan').text(rap.catatan);
+        } else {
+            $('#modal-detail-rap-status').html(`
+                <select name="pembahasan" class="form-control" id="select-status_pembahasan" data-placeholder="Pilih..." required>
+                    <option value="">Pilih...</option>
+                    <option value="setujui" ${rap.pembahasan == 'setujui' ? 'selected' : ''}>Setujui</option>
+                    <option value="perbaiki" ${rap.pembahasan == 'perbaiki' ? 'selected' : ''}>Perbaiki</option>
+                    <option value="tolak" ${rap.pembahasan == 'tolak' ? 'selected' : ''}>Tolak</option>
+                </select>
+            `);
+            $('#modal-detail-rap-catatan').html(`
+                <textarea name="catatan" class="form-control" id="pembahasan-status" placeholder="Catatan Pembahasan" rows="3" required>${rap.catatan ?? ''}</textarea>
+            `);
         }
 
-        $('#modal-detail-rap-status').text(pembahasan);
-        $('#modal-detail-rap-catatan').text(rap.catatan);
 
         setTimeout(() => {
             $('#modal-detail-rap-show-spinner').hide();
             $('#modal-detail-rap-show-content').show();
         }, 800);
     });
+
+    // $('.btn-bahas-rap').on('click', function () {
+    //     const data = $(this).data('rap');
+    //     console.log(data);
+    // });
 
 });

@@ -154,7 +154,7 @@ class RakortekPembahasanUrusanController extends Controller
     {
         $id_opd = $request->id;
         if (!$id_opd) {
-            return redirect()->to('/rakortek/pembahasan/urusan')->with('error', 'Perangkat Daerah tidak ditemukan!');
+            return redirect()->to('/pembahasan/rakortek/urusan')->with('error', 'Perangkat Daerah tidak ditemukan!');
         }
         $opd = Opd::with([
             'tag_bidang.bidang' => fn($q) => $q->select([
@@ -176,9 +176,9 @@ class RakortekPembahasanUrusanController extends Controller
             return redirect()->to('/pembahasan/rakortek/urusan')->with('error', 'Perangkat Daerah tidak ditemukan!');
         }
 
-        // redirect to /rakortek/pembahasan/urusan jika bidang tidak mempunyai indikator
+        // redirect to /pembahasan/rakortek/urusan jika bidang tidak mempunyai indikator
         if ($opd->tag_bidang->isEmpty() || $opd->tag_bidang->every(fn($tag) => $tag->indikators->isEmpty())) {
-            return redirect()->to('/rakortek/pembahasan/urusan')->with('error', 'Perangkat Daerah tidak mempunyai indikator atau belum mengisi target kinerja indikator urusan!');
+            return redirect()->to('/pembahasan/rakortek/urusan')->with('error', 'Perangkat Daerah tidak mempunyai indikator atau belum mengisi target kinerja indikator urusan!');
         }
         // return $opd;
         return view('v1-1.rakortek.pembahasan.urusan.rakortek-pembahasan-urusan-opd', [

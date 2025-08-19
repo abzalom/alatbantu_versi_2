@@ -17,38 +17,18 @@
 </head>
 
 <body>
-
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>#</th>
-                <th>Kode OPD</th>
-                <th>Nama OPD</th>
-                <th>Strategi</th>
-                <th>Arah Kebijakan</th>
-                <th>Prioritas</th>
-                <th>Bidang Urusan</th>
-                <th>Program</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($data as $rpjmd)
-                @foreach ($rpjmd['opd'] as $opd)
-                    <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $opd['kode_opd'] }}</td>
-                        <td>{{ $opd['nama_opd'] }}</td>
-                        <td>{{ $rpjmd['strategis'] }}</td>
-                        <td>{{ $rpjmd['arah_kebijakan'] }}</td>
-                        <td>{{ $rpjmd['prioritas'] }}</td>
-                        <td>{{ $rpjmd['bidang'] }}</td>
-                        <td>{{ $rpjmd['program'] }}</td>
-                    </tr>
-                @endforeach
-            @endforeach
-        </tbody>
-    </table>
-
+    <div class="container">
+        <button class="btn btn-primary" id="testButton" data-rap='@json($rap)'>{{ $rap->text_subkegiatan }}</button>
+    </div>
+    <script src="/vendors/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#testButton').on('click', function() {
+                var rap = $(this).data('rap');
+                console.log(rap);
+            });
+        });
+    </script>
 </body>
 
 </html>

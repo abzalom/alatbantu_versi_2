@@ -13,18 +13,16 @@ class UserController extends Controller
 {
     public function user_config(Request $request)
     {
-        $data = User::whereNot('id', Auth::user()->id)
-            ->withTrashed()
-            ->get();
-        $opds = Opd::get();
-        // return $opds;
+        $users = User::whereNot('id', Auth::id())
+            ->whereNot('username', 'admin')
+            ->with(['opds'])->get();
+        // return $users;
         return view('app.pengaturan.users.pengaturan-users', [
             'app' => [
                 'title' => 'Pengaturan',
                 'desc' => 'Pengaturan Users',
             ],
-            'data' => $data,
-            'opds' => $opds,
+            'users' => $users,
         ]);
     }
 }

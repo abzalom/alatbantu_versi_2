@@ -34,6 +34,8 @@ Route::middleware(ApiAuthToken::class)->group(function () {
         Route::controller(ApiOpdController::class)->group(function () {
             Route::post('/data/opd', 'api_opd');
             Route::post('/data/opd/subkegiatan', 'api_subkegiatan_opd');
+            Route::post('/save/kepala_opd/save', 'api_save_kepala_opd');
+            Route::post('/update/kepala_opd/status', 'api_update_kepala_opd_status');
         });
         Route::controller(ApiUsersController::class)->group(function () {
             Route::post('/data/user', 'get_data_user');

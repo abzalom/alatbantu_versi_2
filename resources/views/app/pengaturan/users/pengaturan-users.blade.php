@@ -1,7 +1,7 @@
 <x-app-layout-component :title="$app['title'] ?? null">
 
     <script>
-        const listSkpd = @json($opds);
+        const listSkpd = @json($users->pluck('opds')->flatten());
     </script>
 
     @if (session()->has('pesan-success'))
@@ -62,7 +62,7 @@
                         @php
                             $no = 1;
                         @endphp
-                        @foreach ($data as $user)
+                        @foreach ($users as $user)
                             <tr>
                                 <td>{{ $no++ }} <input type="checkbox" class="form-check-input user-selected" name="user_select_all" value="{{ $user->id }}"> </td>
                                 <td>{{ $user->name }}</td>
@@ -81,15 +81,24 @@
                                         <span class="badge text-bg-{{ $color }}">{{ $role }}</span>
                                     @endforeach
                                 </td>
-                                <td class="text-center">
-                                    @if (!$user->deleted_at)
-                                        <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tangging SKPD">
-                                            <button class="btn btn-sm btn-primary btn-tagging-skpd-user" value="{{ $user->id }}" data-tahun="{{ session()->get('tahun') }}" data-bs-toggle="modal" data-bs-target="#userTaggingSkpdModal"><i class="fa-solid fa-list"></i></button>
-                                        </div>
+                                <td class="text-wrap">
+                                    @if ($user->opds->count() > 0)
+                                        <ul>
+                                            @foreach ($user->opds as $opd)
+                                                <li style="border-bottom: 1px solid #aeaeae; padding: 2px 0;">
+                                                    {{ $opd->nama_opd }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
                                     @endif
                                 </td>
                                 <td class="text-center" style="width: 2%">
                                     <div class="d-flex gap-1 justify-content-center">
+                                        @if (!$user->deleted_at)
+                                            <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Tangging SKPD">
+                                                <button class="btn btn-sm btn-primary btn-tagging-skpd-user" value="{{ $user->id }}" data-tahun="{{ session()->get('tahun') }}" data-bs-toggle="modal" data-bs-target="#userTaggingSkpdModal"><i class="fa-solid fa-list"></i></button>
+                                            </div>
+                                        @endif
                                         @if (!$user->deleted_at)
                                             <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit User">
                                                 <button class="btn btn-sm btn-secondary btn-edit-user" value="{{ $user->id }}" data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="fa-solid fa-pen-to-square"></i></button>

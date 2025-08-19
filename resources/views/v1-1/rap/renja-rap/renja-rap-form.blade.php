@@ -304,7 +304,7 @@
                                 <div class="mb-4">
                                     <label for="upload-file-kak" class="form-label">Kerangka Acuan Kerja [KAK] <small class="text-muted">(*wajib)</small></label>
                                     <div id="upload-file-kak-group" class="input-group">
-                                        <label class="input-group-text {{ $isEdit ? 'text-bg-danger' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-kak').click()" @else for="upload-file-kak" @endif>
+                                        <label class="input-group-text {{ $isEdit ? 'text-bg-secondary' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-kak').click()" @else for="upload-file-kak" @endif>
                                             @if ($isEdit)
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             @else
@@ -333,7 +333,7 @@
                                 <div class="mb-4">
                                     <label for="upload-file-rab" class="form-label">Rencana Anggaran Biaya [RAB] <small class="text-muted">(*wajib)</small></label>
                                     <div id="upload-file-rab-group" class="input-group">
-                                        <label class="input-group-text {{ $isEdit ? 'text-bg-danger' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-rab').click()" @else for="upload-file-rab" @endif>
+                                        <label class="input-group-text {{ $isEdit ? 'text-bg-secondary' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-rab').click()" @else for="upload-file-rab" @endif>
                                             @if ($isEdit)
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             @else
@@ -360,8 +360,8 @@
                                 <div class="mb-4">
                                     <label for="upload-file-pendukung1" class="form-label">File pendukung 1 <small class="text-muted">(*wajib)</small></label>
                                     <div class="input-group">
-                                        <label class="input-group-text {{ $isEdit ? 'text-bg-danger' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-pendukung1').click()" @else for="upload-file-pendukung1" @endif>
-                                            @if ($isEdit)
+                                        <label class="input-group-text {{ $isEdit && $edit_rap->file_pendukung1_name ? 'text-bg-secondary' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.getElementById('upload-file-pendukung1').click()" @else for="upload-file-pendukung1" @endif>
+                                            @if ($isEdit && $edit_rap->file_pendukung1_name)
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             @else
                                                 File Tambahan
@@ -375,6 +375,16 @@
                                                 Pilih File Pendukung Lainya
                                             @endif
                                         </span>
+                                        @if ($isEdit && $edit_rap->file_pendukung1_name)
+                                            <label class="input-group-text" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus File Pendukung 1">
+                                                <div class="form-check">
+                                                    <input name="delete_file_pendukung1" class="form-check-input" type="checkbox" value="1" id="checkDefault">
+                                                    <label class="form-check-label" for="checkDefault">
+                                                        Hapus file ini
+                                                    </label>
+                                                </div>
+                                            </label>
+                                        @endif
                                     </div>
                                     <div id="error-div-pendukung1">
                                         @error('file_pendukung1_name')
@@ -387,7 +397,7 @@
                                 <div class="mb-4">
                                     <label for="upload-file-pendukung2" class="form-label">File pendukung lainnya</small></label>
                                     <div class="input-group">
-                                        <label class="input-group-text {{ $isEdit && $edit_rap->file_pendukung2_name ? 'text-bg-danger' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.querySelector('input[name=file_pendukung2_name]').click()" @else for="upload-file-pendukung2" @endif>
+                                        <label class="input-group-text {{ $isEdit && $edit_rap->file_pendukung2_name ? 'text-bg-secondary' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.querySelector('input[name=file_pendukung2_name]').click()" @else for="upload-file-pendukung2" @endif>
                                             @if ($isEdit && $edit_rap->file_pendukung2_name)
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             @else
@@ -402,6 +412,16 @@
                                                 Pilih File Pendukung Lainya
                                             @endif
                                         </span>
+                                        @if ($isEdit && $edit_rap->file_pendukung2_name)
+                                            <label class="input-group-text" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus File Pendukung 2">
+                                                <div class="form-check">
+                                                    <input name="delete_file_pendukung2" class="form-check-input" type="checkbox" value="1" id="checkDefault">
+                                                    <label class="form-check-label" for="checkDefault">
+                                                        Hapus file ini
+                                                    </label>
+                                                </div>
+                                            </label>
+                                        @endif
                                     </div>
                                     <div id="error-div-pendukung2">
                                         @error('file_pendukung2_name')
@@ -414,7 +434,7 @@
                                 <div class="mb-4">
                                     <label for="upload-file-pendukung3" class="form-label">File pendukung lainnya</small></label>
                                     <div class="input-group">
-                                        <label class="input-group-text {{ $isEdit && $edit_rap->file_pendukung3_name ? 'text-bg-danger' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.querySelector('input[name=file_pendukung3_name]').click()" @else for="upload-file-pendukung3" @endif>
+                                        <label class="input-group-text {{ $isEdit && $edit_rap->file_pendukung3_name ? 'text-bg-secondary' : '' }}" style="cursor: pointer" @if ($isEdit) onclick="document.querySelector('input[name=file_pendukung3_name]').click()" @else for="upload-file-pendukung3" @endif>
                                             @if ($isEdit && $edit_rap->file_pendukung3_name)
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             @else
@@ -429,6 +449,16 @@
                                                 Pilih File Pendukung Lainya
                                             @endif
                                         </span>
+                                        @if ($isEdit && $edit_rap->file_pendukung3_name)
+                                            <label class="input-group-text" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Hapus File Pendukung 3">
+                                                <div class="form-check">
+                                                    <input name="delete_file_pendukung3" class="form-check-input" type="checkbox" value="1" id="checkDefault">
+                                                    <label class="form-check-label" for="checkDefault">
+                                                        Hapus file ini
+                                                    </label>
+                                                </div>
+                                            </label>
+                                        @endif
                                     </div>
                                     <div id="error-div-pendukung3">
                                         @error('file_pendukung3_name')

@@ -70,18 +70,18 @@
                             <th>PERANGKAT DAERAH</th>
                             <th>ALOKASI PAGU</th>
                             <th>INPUTAN RAP {{ strtoupper($jenis) }}</th>
-                            <th>SELISIH</th>
+                            <th>TERSISAH</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
-                        @foreach ($data as $opd)
+                        @foreach ($opds as $opd)
                             <tr>
                                 <td>{{ $opd->kode_opd }}</td>
                                 <td>{{ $opd->nama_opd }}</td>
                                 <td>{{ formatIdr($opd->pagu ? $opd->pagu->$jenis : 0) }}</td>
                                 <td>{{ formatIdr($opd->alokasi) }}</td>
-                                <td>{{ formatIdr($opd->pagu ? $opd->alokasi - $opd->pagu->$jenis : 0) }}</td>
+                                <td>{{ formatIdr($opd->pagu ? $opd->pagu->$jenis - $opd->alokasi : 0) }}</td>
                                 <td>
                                     <div class="btn-group">
                                         <a href="/rap/{{ $jenis }}/renja?skpd={{ $opd->id }}" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="RAP"><i class="fa-solid fa-list"></i></a>

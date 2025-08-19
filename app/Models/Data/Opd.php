@@ -40,6 +40,16 @@ class Opd extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function kepala(): HasMany
+    {
+        return $this->hasMany(KepalaOpd::class, 'kode_unik_opd', 'kode_unik_opd');
+    }
+
+    public function kepala_aktif(): HasOne
+    {
+        return $this->hasOne(KepalaOpd::class, 'kode_unik_opd', 'kode_unik_opd')->where('status', true);
+    }
+
     public function tag_bidang(): HasMany
     {
         return $this->hasMany(OpdTagBidang::class, 'kode_unik_opd', 'kode_unik_opd');

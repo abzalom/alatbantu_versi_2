@@ -1,58 +1,13 @@
-ini rules pada saat insert data baru
-return [
-    'id_opd' => 'required|exists:opds,id',
-    'jenis' => 'required|in:bg,sg,dti',
-    'opd_tag_otsus' => 'required|exists:opd_tag_otsuses,id',
-    'id_subkegiatan' => 'required|exists:nomenklatur_sikds,id',
-    'vol_subkeg' => 'required|numeric',
-    'anggaran' => 'required|numeric',
-    'penerima_manfaat' => 'required|in:oap,umum',
-    'jenis_layanan' => 'required|in:terkait,pendukung',
-    'ppsb' => 'required|in:ya,tidak',
-    'multiyears' => 'required|in:ya,tidak',
-    'mulai' => 'required|date_format:Y-m-d',
-    'selesai' => 'required|date_format:Y-m-d|after_or_equal:mulai',
-    'jenis_kegiatan' => 'required|in:fisik,nonfisik',
-    'lokus' => 'required|array',
-    'lokus.*' => 'exists:lokuses,id',
-    'koordinat' => Rule::requiredIf($this->jenis_kegiatan == 'fisik'),
-    'dana_lain' => 'required|array',
-    'dana_lain.*' => 'exists:sumberdanas,id',
-    'keterangan' => 'required|string',
-    'file_kak_name' => 'required|file|mimes:pdf|max:5120',
-    'file_rab_name' => 'required|file|mimes:pdf|max:5120',
-    'file_pendukung1_name' => 'nullable|file|mimes:pdf|max:5120',
-    'file_pendukung2_name' => 'nullable|file|mimes:pdf|max:5120',
-    'file_pendukung3_name' => 'nullable|file|mimes:pdf|max:5120',
-    'link_file_dukung_lain' => 'nullable|url',
-    'tahun' => 'required|integer|min:2022|max:' . (date('Y') + 1),
-];
+saya mau jika $raps->with('tagging.target_aktifitas') maka datanya harus kembali seperti ini: 
 
-tetapi pada saat update data rules yang saya gunakan hanya ini
-
-return [
-    'vol_subkeg' => 'required|numeric',
-    'anggaran' => 'required|numeric',
-    'penerima_manfaat' => 'required|in:oap,umum',
-    'jenis_layanan' => 'required|in:terkait,pendukung',
-    'ppsb' => 'required|in:ya,tidak',
-    'multiyears' => 'required|in:ya,tidak',
-    'mulai' => 'required|date_format:Y-m-d',
-    'selesai' => 'required|date_format:Y-m-d|after_or_equal:mulai',
-    'jenis_kegiatan' => 'required|in:fisik,nonfisik',
-    'lokus' => 'required|array',
-    'lokus.*' => 'exists:lokuses,id',
-    'koordinat' => Rule::requiredIf($this->jenis_kegiatan == 'fisik'),
-    'dana_lain' => 'required|array',
-    'dana_lain.*' => 'exists:sumberdanas,id',
-    'keterangan' => 'required|string',
-    'file_kak_name' => 'required|file|mimes:pdf|max:5120',
-    'file_rab_name' => 'required|file|mimes:pdf|max:5120',
-    'file_pendukung1_name' => 'nullable|file|mimes:pdf|max:5120',
-    'file_pendukung2_name' => 'nullable|file|mimes:pdf|max:5120',
-    'file_pendukung3_name' => 'nullable|file|mimes:pdf|max:5120',
-    'link_file_dukung_lain' => 'nullable|url',
-];
-
-
-bagaiman cara mengaturnya pada StoreRapReqeust.php
+[
+    'data' => [
+        'target_aktifitas' => [
+            'kode_target_aktifitas' => 'di isi dengan kode target aktivitas',
+            'uraian' => 'di isi dengan uraian target aktivitas',
+            'raps' => [
+                // data dari rap yang sama dengan kode target aktivitas
+            ]
+        ]
+    ]
+]

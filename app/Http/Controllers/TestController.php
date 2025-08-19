@@ -7,21 +7,100 @@ use App\Models\Data\Lokus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RapRipppCollection;
+use App\Http\Resources\RapRipppResource;
+use App\Models\Data\KepalaOpd;
 use App\Models\Data\Sumberdana;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Nomenklatur\NomenklaturSikd;
 use App\Models\Rap\RapOtsus;
+use App\Models\Tagging\Nomenklatur\OpdTagBidang;
+use App\Models\Tagging\Otsus\OpdTagOtsus;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
 class TestController extends Controller
 {
 
-    public function test()
+    public function test(Request $request)
     {
-        $opd = Opd::find(91);
-        $rap = RapOtsus::where('kode_unik_opd', $opd->kode_unik_opd)->get();
-        return $rap;
+        $opd = Opd::whereHas('tag_otsus', function ($q) use ($request) {
+            $q->where('alias_dana', $request->jenis)
+                ->where('pembahasan', 'setujui')
+                ->where('validasi', true)
+            ;
+        })
+            ->with([
+                'tag_otsus' => fn($q) => $q->where([
+                    'alias_dana' => $request->jenis,
+                    'pembahasan' => 'setujui',
+                    'validasi' => true,
+                ])->whereHas('raps', function ($q) use ($request) {
+                    $q->where('alias_dana', $request->jenis)
+                        ->where([
+                            'pembahasan' => 'setujui',
+                            'validasi' => true,
+                        ])
+                        ->whereIn('pembahasan', $request->list == 'semua' ? ['setujui', 'tolak'] : [$request->list]);
+                }),
+                'target_aktifitas.aktifitas.program',
+                'tag_otsus.raps' => fn($q) => $q->where([
+                    'alias_dana' => $request->jenis,
+                    'validasi' => true,
+                ])
+                    ->whereIn('pembahasan', $request->list == 'semua' ? ['setujui', 'tolak'] : [$request->list]),
+            ])
+            ->find($request->opd);
+        // return $opd;
+        $data = [];
+
+        foreach ($opd->tag_otsus as $tag) {
+            if (!isset($data[$tag->program->kode_program])) {
+                $data[$tag->program->kode_program] = [
+                    'uraian' => $tag->program->kode_program . ' ' .  $tag->program->uraian,
+                    'aktifitas' => []
+                ];
+            }
+            if (!isset($data[$tag->program->kode_program]['aktifitas'][$tag->aktifitas->kode_aktifitas])) {
+                $data[$tag->program->kode_program]['aktifitas'][$tag->aktifitas->kode_aktifitas] = [
+                    'uraian' => $tag->aktifitas->kode_aktifitas . ' ' .  $tag->aktifitas->uraian,
+                    'target_aktifitas' => []
+                ];
+            }
+            if (!isset($data[$tag->program->kode_program]['aktifitas'][$tag->aktifitas->kode_aktifitas]['target_aktifitas'][$tag->target_aktifitas->kode_target_aktifitas])) {
+                $data[$tag->program->kode_program]['aktifitas'][$tag->aktifitas->kode_aktifitas]['target_aktifitas'][$tag->target_aktifitas->kode_target_aktifitas] = [
+                    'uraian' => $tag->target_aktifitas->kode_target_aktifitas . ' ' .  $tag->target_aktifitas->uraian,
+                    'raps' => []
+                ];
+            }
+
+            foreach ($tag->raps as $rap) {
+                if (!isset($data[$rap->kode_program]['aktifitas'][$rap->kode_aktifitas]['target_aktifitas'][$rap->kode_target_aktifitas]['raps'][$rap->id])) {
+                    $data[$rap->kode_program]['aktifitas'][$rap->kode_aktifitas]['target_aktifitas'][$rap->kode_target_aktifitas]['raps'][$rap->id] = [
+                        'subkegiatan' => $rap->text_subkegiatan,
+                        'indikator' => $rap->indikator_subkegiatan,
+                        'target' => $rap->vol_subkeg,
+                        'anggaran' => $rap->anggaran,
+                        'sumberdana' => $rap->sumberdana,
+                        'penerima_manfaat' => $rap->penerima_manfaat,
+                        'jenis_layanan' => $rap->jenis_layanan,
+                        'jenis_kegiatan' => $rap->jenis_kegiatan,
+                        'dana_lain' => $rap->dana_lain,
+                        'mulai' => $rap->mulai,
+                        'selesai' => $rap->selesai,
+                        'ppsb' => $rap->ppsb,
+                        'multiyears' => $rap->multiyears,
+                        'keterangan' => $rap->keterangan,
+                        'pembahasan' => $rap->pembahasan,
+                        'validasi' => $rap->validasi,
+                    ];
+                }
+            }
+        }
+
+        // return $opd;
+        return RapOtsus::find(7);
     }
 
     public function test_form(Request $request, $jenis, $id_opd)
@@ -201,5 +280,62 @@ class TestController extends Controller
             return response()->file($file);
         }
         return abort(404, 'File not found.');
+    }
+
+    public function quick_count_psu_papua(Request $request)
+    {
+        $user = Auth::user();
+        $sumberdana = $request->jenis == 'bg' ? 'Otsus 1%' : ($request->jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
+
+        $query = $user->hasRole('user')
+            // jika role user: batasi ke OPD yang dimiliki user
+            ? $user->opds()->where('opds.id', $request->skpd)   // pakai opds.id agar aman saat join pivot
+            // jika bukan user: langsung ke model Opd
+            : Opd::query()->whereKey($request->skpd);
+
+        // filter wajib: hanya OPD yang punya tag_otsus sesuai
+        $query = $query->whereHas('tag_otsus', function ($q) use ($request) {
+            $q->where('alias_dana', $request->jenis)
+                ->where('pembahasan', 'setujui')
+                ->where('validasi', true);
+        });
+
+        // filter wajib: hanya OPD yang punya tag_otsus sesuai
+        // $query = $query->with([
+        //     'tag_otsus' => fn($q) => $q->where('alias_dana', $request->jenis)
+        //         ->where('pembahasan', 'setujui')
+        //         ->where('validasi', true),
+        //     'tag_otsus.target_aktifitas' => fn($q) => $q->select(['kode_target_aktifitas', 'uraian', 'satuan']),
+        //     'tag_otsus.raps.subkegiatan.kegiatan.program.bidang.urusan'
+        // ]);
+        $opd = $query->first();
+        if (!$opd) {
+            abort(404, 'Perangkat Daerah tidak ditemukan!');
+        }
+        // return $opd;
+        $tag_bidang = OpdTagBidang::where('kode_unik_opd', $opd->kode_unik_opd)->get();
+        $nomen_sikd = NomenklaturSikd::whereIn('kode_bidang', $tag_bidang->pluck('kode_bidang'))->get();
+        $raps = RapOtsus::with('tagging.target_aktifitas')
+            ->whereHas('tagging', function ($query) use ($request) {
+                $query->where('alias_dana', $request->jenis)
+                    ->where('pembahasan', 'setujui')
+                    ->where('validasi', true);
+            })
+            ->where('alias_dana', $request->jenis)
+            ->where('kode_unik_opd', $opd->kode_unik_opd)
+            ->get();
+
+        // dump(new RapRipppCollection($raps));
+        return new RapRipppCollection($raps);
+
+        // return $raps->groupBy('tagging.target_aktifitas.kode_target_aktifitas');
+
+        // EKSEKUSI query
+
+        // return $opd->get();
+
+
+        // return $opd;
+        // $opd = Opd::where('id', $opd_user->id)->get();
     }
 }

@@ -183,4 +183,8 @@ $(document).ready(function () {
             showToast('File KAK & RAB wajib diunggah.', 'danger');
         }
     });
+
+    $('.btn-remove-file-pendukung').on('click', function () {
+        alert('Hapus file pendukung tidak didukung pada versi ini.');
+    });
 });

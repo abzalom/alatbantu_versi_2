@@ -7,6 +7,7 @@
 use App\Http\Controllers\Alatbantu\BantuPaguSkpdController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Cetak\CetakRapController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Otsus\OtsusController;
 use App\Http\Controllers\Otsus\RapOtsusController;
@@ -70,10 +71,6 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 
     Route::middleware(WebRoleMustAdmin::class)->group(function () {
 
-        Route::get('/config', function () {
-            return redirect()->to('/config/opd');
-        });
-
         Route::controller(UserController::class)->group(function () {
             Route::get('/config/user', 'user_config');
         });
@@ -92,11 +89,6 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
             Route::post('/config/schedule/monev/lock', 'lock_schedule_monev_config');
         });
 
-        Route::controller(ConfigOpdController::class)->group(function () {
-            Route::get('/config/opd', 'config_opd');
-            Route::post('/config/sinkron/opd-sipd', 'config_sinkron_opd');
-        });
-
         Route::controller(ConfigPaguSkpdController::class)->group(function () {
             Route::get('/config/pagu', 'config_pagu');
             Route::post('/config/pagu', 'save_config_pagu');
@@ -107,20 +99,6 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
             Route::get('/otsus/indikator', 'otsus_indikator');
             Route::get('/otsus/alokasi_dana', 'otsus_alokasi_dana');
             Route::post('/otsus/alokasi_dana', 'otsus_alokasi_dana_save');
-        });
-
-        Route::controller(RapOtsusController::class)->group(function () {
-            // Route::get('/rap/{jenis}', 'rap');
-            // Route::get('/rap/{jenis}/renja', 'renja_rap');
-            // Route::post('/rap/restore', 'restore_rap');
-            // Route::post('/rap/destroy', 'destroy_rap');
-            // Route::get('/rap/opd', 'rap_opd');
-            // Route::get('/rap/indikator', 'rap_indikator');
-            // Route::post('/rap/indikator/upload', 'rap_upload_indikator_opd');
-            // Route::get('/rap/opd/form-subkegiatan', 'rap_form');
-            // Route::post('/rap/opd/form-subkegiatan', 'rap_insert_form');
-            // Route::post('/rap/opd/upload-subkegiatan', 'rap_upload_subkegiatan');
-            // Route::post('/rap/opd/upload-data-dukung', 'rap_upload_data_dukung');
         });
 
         Route::get('/sinkron', function () {
@@ -160,6 +138,14 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
             Route::get('/data/sikd/rap/{sumberdana}', 'rap_otsus');
             Route::post('/data/sikd/rap/{sumberdana}/destroy', 'destroy_rap_otsus');
         });
+    });
+
+    Route::controller(ConfigOpdController::class)->group(function () {
+        Route::any('/config', function () {
+            return redirect()->to('/config/opd');
+        });
+        Route::get('/config/opd', 'config_opd');
+        Route::post('/config/sinkron/opd-sipd', 'config_sinkron_opd');
     });
 
     Route::get('/rakortek', function () {
@@ -211,6 +197,8 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::get('/rap/{jenis}/renja/{id_opd}/form', 'renja_form_rap');
         Route::post('/rap/{jenis}/renja/{id_opd}/form', 'insert_new_rap');
         Route::post('/rap/{jenis}/renja/{id_opd}/form/update', 'update_rap');
+        Route::post('/rap/validasi', 'validasi_rap');
+        Route::post('/rap/pembahasan', 'pembahasan_rap');
         Route::post('/rap/restore', 'restore_rap');
         Route::post('/rap/destroy', 'destroy_rap');
     });
@@ -226,12 +214,16 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
     });
 
     Route::middleware(ProductionCheck::class)->controller(SinkronDataToLocalController::class)->group(function () {});
+
+    Route::controller(CetakRapController::class)->group(function () {
+        Route::get('/cetak/rap', 'cetak_rap');
+    });
 });
 
 Route::controller(TestController::class)->group(function () {
-    Route::get('/test/{jenis}/renja/{id_opd}/form', 'test_form');
-    Route::post('/test/{jenis}/renja/{id_opd}/form', 'post_test');
+    // Route::get('/test/{jenis}/renja/{id_opd}/form', 'test_form');
+    // Route::post('/test/{jenis}/renja/{id_opd}/form', 'post_test');
     // Route::get('/test', 'preg_testing');
-    Route::get('/error', 'error_test');
-    Route::get('/test', 'test');
+    // Route::get('/error', 'error_test');
+    Route::get('/test', 'quick_count_psu_papua');
 });

@@ -1,17 +1,48 @@
-Meningkatkan akuntabilitas kinerja pemerintah daerah
-Meningkatkan Profesionalisme pegawai
-Meningkatkan Kualitas Pelayanan Publik
-Meningkatkan Aksesibilitas dan daya saing pendidikan
-Meningkatkan Derajat dan aksesibiltas kesehatan
-Meningkatkan Penanganan PMKS
-Meningkatkan Kesetaraan dan keadilan gender serta penanganan kekerasan
-Meningkatkan Prestasi pemuda dan olah raga
-Meningkatkan Kelestarian budaya dan nilai nilai kearifan lokal
-Meningkatkan Pemerataan akses infrastruktur dasar wilayah meningkat
-Meningkatkan Pengendalian pengelolaan sumber daya alam yang berbasis pada pembangunan berkelanjutan
-Meningkatkan Produksi dan produktivitas pertanian, peternakan dan perikanan
-Daya saing Usaha Mikro Kecil dan Menengah, Koperasi serta mengembangkan potensi perindustrian dan perdagangan
-Meningkatkan Investasi dan mempermudah perijinan serta menyiapkan kualitas tenaga kerja
-Meningkatnya Keberdayaan dan kemandirian masyarakat dalam pembangunan
-Meningkatkan Keamanan dan ketertiban serta stabilitas wilayah
-Meningkatkan Pencegahan Dini dan Penganggulangan Korban Bencana Alam
+$raps = $raps->map(function ($rap) {
+            return [
+                'kode_unik_opd' => $rap->kode_unik_opd,
+                'kode_opd' => $rap->kode_opd,
+                'kode_tema' => $rap->kode_tema,
+                'kode_program_rippp' => $rap->kode_program,
+                'kode_keluaran_rippp' => $rap->kode_keluaran,
+                'kode_aktifitas_rippp' => $rap->kode_aktifitas,
+                'kode_target_aktifitas_rippp' => $rap->kode_target_aktifitas,
+                'kode_target_aktifitas_rippp' => $rap->kode_target_aktifitas,
+                'kode_subkegiatan' => $rap->kode_subkegiatan,
+                'kode_kegiatan' => $rap->kode_kegiatan,
+                'indikator_subkegiatan' => $rap->indikator_subkegiatan,
+                'satuan_subkegiatan' => $rap->satuan_subkegiatan,
+                'klasifikasi_belanja' => $rap->klasifikasi_belanja,
+                'text_subkegiatan' => $rap->text_subkegiatan,
+                'sumberdana' => $rap->sumberdana,
+                'alias_dana' => $rap->alias_dana,
+                'penerima_manfaat' => $rap->penerima_manfaat,
+                'jenis_layanan' => $rap->jenis_layanan,
+                'jenis_kegiatan' => $rap->jenis_kegiatan,
+                'dana_lain' => $rap->dana_lain,
+                'vol_subkeg' => $rap->vol_subkeg,
+                'anggaran' => $rap->anggaran,
+                'mulai' => $rap->mulai,
+                'selesai' => $rap->selesai,
+                'keterangan' => $rap->keterangan,
+                'ppsb' => $rap->ppsb,
+                'multiyears' => $rap->multiyears,
+                'multiyears' => $rap->multiyears,
+                'file_path' => $rap->file_path,
+                'file_kak_name' => $rap->file_kak_name,
+                'file_rab_name' => $rap->file_rab_name,
+                'file_pendukung1_name' => $rap->file_pendukung1_name,
+                'file_pendukung2_name' => $rap->file_pendukung2_name,
+                'file_pendukung3_name' => $rap->file_pendukung3_name,
+                'link_file_dukung_lain' => $rap->link_file_dukung_lain,
+                'koordinat' => $rap->koordinat,
+                'pembahasan' => $rap->pembahasan,
+                'validasi' => $rap->validasi,
+                'catatan' => $rap->catatan,
+                'kirim' => $rap->kirim,
+                'tahun' => $rap->tahun,
+                'created_at' => $rap->created_at,
+                'updated_at' => $rap->updated_at,
+                'deleted_at' => $rap->deleted_at,
+            ];
+        });

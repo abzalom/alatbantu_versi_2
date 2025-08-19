@@ -48,7 +48,7 @@ class RapOtsus extends Model
         return null;
     }
 
-    function getLokasiTextAttribute()
+    public function getLokasiTextAttribute()
     {
         $jsonData = json_decode($this->lokus, true);
         if (is_array($jsonData) && !empty($jsonData)) {
@@ -56,9 +56,24 @@ class RapOtsus extends Model
                 return $item['kampung'];
             })->implode(', ');
         }
-
         return null;
     }
+
+    protected function koordinat(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => str_replace(
+                ["\r\n", "\r", "\n", "'"],
+                // ['\n', '\n', '\n', "\\'"],
+                ['\n', '\n', '\n', '\\"'],
+                (string) $value
+            ),
+        );
+    }
+
+
+
+    // Relationship Function
 
     public function opd(): BelongsTo
     {

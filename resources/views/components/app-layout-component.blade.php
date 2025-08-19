@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="/vendors/select2-bootstrap-5-theme-1.3.0/select2-bootstrap-5-theme.min.css">
     <link rel="stylesheet" href="/vendors/summernote-0.8.18-dist/summernote.min.css">
     <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="/assets/css/customs.css" />
     <title>
         @isset($app['title'])
             {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}{{ $app['title'] }}
@@ -26,6 +27,7 @@
     </title>
 
     <script>
+        const isAdmin = @json(auth()->user()->hasRole('admin') ?? false);
         var cient_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const hostname = window.location.hostname;

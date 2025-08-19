@@ -32,6 +32,11 @@
                     <h1 class="modal-title fs-5" id="detailRapOpdModalLabel">Detail RAP</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                @if (auth()->user()->hasRole('admin'))
+                    <form action="/rap/pembahasan" method="post">
+                        @csrf
+                        <input type="hidden" id="modal-detail-rap-id" name="id_rap">
+                @endif
                 <div class="modal-body p-0">
                     <div class="row p-2">
                         <div class="table-responsive">
@@ -144,6 +149,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    @if (auth()->user()->hasRole('admin'))
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
