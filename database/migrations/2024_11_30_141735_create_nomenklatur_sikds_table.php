@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('id_subkegiatan')->index()->nullable();
 
             $table->string('kode_bidang')->index()->nullable();
+            $table->string('kode_unik_subkegiatan')->index()->nullable();
             $table->text('nama_bidang')->nullable();
 
             $table->string('kode_program')->index()->nullable();
@@ -32,6 +33,7 @@ return new class extends Migration
             $table->string('satuan')->index()->nullable();
             $table->string('klasifikasi_belanja')->index()->nullable();
             $table->enum('sumberdana', ['bg', 'sg', 'dti'])->index()->nullable();
+            $table->year('tahun')->nullable()->comment('Tahun untuk nomenklatur SIKD');
             $table->timestamps();
         });
     }

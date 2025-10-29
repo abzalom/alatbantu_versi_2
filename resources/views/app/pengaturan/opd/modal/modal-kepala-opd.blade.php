@@ -53,18 +53,18 @@
                         <h5 class="listKepalaOpdModalDescription"></h5>
                     </div>
                     <div class="mb-3">
-                        <label for="nama_kepala_opd" class="form-label">Nama Kepala OPD</label>
-                        <input name="nama" type="text" class="form-control" id="nama_kepala_opd" name="nama_kepala_opd" placeholder="Masukkan Nama Kepala OPD">
+                        <label for="id_nama" class="form-label">Nama Kepala OPD</label>
+                        <input name="nama" type="text" class="form-control" id="id_nama" name="nama_kepala_opd" placeholder="Masukkan Nama Kepala OPD">
                         <span id="nama_error" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="nip_kepala_opd" class="form-label">NIP Kepala OPD</label>
-                        <input name="nip" type="text" class="form-control" id="nip_kepala_opd" name="nip_kepala_opd" placeholder="Masukkan NIP Kepala OPD">
+                        <label for="id_nip" class="form-label">NIP Kepala OPD</label>
+                        <input name="nip" type="text" class="form-control" id="id_nip" name="nip_kepala_opd" placeholder="Masukkan NIP Kepala OPD">
                         <span id="nip_error" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="pangkat" class="form-label">Pangkat</label>
-                        <select name="pangkat" class="form-control select2" id="pangkat" data-placeholder="Pilih...">
+                        <label for="id_pangkat" class="form-label">Pangkat</label>
+                        <select name="pangkat" class="form-control select2" id="id_pangkat" data-placeholder="Pilih...">
                             <option value=""></option>
                             @foreach ($pangkats as $pangkat)
                                 <option value="{{ $pangkat->value }}">
@@ -75,8 +75,8 @@
                         <span id="pangkat_error" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="jabatan" class="form-label">Jabatan</label>
-                        <select name="jabatan" class="form-control select2" id="jabatan" data-placeholder="Pilih...">
+                        <label for="id_jabatan" class="form-label">Jabatan</label>
+                        <select name="jabatan" class="form-control select2" id="id_jabatan" data-placeholder="Pilih...">
                             <option value=""></option>
                             <option value="kepala">Kepala</option>
                             <option value="direktur">Direktur</option>
@@ -85,8 +85,8 @@
                         <span id="jabatan_error" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="status_jabatan" class="form-label">Status Jabatan</label>
-                        <select name="status_jabatan" class="form-control select2" id="status_jabatan" data-placeholder="Pilih...">
+                        <label for="id_status_jabatan" class="form-label">Status Jabatan</label>
+                        <select name="status_jabatan" class="form-control select2" id="id_status_jabatan" data-placeholder="Pilih...">
                             <option value=""></option>
                             <option value="plt">Pelaksana Tugas</option>
                             <option value="definitif">Definitif</option>

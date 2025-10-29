@@ -38,7 +38,7 @@
                         <div class="mb-3">
                             <label for="input-volume_target_aktifitas-rappp" class="form-label">Volume</label>
                             <div class="input-group">
-                                <input name="volume_target_aktifitas" type="text" class="form-control format-angka" id="input-volume_target_aktifitas-rappp" placeholder="Volume" aria-describedby="satuan_target_aktifitas-addon" disabled>
+                                <input name="volume_usulan" type="text" class="form-control format-angka" id="input-volume_target_aktifitas-rappp" placeholder="Volume" aria-describedby="satuan_target_aktifitas-addon" disabled>
                                 <span class="input-group-text" id="satuan_target_aktifitas-addon">Satuan</span>
                             </div>
                             <span id="volume_target_aktifitas_error" class="text-danger"></span>
@@ -50,9 +50,9 @@
                                 <div class="mb-3">
                                     <label for="input-volume_target_aktifitas-rappp-satuan-not-exists" class="form-label">Volume</label>
                                     <div class="input-group">
-                                        <input name="volume_target_aktifitas_satuan_not_exists" type="text" class="form-control format-angka" id="input-volume_target_aktifitas-rappp-satuan-not-exists" placeholder="Volume" aria-describedby="satuan_target_aktifitas-addon" disabled>
+                                        <input name="volume_usulan_satuan_not_exists" type="text" class="form-control format-angka" id="input-volume_target_aktifitas-rappp-satuan-not-exists" placeholder="Volume" aria-describedby="satuan_target_aktifitas-addon" disabled>
                                     </div>
-                                    <span id="volume_target_aktifitas_satuan_not_exists_error" class="text-danger"></span>
+                                    <span id="volume_usulan_satuan_not_exists_error" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -69,13 +69,13 @@
 
                     <div class="mb-3">
                         <label for="select-sumberdana-rappp" class="form-label">Sumber Pendanaan</label>
-                        <select name="sumberdana" class="form-control" id="select-sumberdana-rappp" data-placeholder="Pilih..." disabled>
+                        <select name="alias_dana_usulan" class="form-control" id="select-sumberdana-rappp" data-placeholder="Pilih..." disabled>
                             <option value="">Pilih...</option>
                             <option value="bg">Otsus 1%</option>
                             <option value="sg">Otsus 1,25%</option>
                             <option value="dti">DTI</option>
                         </select>
-                        <span id="sumberdana_error" class="text-danger"></span>
+                        <span id="alias_dana_usulan_error" class="text-danger"></span>
                     </div>
 
                 </div>

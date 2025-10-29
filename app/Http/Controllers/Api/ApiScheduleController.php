@@ -57,13 +57,81 @@ class ApiScheduleController extends Controller
         ]);
     }
 
+    public function get_schedule_by_id(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|exists:schedules,id',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Missing some parameter\'s',
+                'alert' => 'danger',
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $data = Schedule::find($request->id);
+        if (!$data) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data not found',
+                'alert' => 'danger',
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
+    }
+
     public function get_schedule_active(Request $request)
     {
-        return $request->all();
         $data = DB::table('schedules')->where('status', 1)->get();
         return response()->json([
             'active' => $data->isNotEmpty() ? true : false,
             'message' => $data->isNotEmpty() ? 'Jadwal aktif ditemukan' : 'Jadwal aktif tidak ditemukan',
+        ]);
+    }
+
+    public function is_active_get_schedule()
+    {
+        $data = DB::table('schedules')->where('status', 1)->get();
+        if ($data->isNotEmpty()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Jadwal aktif ditemukan',
+                'alert' => 'success',
+                'data' => $data
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message' => 'Data tidak ditemukan!',
+            'alert' => 'danger',
+        ]);
+    }
+
+    public function deactivate_input_schedule(Request $request)
+    {
+        // set penginputan menjadi false berdasarkan Schedule::find($request->id);
+        $schedule = Schedule::find($request->id);
+        if (!$schedule) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan',
+                'alert' => 'danger',
+            ], 404);
+        }
+
+        $schedule->penginputan = false;
+        $schedule->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Penginputan berhasil dinonaktifkan',
+            'alert' => 'success',
         ]);
     }
 }

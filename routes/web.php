@@ -7,6 +7,7 @@
 use App\Http\Controllers\Alatbantu\BantuPaguSkpdController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\UserController;
+use App\Http\Controllers\Auth\UserProfileController;
 use App\Http\Controllers\Cetak\CetakRapController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Otsus\OtsusController;
@@ -14,14 +15,18 @@ use App\Http\Controllers\Otsus\RapOtsusController;
 use App\Http\Controllers\Config\ConfigAppController;
 use App\Http\Controllers\Config\ConfigOpdController;
 use App\Http\Controllers\Config\ConfigPaguSkpdController;
+use App\Http\Controllers\Config\ConfigRolesController;
 use App\Http\Controllers\Config\ScheduleMonevController;
 use App\Http\Controllers\Config\ScheduleRapController;
 use App\Http\Controllers\Config\SessionController;
-use App\Http\Controllers\Config\SinkronDataToLocalController;
+use App\Http\Controllers\Config\TimPembahasController;
+use App\Http\Controllers\Config\TimPembahasOpdController;
 use App\Http\Controllers\Data\DataPublishSikdController;
 use App\Http\Controllers\djpk\sinkronSikdDjpkController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Laporan\RekapIndikatorOtsusController;
+use App\Http\Controllers\Monev\MonevRakortekController;
+use App\Http\Controllers\Monev\MonevRapController;
 use App\Http\Controllers\Rakortek\RakortekPembahasanRapppController;
 use App\Http\Controllers\Rakortek\RakortekPembahasanUrusanController;
 use App\Http\Controllers\Rakortek\RakortekRapppController;
@@ -29,7 +34,6 @@ use App\Http\Controllers\Rakortek\RakortekUrusanController;
 use App\Http\Controllers\Ref\ReferensiDataController;
 use App\Http\Controllers\TestController;
 use App\Http\Middleware\PrivateRouteMiddleware;
-use App\Http\Middleware\ProductionCheck;
 use App\Http\Middleware\Web\WebAuthenticateUser;
 use App\Http\Middleware\Web\WebRoleMustAdmin;
 
@@ -50,6 +54,15 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware(WebAuthenticateUser::class)->group(function () {
+
+    Route::get('/', function () {
+        return redirect()->to('/dashboard');
+    });
+
+    Route::controller(HomeController::class)->group(function () {
+        Route::get('/dashboard', 'home');
+    });
+
     Route::controller(AuthController::class)->group(function () {
         Route::post('/auth/logout', 'logout_auth');
     });
@@ -65,8 +78,10 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::post('/config/app/session/tahun', 'config_app_session_tahun');
     });
 
-    Route::controller(HomeController::class)->group(function () {
-        Route::get('/', 'home');
+    Route::controller(UserProfileController::class)->group(function () {
+        Route::get('/user/profile', 'profile');
+        Route::post('/user/profile', 'updateProfile');
+        Route::post('/user/profile/password_change', 'changePassword');
     });
 
     Route::middleware(WebRoleMustAdmin::class)->group(function () {
@@ -74,6 +89,17 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::controller(UserController::class)->group(function () {
             Route::get('/config/user', 'user_config');
         });
+
+        Route::resource('/config/roles', ConfigRolesController::class);
+
+        Route::resource('/config/team/bappeda', TimPembahasController::class)->except(['show']);
+        Route::controller(TimPembahasController::class)->group(function () {
+            Route::post('/config/team/bappeda/add_tim_opd', 'add_tim_opd');
+        });
+        Route::resource('/config/team/opd', TimPembahasOpdController::class)->except(['show']);
+        // Route::controller(TimPembahasOpdController::class)->group(function () {
+        //     Route::get('/config/team/opd', 'index');
+        // });
 
         Route::controller(ScheduleRapController::class)->group(function () {
             Route::get('/config/schedule/rap', 'schedule_rap_config');
@@ -86,7 +112,9 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::controller(ScheduleMonevController::class)->group(function () {
             Route::get('/config/schedule/monev', 'schedule_monev_config');
             Route::post('/config/schedule/monev/new', 'new_schedule_monev_config');
+            Route::post('/config/schedule/monev/update', 'update_schedule_monev_config');
             Route::post('/config/schedule/monev/lock', 'lock_schedule_monev_config');
+            Route::post('/config/schedule/monev/activate', 'activate_schedule_monev_config');
         });
 
         Route::controller(ConfigPaguSkpdController::class)->group(function () {
@@ -146,41 +174,42 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         });
         Route::get('/config/opd', 'config_opd');
         Route::post('/config/sinkron/opd-sipd', 'config_sinkron_opd');
+        Route::post('/config/opd/tag_bidang', 'tag_bidang_opd');
     });
 
     Route::get('/rakortek', function () {
         return redirect()->to('/rakortek/urusan');
     });
 
-    Route::controller(RakortekUrusanController::class)->group(function () {
+    Route::middleware(['jadwal.monev'])->controller(RakortekUrusanController::class)->group(function () {
         Route::get('/rakortek/urusan', 'rakortek_indikator_urusan');
         Route::get('/rakortek/urusan/{opd}', 'opd_rakortek_indikator_urusan');
         Route::post('/rakortek/urusan/{opd}/save/target_daerah', 'opd_save_target_daerah_rakortek_indikator_urusan');
     });
 
-    Route::controller(RakortekPembahasanUrusanController::class)->group(function () {
+    Route::middleware(['jadwal.monev'])->controller(RakortekPembahasanUrusanController::class)->group(function () {
         Route::get('/pembahasan/rakortek', function () {
             return redirect()->to('/pembahasan/rakortek/urusan');
         });
         Route::get('/pembahasan/rakortek/urusan', 'pembahasan_urusan');
         Route::get('/pembahasan/rakortek/urusan/opd', 'pembahasan_urusan_opd');
         Route::middleware(WebRoleMustAdmin::class)->group(function () {
-            Route::post('/pembahasan/rakortek/urusan/opd', 'save_pembahasan_urusan_opd');
-            Route::post('/pembahasan/rakortek/urusan/opd/validasi', 'validasi_pembahasan_urusan_opd');
+            Route::post('/pembahasan/rakortek/urusan/opd', 'pembahasan_save_urusan_opd');
+            Route::post('/pembahasan/rakortek/urusan/opd/validasi', 'pembahasan_validasi_urusan_opd');
         });
     });
 
-    Route::controller(RakortekRapppController::class)->group(function () {
+    Route::middleware(['jadwal.monev'])->controller(RakortekRapppController::class)->group(function () {
         Route::get('/rakortek/rappp', 'rakortek_rappp');
         Route::get('/rakortek/rappp/opd', 'opd_rakortek_rappp');
-        Route::post('/rakortek/rappp/opd', 'save_opd_rakortek_rappp');
-        Route::patch('/rakortek/rappp/opd', 'update_opd_rakortek_rappp');
-        Route::delete('/rakortek/rappp/opd', 'delete_opd_rakortek_rappp');
+        Route::post('/rakortek/rappp/opd', 'opd_save_rakortek_rappp');
+        Route::patch('/rakortek/rappp/opd', 'opd_update_rakortek_rappp');
+        Route::delete('/rakortek/rappp/opd', 'opd_delete_rakortek_rappp');
         Route::post('/rakortek/rappp/restore', 'restore_rakortek_rappp');
         Route::post('/rakortek/rappp/destroy', 'destroy_rakortek_rappp');
     });
 
-    Route::controller(RakortekPembahasanRapppController::class)->group(function () {
+    Route::middleware('jadwal.monev')->controller(RakortekPembahasanRapppController::class)->group(function () {
         Route::get('/pembahasan/rakortek/rappp', 'pembahasan_rappp');
         Route::get('/pembahasan/rakortek/rappp/opd', 'pembahasan_rappp_opd');
         Route::middleware(WebRoleMustAdmin::class)->group(function () {
@@ -191,16 +220,17 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         });
     });
 
-    Route::controller(RapOtsusController::class)->group(function () {
+    Route::middleware(['jadwal.monev', 'jadwal.rakortek'])->controller(RapOtsusController::class)->group(function () {
         Route::get('/rap/{jenis}', 'rap');
         Route::get('/rap/{jenis}/renja', 'renja_rap');
         Route::get('/rap/{jenis}/renja/{id_opd}/form', 'renja_form_rap');
-        Route::post('/rap/{jenis}/renja/{id_opd}/form', 'insert_new_rap');
-        Route::post('/rap/{jenis}/renja/{id_opd}/form/update', 'update_rap');
-        Route::post('/rap/validasi', 'validasi_rap');
-        Route::post('/rap/pembahasan', 'pembahasan_rap');
-        Route::post('/rap/restore', 'restore_rap');
-        Route::post('/rap/destroy', 'destroy_rap');
+        Route::post('/rap/{jenis}/renja/{id_opd}/form', 'insert_new_rap')->middleware('jadwal.rap');
+        Route::post('/rap/{jenis}/renja/{id_opd}/form/update', 'update_rap')->middleware('jadwal.rap');
+        Route::post('/rap/kirim', 'kirim_rap')->middleware('jadwal.rap');
+        Route::post('/rap/validasi', 'validasi_rap')->middleware('jadwal.rap');
+        Route::post('/rap/pembahasan', 'pembahasan_rap')->middleware('jadwal.rap');
+        Route::post('/rap/restore', 'restore_rap')->middleware('jadwal.rap');
+        Route::post('/rap/destroy', 'destroy_rap')->middleware('jadwal.rap');
     });
 
     Route::controller(RapOtsusController::class)->group(function () {
@@ -213,7 +243,16 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::get('/file-rap/uploads/{tahun}/skpd/{skpd}/{file}', 'get_file_rap');
     });
 
-    Route::middleware(ProductionCheck::class)->controller(SinkronDataToLocalController::class)->group(function () {});
+    // Monitoring, Pelaporan dan Evaluasi
+    Route::controller(MonevRapController::class)->group(function () {
+        Route::get('/monev/rap', 'rap_monev');
+    });
+
+    Route::controller(MonevRakortekController::class)->group(function () {
+        Route::get('/monev/rakortek', 'rakortek_monev');
+    });
+
+    // Route::middleware(ProductionCheck::class)->controller(SinkronDataToLocalController::class)->group(function () {});
 
     Route::controller(CetakRapController::class)->group(function () {
         Route::get('/cetak/rap', 'cetak_rap');
@@ -221,9 +260,7 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 });
 
 Route::controller(TestController::class)->group(function () {
-    // Route::get('/test/{jenis}/renja/{id_opd}/form', 'test_form');
-    // Route::post('/test/{jenis}/renja/{id_opd}/form', 'post_test');
-    // Route::get('/test', 'preg_testing');
-    // Route::get('/error', 'error_test');
-    Route::get('/test', 'quick_count_psu_papua');
+    Route::get('/test', 'test_tag_bidang');
+    Route::get('/test/schema', 'schema_table');
+    Route::get('/test/opd', 'result_opd_raps');
 });

@@ -22,6 +22,38 @@
             </h5>
         </div>
         <div class="card-body">
+            <table class="mb-4 table-sm">
+                <tr>
+                    <th style="border-bottom: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">Uraian</th>
+                    <th class="text-end" style="border-bottom: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">Total Alokasi</th>
+                    <th class="text-end" style="border-bottom: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">Total Pagu</th>
+                    <th class="text-end" style="border-bottom: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">Selisih</th>
+                </tr>
+                <tr>
+                    <td style=" border-right: 2px dashed rgb(122, 122, 122);">Otsus BG (1%)</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['bg']['alokasi']) }}</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['bg']['total_pagu']) }}</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['bg']['sisa']) }}</td>
+                </tr>
+                <tr>
+                    <td style=" border-right: 2px dashed rgb(122, 122, 122);">Otsus SG (1,25%)</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['sg']['alokasi']) }}</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['sg']['total_pagu']) }}</td>
+                    <td class="text-end" style=" border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['sg']['sisa']) }}</td>
+                </tr>
+                <tr>
+                    <td style=" border-right: 2px dashed rgb(122, 122, 122);">DTI</td>
+                    <td class="text-end" style="border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['dti']['alokasi']) }}</td>
+                    <td class="text-end" style="border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['dti']['total_pagu']) }}</td>
+                    <td class="text-end" style="border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['dti']['sisa']) }}</td>
+                </tr>
+                <tr>
+                    <th class="text-end" style="border-top: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">Jumlah</th>
+                    <th class="text-end" style="border-top: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['jumlah']['alokasi']) }}</th>
+                    <th class="text-end" style="border-top: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['jumlah']['total_pagu']) }}</th>
+                    <th class="text-end" style="border-top: 2px dashed rgb(122, 122, 122); border-right: 2px dashed rgb(122, 122, 122);">{{ formatNumber($total['jumlah']['sisa']) }}</th>
+                </tr>
+            </table>
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead class="table-dark">

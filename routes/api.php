@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ApiScheduleController;
 use App\Http\Controllers\Api\ApiTaggingController;
 use App\Http\Controllers\Api\ApiTestController;
 use App\Http\Controllers\Api\Auth\ApiAuthController;
+use App\Http\Controllers\Api\Config\ApiConfigTimPembahas;
 use App\Http\Controllers\Api\Data\ApiUsersController;
 use App\Http\Controllers\Api\Data\Sinkron\ApiSinkronDjpkSikdController;
 use App\Http\Controllers\Api\Otsus\ApiAlokasiOtsusController;
@@ -87,6 +88,9 @@ Route::middleware(ApiAuthToken::class)->group(function () {
         });
         Route::controller(ApiScheduleController::class)->group(function () {
             Route::post('/schedule/get_schedule', 'get_schedule');
+            Route::post('/schedule/get_schedule/by_id', 'get_schedule_by_id');
+            Route::post('/schedule/get_schedule/is_active', 'is_active_get_schedule');
+            Route::post('/schedule/get_schedule/deactivate_input', 'deactivate_input_schedule');
             Route::post('/schedule/get/active', 'get_schedule_active');
         });
     });
@@ -111,5 +115,12 @@ Route::middleware(ApiAuthToken::class)->group(function () {
         Route::post('/data/rap', 'rap_opd');
         Route::post('/data/rap/file-check', 'rap_file_check');
         Route::post('/data/rap_by_target_aktifitas', 'rap_by_target_aktifitas');
+    });
+
+    Route::controller(ApiConfigTimPembahas::class)->group(function () {
+        Route::post('/config/tim_pembahas/bappeda/set/order', 'set_order_tim_pembahas_bappeda');
+        Route::post('/config/tim_pembahas/opd/set/order', 'set_order_tim_pembahas_opd');
+
+        Route::post('/config/tim_pembahas/bappeda/destroy_member', 'destroy_member_tim_pembahas_bappeda');
     });
 });

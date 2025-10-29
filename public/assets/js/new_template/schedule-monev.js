@@ -6,10 +6,16 @@ $(document).ready(function () {
         $('#ScheduleMonevModal .modal-show-spinner').show();
         $('#new-item-input').html(``);
         $('#edit-item-input').html(``);
+        // reset all input and select
+        $('#add-schedule-monev-tahapan').val('');
+        $('#add-schedule-monev-nama').val('');
+        $('#add-schedule-monev-keterangan').val('');
+        $('#form-schedule-monev').attr('action', '/config/schedule/monev/new');
+        $('#add-schedule-monev-tahapan').attr('disabled', false);
     });
 
     $('#btn-create-schedule').on('click', function () {
-        console.log(dataJadwalMonev);
+        $('#form-schedule-monev').attr('action', '/config/schedule/monev/new');
         let jadwalAktif = dataJadwalMonev.filter(jadwal => jadwal.status == 1);
         if (jadwalAktif.length > 0) {
             // modal #ScheduleMonevModal hide
@@ -32,10 +38,13 @@ $(document).ready(function () {
     $('.btn-edit-schedule').on('click', function () {
         let data = $(this).val() ? JSON.parse($(this).val()) : null;
         if (data) {
+            $('#form-schedule-monev').attr('action', '/config/schedule/monev/update');
             $('#edit-item-input').html(`
                 <input type="hidden" name="id" value="${data.id}"></input>
                 <input type="hidden" name="updated_by" value="${auth.id}"></input>
             `);
+            $('#add-schedule-monev-tahapan').val(data.tahapan);
+            $('#add-schedule-monev-tahapan').attr('disabled', true);
             $('#add-schedule-monev-nama').val(data.nama);
             $('#add-schedule-monev-keterangan').val(data.keterangan);
             setTimeout(() => {

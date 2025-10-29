@@ -19,17 +19,31 @@
                                 </tr>
                             </thead>
                             <tbody class="align-middle">
-                                @foreach ($opd->raps as $rapDeleted)
-                                    @if ($rapDeleted->deleted_at)
-                                        <tr>
-                                            <td>{{ $rapDeleted->text_subkegiatan }}</td>
-                                            <td>{{ formatIdr($rapDeleted->vol_subkeg) . ' ' . $rapDeleted->satuan_subkegiatan }}</td>
-                                            <td>{{ formatIdr($rapDeleted->anggaran) }}</td>
-                                            <td>
-                                                <input class="form-check-input arsip-checked border-2" value="{{ $rapDeleted->id }}" style="width: 20px; height: 20px;" type="checkbox" value="" id="flexCheckDefault">
-                                            </td>
-                                        </tr>
-                                    @endif
+                                @foreach ($opd->tag_otsus as $tagOtsusDelete)
+                                    @foreach ($tagOtsusDelete->raps as $rapDeleted)
+                                        @if ($rapDeleted->deleted_at)
+                                            <tr>
+                                                <td>
+                                                    {{ $rapDeleted->text_subkegiatan }}
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        (dibuat : {{ \Carbon\Carbon::parse($rapDeleted->created_at)->diffForHumans() }})
+                                                        <br>
+                                                        (dihapus : {{ \Carbon\Carbon::parse($rapDeleted->deleted_at)->diffForHumans() }})
+                                                    </small>
+                                                </td>
+                                                <td>{{ formatIdr($rapDeleted->vol_subkeg) . ' ' . $rapDeleted->satuan_subkegiatan }}</td>
+                                                <td>{{ formatIdr($rapDeleted->anggaran) }}</td>
+                                                <td>
+                                                    @if (input_rap() || auth()->user()->hasRole('admin'))
+                                                        <input class="form-check-input arsip-checked border-2" value="{{ $rapDeleted->id }}" style="width: 20px; height: 20px;" type="checkbox" value="" id="flexCheckDefault">
+                                                    @else
+                                                        <i class="fa-solid fa-lock fa-xl" data-bs-toggle="tooltip" data-bs-placement="top" title="Jadwal penginputan terkunci atau tidak aktif"></i>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -38,19 +52,23 @@
             </div>
             <div class="modal-footer d-flex justify-content-between align-items-center">
                 <div class="me-3">
-                    <form action="/rap/destroy" method="post">
-                        @csrf
-                        <div class="list-arsip-checked-input"></div>
-                        <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> Hapus Permanent</button>
-                    </form>
+                    @if (input_rap() || auth()->user()->hasRole('admin'))
+                        <form action="/rap/destroy" method="post">
+                            @csrf
+                            <div class="list-arsip-checked-input"></div>
+                            <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> Hapus Permanent</button>
+                        </form>
+                    @endif
                 </div>
                 <div class="me-3 d-flex gap-3">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <form action="/rap/restore" method="post">
-                        @csrf
-                        <div class="list-arsip-checked-input"></div>
-                        <button type="submit" class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i> Kembalikan</button>
-                    </form>
+                    @if (input_rap() || auth()->user()->hasRole('admin'))
+                        <form action="/rap/restore" method="post">
+                            @csrf
+                            <div class="list-arsip-checked-input"></div>
+                            <button type="submit" class="btn btn-warning"><i class="fa-solid fa-arrows-rotate"></i> Kembalikan</button>
+                        </form>
+                    @endif
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>

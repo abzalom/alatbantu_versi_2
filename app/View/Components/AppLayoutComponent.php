@@ -11,14 +11,16 @@ class AppLayoutComponent extends Component
 
     public $title;
     public $desc;
+    public $app;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($title = "RAP-APP", $desc = "Deskrisi Halaman")
+    public function __construct($title = "RAP-APP", $desc = "Deskrisi Halaman", $app = [])
     {
         $this->title = $title;
         $this->desc = $desc;
+        $this->app = $app;
     }
 
     /**
@@ -26,6 +28,7 @@ class AppLayoutComponent extends Component
      */
     public function render(): View|Closure|string
     {
+        // dump($this->app);
         return view('components.app-layout-component', [
             'app' => [
                 'title' => $this->title,

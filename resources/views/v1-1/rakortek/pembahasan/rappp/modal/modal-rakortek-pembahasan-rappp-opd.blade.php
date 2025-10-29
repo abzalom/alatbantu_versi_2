@@ -33,23 +33,47 @@
                                     <td>:</td>
                                     <td id="bahas-satuan-show"></td>
                                 </tr>
+                            </table>
+                            <hr>
+                            <h5>Usulan Perangkat Daerah</h5>
+                            <table class="table table-sm table-borderless table-hover">
+                                <tr>
+                                    <td style="width: 30%">Volume Usulan</td>
+                                    <td>:</td>
+                                    <td id="bahas-volume_usulan-show"></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 30%">Sumber Dana Usulan</td>
+                                    <td>:</td>
+                                    <td id="bahas-sumberdana_usulan-show"></td>
+                                </tr>
+                            </table>
+
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <h5>Kesepakatan Pembahasan</h5>
+                                <div data-bs-toggle="tooltip" data-bs-placement="top" title="bahas lagi" id="ubah-pembahasan-rappp" style="display: none">
+                                    <i class="fa-solid fa-pen-to-square text-primary m-2" id="click-ubah-pembahasan-rappp" style="font-size: 17px"></i>
+                                </div>
+                            </div>
+                            <table class="table table-sm table-borderless table-hover">
                                 <tr>
                                     <td style="width: 30%">Volume</td>
                                     <td>:</td>
-                                    <td id="bahas-volume-show"></td>
+                                    <td id="bahas-volume-show">
+                                        <input name="volume" type="number" class="form-control" id="bahas-volume-input" placeholder="Masukkan volume..." disabled>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td style="width: 30%">Sumber Dana</td>
                                     <td>:</td>
-                                    <td id="bahas-sumberdana-show"></td>
-                                </tr>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="text-end d-flex justify-content-end align-content-end">
-                                        <div data-bs-toggle="tooltip" data-bs-placement="top" title="bahas lagi" id="ubah-pembahasan-rappp" style="display: none">
-                                            <i class="fa-solid fa-pen-to-square text-primary m-2" id="click-ubah-pembahasan-rappp" style="font-size: 17px"></i>
-                                        </div>
+                                    <td id="bahas-sumberdana-show">
+                                        <select name="alias_dana" class="form-control" id="bahas-sumberdana-select" data-placeholder="Pilih..." disabled>
+                                            <option value="">Pilih...</option>
+                                            <option value="bg">Otsus 1%</option>
+                                            <option value="sg">Otsus 1,25%</option>
+                                            <option value="dti">DTI</option>
+                                        </select>
                                     </td>
                                 </tr>
                                 <tr>

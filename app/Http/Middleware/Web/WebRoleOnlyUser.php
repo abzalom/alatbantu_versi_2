@@ -22,8 +22,8 @@ class WebRoleOnlyUser
 
             // Periksa role pengguna
             if ($user->hasRole('admin')) {
-                // Arahkan ke /skpd jika perannya adalah user
-                return redirect('/');
+                // Arahkan ke /dashboard jika perannya adalah admin
+                return redirect('/dashboard');
             }
         }
         return $next($request);

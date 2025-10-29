@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RapRipppCollection;
 use App\Http\Resources\RapRipppResource;
+use App\Models\Config\Schedule;
 use App\Models\Data\KepalaOpd;
 use App\Models\Data\Sumberdana;
+use App\Models\Nomenklatur\A2Bidang;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Nomenklatur\NomenklaturSikd;
@@ -18,14 +20,16 @@ use App\Models\Rap\RapOtsus;
 use App\Models\Tagging\Nomenklatur\OpdTagBidang;
 use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Browsershot\Browsershot;
 
 class TestController extends Controller
 {
 
     public function test(Request $request)
     {
-        $opd = Opd::whereHas('tag_otsus', function ($q) use ($request) {
+        $opd = Opd::withoutGlobalScopes()->whereHas('tag_otsus', function ($q) use ($request) {
             $q->where('alias_dana', $request->jenis)
                 ->where('pembahasan', 'setujui')
                 ->where('validasi', true)
@@ -105,7 +109,7 @@ class TestController extends Controller
 
     public function test_form(Request $request, $jenis, $id_opd)
     {
-        $opd = Opd::whereHas('tag_otsus', function ($q) use ($jenis) {
+        $opd = Opd::withoutGlobalScopes()->whereHas('tag_otsus', function ($q) use ($jenis) {
             $q->where('alias_dana', $jenis)
                 ->where('pembahasan', 'setujui')
                 ->where('validasi', true);
@@ -282,60 +286,241 @@ class TestController extends Controller
         return abort(404, 'File not found.');
     }
 
-    public function quick_count_psu_papua(Request $request)
+    public function klasifikasi_belanja(Request $request)
     {
-        $user = Auth::user();
-        $sumberdana = $request->jenis == 'bg' ? 'Otsus 1%' : ($request->jenis == 'sg' ? 'Otsus 1,25%' : 'DTI');
-
-        $query = $user->hasRole('user')
-            // jika role user: batasi ke OPD yang dimiliki user
-            ? $user->opds()->where('opds.id', $request->skpd)   // pakai opds.id agar aman saat join pivot
-            // jika bukan user: langsung ke model Opd
-            : Opd::query()->whereKey($request->skpd);
-
-        // filter wajib: hanya OPD yang punya tag_otsus sesuai
-        $query = $query->whereHas('tag_otsus', function ($q) use ($request) {
-            $q->where('alias_dana', $request->jenis)
-                ->where('pembahasan', 'setujui')
-                ->where('validasi', true);
-        });
-
-        // filter wajib: hanya OPD yang punya tag_otsus sesuai
-        // $query = $query->with([
-        //     'tag_otsus' => fn($q) => $q->where('alias_dana', $request->jenis)
-        //         ->where('pembahasan', 'setujui')
-        //         ->where('validasi', true),
-        //     'tag_otsus.target_aktifitas' => fn($q) => $q->select(['kode_target_aktifitas', 'uraian', 'satuan']),
-        //     'tag_otsus.raps.subkegiatan.kegiatan.program.bidang.urusan'
-        // ]);
-        $opd = $query->first();
-        if (!$opd) {
-            abort(404, 'Perangkat Daerah tidak ditemukan!');
-        }
-        // return $opd;
-        $tag_bidang = OpdTagBidang::where('kode_unik_opd', $opd->kode_unik_opd)->get();
-        $nomen_sikd = NomenklaturSikd::whereIn('kode_bidang', $tag_bidang->pluck('kode_bidang'))->get();
-        $raps = RapOtsus::with('tagging.target_aktifitas')
-            ->whereHas('tagging', function ($query) use ($request) {
-                $query->where('alias_dana', $request->jenis)
-                    ->where('pembahasan', 'setujui')
-                    ->where('validasi', true);
-            })
-            ->where('alias_dana', $request->jenis)
-            ->where('kode_unik_opd', $opd->kode_unik_opd)
+        // return Schema::getColumnListing('nomenklatur_sikds');
+        return NomenklaturSikd::where('sumberdana', 'dti')->select('klasifikasi_belanja')
+            ->distinct()
             ->get();
+    }
 
-        // dump(new RapRipppCollection($raps));
-        return new RapRipppCollection($raps);
+    public function indikator_rakortek_rappp(Request $request)
+    {
+        $opds = auth()->user()->hasRole('user')
+            ? auth()->user()->opds()->with(['tag_bidang.indikators.target'])
+            : Opd::withoutGlobalScopes()->with(['tag_bidang.indikators.target']);
 
-        // return $raps->groupBy('tagging.target_aktifitas.kode_target_aktifitas');
+        $opds = $opds->get();
 
-        // EKSEKUSI query
+        // return $opds;
 
-        // return $opd->get();
+        $opds = $opds->map(function ($opd) {
+            $punya_indikator = 0;
+            $punya_target = 0;
+            foreach ($opd->tag_bidang as $bidang) {
+                if ($bidang->indikators) {
+                    $punya_indikator += $bidang->indikators->count();
+                    foreach ($bidang->indikators as $indikator) {
+                        if ($indikator->target && $indikator->target->pembahasan == 'setujui' && $indikator->target->validasi) {
+                            $punya_target += 1;
+                        }
+                    }
+                }
+            }
+            return (object) [
+                'id' => $opd->id,
+                'kode_unik_opd' => $opd->kode_unik_opd,
+                'kode_opd' => $opd->kode_opd,
+                'nama_opd' => $opd->nama_opd,
+                'tahun' => $opd->tahun,
+                'punya_indikator' => $punya_indikator > 0,
+                'punya_target' => $punya_target > 0,
+            ];
+        });
+        return $opds;
+    }
 
+    public function getTableColumnNames()
+    {
+        return Schema::getColumnListing('opd_tag_otsuses');
+    }
 
+    public function test_pdf()
+    {
+        $dir  = storage_path('app/files/pdf');
+        File::ensureDirectoryExists($dir); // <-- bikin folder jika belum ada
+        Browsershot::html('<h1>Hello world</h1>')->save(storage_path('app/files/pdf/test.pdf'));
+    }
+
+    public function test_tim_pembahas()
+    {
+        $opd = Opd::withoutGlobalScopes()->with('tim_pembahas')->find(91);
+        return $opd;
+    }
+
+    public function test_nomenklatur(Request $request)
+    {
+        $klasifikasi = $request->input('klasifikasi', null);
+        $filter_bidang = $request->input('bidang', null);
+        $nomenClass = new NomenklaturSikd();
+        $klasList = DB::table('nomenklatur_sikds')->select('klasifikasi_belanja')
+            ->distinct()
+            ->get();
+        if ($klasifikasi) {
+            $nomenClass = $nomenClass->where('klasifikasi_belanja', $klasifikasi);
+        }
+        $nomenklatur = $nomenClass->get();
+        // $rutin = $request->input('rutin', null);
+        // return $nomenklatur;
+        // return $kode_bidang;
+        // return $bidang;
+
+        return view('testing_view.test-nomen', [
+            'app' => [
+                'title' => 'Test Nomenklatur Sikd',
+                'desc' => 'This is a test for Nomenklatur Sikd listing.',
+            ],
+            'nomenklatur' => $nomenklatur,
+            'klasList' => $klasList,
+            'filter' => [
+                'klasifikasi' => $klasifikasi,
+                // 'rutin' => $rutin,
+            ],
+        ]);
+    }
+
+    public function test_kepala_opd()
+    {
+        $kepala = KepalaOpd::first();
+    }
+
+    public function regex_test()
+    {
+        $opds = json_decode(Storage::disk('public')->get('data/opds/opds.json'), true);
+        $tags = [];
+        foreach ($opds as $opd) {
+            $kode_unik_opd = $opd['tahun'] . '-' . $opd['kode_opd'];
+            $expKode = explode('.', $opd['kode_opd']);
+            $kode_urusan1 = $expKode[0];
+            $bid1 = $expKode[0] . '.' . $expKode[1];
+            $kode_urusan2 = $expKode[2];
+            $bid2 = $expKode[2] . '.' . $expKode[3];
+            $kode_urusan3 = $expKode[4];
+            $bid3 = $expKode[4] . '.' . $expKode[5];
+            $kode_unik_opd_tag_bidang1 = $kode_unik_opd . '-' . $bid1;
+            $kode_unik_opd_tag_bidang2 = $kode_unik_opd . '-' . $bid2;
+            $kode_unik_opd_tag_bidang3 = $kode_unik_opd . '-' . $bid3;
+            if (!isset($tags[$kode_unik_opd_tag_bidang1]) && $bid1 !== '0.00') {
+                $tags[$kode_unik_opd_tag_bidang1] = [
+                    'kode_unik_opd' => $kode_unik_opd,
+                    'kode_unik_opd_tag_bidang' => $kode_unik_opd_tag_bidang1,
+                    'kode_opd' => $opd['kode_opd'],
+                    'kode_urusan' => $kode_urusan1,
+                    'kode_bidang' => $bid1,
+                    'tahun' => $opd['tahun'],
+                ];
+            }
+            if (!isset($tags[$kode_unik_opd_tag_bidang2]) && $bid2 !== '0.00') {
+                $tags[$kode_unik_opd_tag_bidang2] = [
+                    'kode_unik_opd' => $kode_unik_opd,
+                    'kode_unik_opd_tag_bidang' => $kode_unik_opd_tag_bidang2,
+                    'kode_opd' => $opd['kode_opd'],
+                    'kode_urusan' => $kode_urusan2,
+                    'kode_bidang' => $bid2,
+                    'tahun' => $opd['tahun'],
+                ];
+            }
+            if (!isset($tags[$kode_unik_opd_tag_bidang3]) && $bid3 !== '0.00') {
+                $tags[$kode_unik_opd_tag_bidang3] = [
+                    'kode_unik_opd' => $kode_unik_opd,
+                    'kode_unik_opd_tag_bidang' => $kode_unik_opd_tag_bidang3,
+                    'kode_opd' => $opd['kode_opd'],
+                    'tahun' => $opd['tahun'],
+                    'kode_urusan' => $kode_urusan3,
+                    'kode_bidang' => $bid3,
+                ];
+            }
+        }
+        $tags = array_values($tags);
+        return $tags;
+    }
+
+    public function schema_table(Request $request)
+    {
+        // return Schema::getTableListing();
+        $rows = DB::select("
+            SELECT TABLE_NAME AS `table`, COLUMN_NAME AS `column`
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+                AND COLUMN_NAME IN ('kode_unik_opd_tag_bidang')
+            ORDER BY TABLE_NAME
+        ");
+        // return $rows;
+        $collect = collect($rows)->filter(function ($item) {
+            return $item->table !== 'opd_tag_bidangs';
+        })
+            ->groupBy('column');
+        return $collect;
+        $data = [];
+        foreach ($collect as $db) {
+            $tables = collect($db)->pluck('table')->toArray();
+            $data[] = [
+                'column' => 'kode_unik_opd_tag_bidang',
+                'tables' => $tables,
+            ];
+        }
+        // $data = array_values($data);
+        return $data;
+    }
+
+    public function nomen_sikd()
+    {
+        return NomenklaturSikd::whereIn('kode_bidang', ['1.01'])
+            // ->where('sumberdana', 'bg')
+            ->get();
+    }
+
+    public function test_tag_bidang()
+    {
+        $summary = ['added' => [], 'kept' => [], 'deleted' => [], 'restored' => []];
+        $bidangIds = [1, 2, 3, 6];
+        $bidang = A2Bidang::whereIn('id', $bidangIds)->get();
+        // return $bidang->pluck('kode_bidang');
+        $opd = Opd::with([
+            'tag_bidang' => fn($q) => $q->withTrashed(),
+        ])->find(41);
         // return $opd;
-        // $opd = Opd::where('id', $opd_user->id)->get();
+        $existing = $opd->tag_bidang->keyBy('kode_bidang');
+        $toAdd = $bidang->filter(fn($item) => !$existing->has($item->kode_bidang))->values();
+        $toKeep = $bidang->filter(fn($item) => $existing->has($item->kode_bidang))->values();
+        // $toDelete = $existing->filter(fn($item) => !$bidang->contains($item) && !$item->trashed())->values();
+        $toDelete = $existing->filter(fn($item) => !in_array($item->kode_bidang, $bidang->pluck('kode_bidang')->toArray()) && !$item->trashed())->values();
+        // return $toDelete;
+
+        $summary['added'] = $toAdd;
+        $summary['kept'] = $toKeep;
+        $summary['deleted'] = $toDelete;
+        foreach ($toAdd as $addBidang) {
+            $dataAdd = [
+                'kode_unik_opd' => $opd->kode_unik_opd,
+                'kode_unik_opd_tag_bidang' => $opd->kode_unik_opd . '-' . $addBidang->kode_bidang,
+                'kode_opd' => $opd->kode_opd,
+                'kode_urusan' => $addBidang->kode_urusan,
+                'kode_bidang' => $addBidang->kode_bidang,
+                'tahun' => $opd->tahun,
+            ];
+            OpdTagBidang::create($dataAdd);
+        }
+        foreach ($toKeep as $keepBidang) {
+            $tag = $existing->get($keepBidang->kode_bidang);
+            if ($tag && $tag->trashed()) {
+                $tag->restore();
+            }
+        }
+        foreach ($toDelete as $delBidang) {
+            if ($delBidang && !$delBidang->trashed()) {
+                $delBidang->delete();
+            }
+        }
+        return $opd;
+    }
+
+    public function result_opd_raps()
+    {
+        $opd = Opd::with([
+            'tag_bidang' => fn($q) => $q->withTrashed(),
+            'tag_bidang.raps' => fn($q) => $q->withTrashed(),
+        ])->find(41);
+        return $opd;
     }
 }

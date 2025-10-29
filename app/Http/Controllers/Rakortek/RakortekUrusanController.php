@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Rakortek;
 
 use App\Http\Controllers\Controller;
+use App\Models\Config\Schedule;
 use App\Models\Data\Opd;
 use App\Models\Data\Perencanaan\IndikatorUrusanPemda;
 use App\Models\TargetIndikatorUrusan;
@@ -13,7 +14,24 @@ class RakortekUrusanController extends Controller
 {
     public function rakortek_indikator_urusan(Request $request)
     {
-        $opds = auth()->user()->hasRole('user') ? auth()->user()->opds : Opd::get();
+        $user = auth()->user();
+        $query = $user->hasRole('user') ? $user->opds() : new Opd();
+        // return $query->get();
+        $opds = $query->with([
+            'tag_bidang.bidang',
+            'tag_bidang.indikators',
+        ])->get()->map(function ($opd) {
+            return [
+                'id' => $opd->id,
+                'kode_unik_opd' => $opd->kode_unik_opd,
+                'kode_opd' => $opd->kode_opd,
+                'nama_opd' => $opd->nama_opd,
+                'tahun' => $opd->tahun,
+                'count_bidang' => $opd->tag_bidang->count(),
+                'count_indikator' => $opd->tag_bidang->map(fn($tag) => $tag->indikators->count())->sum(),
+            ];
+        })->sortBy('kode_opd');
+        // return $opds;
         return view('v1-1.rakortek.indikator_bidang_urusan.rakortek-urusan', [
             'app' => [
                 'title' => 'Rakortek',
@@ -44,7 +62,16 @@ class RakortekUrusanController extends Controller
         if (!$opd) {
             return redirect()->to('/rakortek')->with('error', 'Perangkat Daerah tidak ditemukan!');
         }
-        // return $opd;
+        $jadwal_rap = Schedule::where('status', true)->first();
+        $check_indikators = 0;
+        foreach ($opd->tag_bidang as $tagCheck) {
+            if ($tagCheck->indikators->count() > 0) {
+                $check_indikators++;
+            }
+        }
+        if ($check_indikators == 0) {
+            return redirect()->to('/rakortek/urusan')->with('error', 'Perangkat Daerah tidak memiliki indikator pada bidang urusan!');
+        }
         return view('v1-1.rakortek.indikator_bidang_urusan.rakortek-urusan-opd', [
             'app' => [
                 'title' => 'Rakortek',
@@ -57,8 +84,27 @@ class RakortekUrusanController extends Controller
     public function opd_save_target_daerah_rakortek_indikator_urusan(Request $request, $id_opd)
     {
         // return $request->all();
-        if (!$request->has('id_indikator') || !$request->id_indikator) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan! Indikator Kosong!');
+        $jadwal = jadwal_rap();
+
+        if (auth()->user()->hasRole('user')) {
+            if (!$jadwal) {
+                return redirect()->back()->with('error', 'Jadwal tidak aktif.');
+            }
+
+            if ($jadwal->tahapan !== 'rakortek') {
+                return redirect()->back()->with('error', 'Tahapan tidak sesuai (bukan rakortek).');
+            }
+
+            if (!$jadwal->penginputan) {
+                return redirect()->back()->with('error', 'Penginputan tidak aktif. Hubungi administrator.');
+            }
+
+            if (jadwal_monev()) {
+                return redirect()->back()->with('error', 'Jadwal Monev masih aktif. Penginputan Rakortek terkunci!');
+            }
+            if (!$request->has('id_indikator') || !$request->id_indikator) {
+                return redirect()->back()->with('error', 'Terjadi kesalahan! Indikator Kosong!');
+            }
         }
         $indikator = IndikatorUrusanPemda::with('bidang')->find($request->id_indikator);
         if (!$indikator) {

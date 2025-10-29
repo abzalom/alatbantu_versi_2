@@ -24,12 +24,14 @@ return new class extends Migration
             $table->string('kode_keluaran')->index();;
             $table->string('kode_aktifitas')->index();
             $table->string('kode_target_aktifitas')->index();
+            $table->string('kode_indikator')->nullable()->index();
+            $table->string('kode_unik_indikator')->nullable()->index();
             $table->string('kode_subkegiatan')->index();
             $table->string('nama_subkegiatan')->index();
             $table->text('indikator_subkegiatan');
             $table->string('satuan_subkegiatan')->index();
             $table->string('klasifikasi_belanja')->index();
-            $table->text('text_subkegiatan')->index();
+            $table->text('text_subkegiatan');
             $table->enum('sumberdana', [
                 "PAD",
                 "DAU",
@@ -44,6 +46,7 @@ return new class extends Migration
                 "Lainnya",
                 "Tidak Ada",
             ])->nullable()->index();
+            $table->enum('alias_dana', ['bg', 'sg', 'dti'])->nullable();
             $table->enum('penerima_manfaat', [
                 'oap',
                 'umum',
@@ -73,10 +76,17 @@ return new class extends Migration
             $table->string('file_pendukung3_name')->nullable();
             $table->string('link_file_dukung_lain')->nullable();
             $table->text('koordinat')->nullable();
+            $table->enum('pembahasan', ['setujui', 'perbaiki', 'tolak'])
+                ->index()
+                ->nullable();
+            $table->boolean('validasi')
+                ->index()
+                ->default(false);
             $table->text('catatan')->nullable();
+            $table->boolean('kirim')->default(false);
             $table->year('tahun')->nullable();
+            $table->softDeletes();
             $table->timestamps();
-            $table->dropSoftDeletes();
         });
     }
 

@@ -16,6 +16,7 @@ class RakortekPembahasanRapppController extends Controller
             ? auth()->user()->opds()
             : new Opd;
         $data = $opds->whereHas('tag_otsus')->orderBy('kode_opd')->get();
+        // return $data;
         return view('v1-1.rakortek.pembahasan.rappp.rakortek-pembahasan-rappp', [
             'app' => [
                 'title' => 'Rakortek RAPPP',
@@ -93,9 +94,12 @@ class RakortekPembahasanRapppController extends Controller
                         'kode_unik_opd' => $tag->kode_unik_opd,
                         'kode_unik_opd_tag_otsus' => $tag->kode_unik_opd_tag_otsus,
                         'volume' => $tag->volume,
+                        'volume_usulan' => $tag->volume_usulan,
                         'satuan' => $tag->satuan,
                         'sumberdana' => $tag->sumberdana,
+                        'sumberdana_usulan' => $tag->sumberdana_usulan,
                         'alias_dana' => $tag->alias_dana,
+                        'alias_dana_usulan' => $tag->alias_dana_usulan,
                         'pembahasan' => $tag->pembahasan,
                         'catatan' => $tag->catatan,
                         'validasi' => $tag->validasi,
@@ -138,6 +142,8 @@ class RakortekPembahasanRapppController extends Controller
             $request->all(),
             [
                 'opd_tag_otsus_id' => 'required|integer|exists:opd_tag_otsuses,id',
+                'volume' => 'required|numeric',
+                'alias_dana' => 'required|string|in:bg,sg,dti',
                 'pembahasan' => 'required|in:setujui,perbaikan,tolak',
                 'catatan' => 'nullable|string',
             ],
@@ -145,6 +151,11 @@ class RakortekPembahasanRapppController extends Controller
                 'opd_tag_otsus_id.required' => 'ID OPD Tag Otsus harus diisi.',
                 'opd_tag_otsus_id.integer' => 'ID OPD Tag Otsus harus berupa angka.',
                 'opd_tag_otsus_id.exists' => 'ID OPD Tag Otsus tidak ditemukan.',
+                'volume.required' => 'Volume harus diisi.',
+                'volume.numeric' => 'Volume harus berupa angka.',
+                'alias_dana.required' => 'Sumber Pendanaan harus diisi.',
+                'alias_dana.string' => 'Sumber Pendanaan harus berupa teks.',
+                'alias_dana.in' => 'Sumber Pendanaan tidak valid',
                 'pembahasan.required' => 'Status pembahasan harus diisi.',
                 'pembahasan.in' => 'Status pembahasan harus salah satu dari: setujui, perbaikan, tolak.',
                 'catatan.string' => 'Catatan harus berupa teks.',
@@ -160,6 +171,12 @@ class RakortekPembahasanRapppController extends Controller
             return redirect()->back()
                 ->with('error', 'RAPPP Progam OPD Otsus tidak ditemukan.');
         }
+
+        $sumberdana = $request->input('alias_dana') == 'bg' ? 'otsus 1%' : ($request->input('alias_dana') == 'sg' ? 'otsus 1,25%' : 'dti');
+
+        $tagOtsus->volume = $request->input('volume');
+        $tagOtsus->sumberdana = $sumberdana;
+        $tagOtsus->alias_dana = $request->input('alias_dana');
         $tagOtsus->pembahasan = $request->input('pembahasan');
         $tagOtsus->catatan = $request->input('catatan');
         $tagOtsus->save();

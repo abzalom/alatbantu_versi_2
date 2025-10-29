@@ -52,16 +52,22 @@
             </div>
             <div class="table-responsive">
                 <table class="table table-hover table-bordered table-stripped">
-                    <thead class="align-middle table-{{ $admin ? 'primary' : 'dark' }}">
+                    <thead class="align-middle table-{{ $admin ? 'primary' : 'dark' }} text-center">
                         <tr>
-                            <th scope="col"></th>
-                            <th scope="col">KODE</th>
-                            <th scope="col">URAIAN</th>
-                            <th scope="col">SATUAN</th>
+                            <th rowspan="2" scope="col">RIPPP</th>
+                            <th rowspan="2" scope="col">KODE</th>
+                            <th rowspan="2" scope="col">URAIAN</th>
+                            <th rowspan="2" scope="col">SATUAN</th>
+                            <th colspan="2">USULAN</th>
+                            <th colspan="2">PEMBAHASAN</th>
+                            <th rowspan="2" scope="col">STATUS</th>
+                            <th rowspan="2" scope="col"></th>
+                        </tr>
+                        <tr>
                             <th scope="col">VOLUME</th>
                             <th scope="col">SUMBER DANA</th>
-                            <th scope="col">STATUS</th>
-                            <th scope="col"></th>
+                            <th scope="col">VOLUME</th>
+                            <th scope="col">SUMBER DANA</th>
                         </tr>
                     </thead>
                     <tbody class="align-middle">
@@ -69,25 +75,25 @@
                             <tr>
                                 <th>Tema Pembangunan</th>
                                 <th>{{ $tema['kode_tema'] }}</th>
-                                <th colspan="6">{{ $tema['uraian_tema'] }}</th>
+                                <th colspan="8">{{ $tema['uraian_tema'] }}</th>
                             </tr>
                             @foreach ($tema['programs'] as $program)
                                 <tr>
                                     <th>Program Prioritas</th>
                                     <th>{{ $program['kode_program'] }}</th>
-                                    <th colspan="6">{{ $program['uraian_program'] }}</th>
+                                    <th colspan="8">{{ $program['uraian_program'] }}</th>
                                 </tr>
                                 @foreach ($program['keluarans'] as $keluaran)
                                     <tr>
                                         <th>Target Keluaran Strategis</th>
                                         <th>{{ $keluaran['kode_keluaran'] }}</th>
-                                        <th colspan="6">{{ $keluaran['uraian_keluaran'] }}</th>
+                                        <th colspan="8">{{ $keluaran['uraian_keluaran'] }}</th>
                                     </tr>
                                     @foreach ($keluaran['aktifitas'] as $aktifitas)
                                         <tr>
                                             <th>Aktifitas Utama</th>
                                             <th>{{ $aktifitas['kode_aktifitas'] }}</th>
-                                            <th colspan="6">{{ $aktifitas['uraian_aktifitas'] }}</th>
+                                            <th colspan="8">{{ $aktifitas['uraian_aktifitas'] }}</th>
                                         </tr>
                                         @foreach ($aktifitas['target_aktifitas'] as $target_aktifitas)
                                             @if (!$target_aktifitas['rappp']['pembahasan'] || $target_aktifitas['rappp']['pembahasan'] !== 'setujui')
@@ -112,8 +118,10 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $target_aktifitas['rappp']['satuan'] }}</td>
-                                                <td>{{ $target_aktifitas['rappp']['volume'] }}</td>
-                                                <td>{{ $target_aktifitas['rappp']['sumberdana'] }}</td>
+                                                <td>{{ $target_aktifitas['rappp']['volume_usulan'] }}</td>
+                                                <td>{{ $target_aktifitas['rappp']['sumberdana_usulan'] }}</td>
+                                                <td style="background-color: rgb(201, 255, 204)">{{ $target_aktifitas['rappp']['volume'] }}</td>
+                                                <td style="background-color: rgb(201, 255, 204)">{{ $target_aktifitas['rappp']['sumberdana'] }}</td>
                                                 <td>
                                                     @if ($target_aktifitas['rappp']['pembahasan'] == 'setujui')
                                                         <span class="badge bg-success">Disetujui {{ $target_aktifitas['rappp']['validasi'] ? '& divalidasi' : '' }}</span>

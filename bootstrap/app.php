@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RequestContext;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,8 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->append(RequestContext::class);
         $middleware->alias([
-            'role' =>  \Spatie\Permission\Middleware\RoleMiddleware::class
+            'role' =>  \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'jadwal.rap' => \App\Http\Middleware\CheckRapSchedule::class,
+            'jadwal.monev' => \App\Http\Middleware\CheckMonevSchedule::class,
+            'jadwal.rakortek' => \App\Http\Middleware\Jadwal\Cek\CekJadwalRakortek::class,
         ]);
 
         $middleware->validateCsrfTokens(except: [

@@ -18,6 +18,7 @@ return new class extends Migration
             // $table->string('username')->index()->nullable();
             $table->text('nama_opd');
             $table->year('tahun');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

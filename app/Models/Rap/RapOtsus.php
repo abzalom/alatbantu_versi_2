@@ -16,15 +16,27 @@ use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
 use App\Models\Tagging\Otsus\OpdTagOtsus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class RapOtsus extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
     protected $guarded = ['id'];
     protected $casts = [
         'dana_lain' => 'array',
         'lokus' => 'array',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('rap_otsus')
+            ->logAll()
+            ->logExcept(['updated_at'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function getTextSubkegiatan()
     {

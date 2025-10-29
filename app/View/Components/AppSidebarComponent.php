@@ -42,8 +42,8 @@ class AppSidebarComponent extends Component
         }
         return view('components.app-sidebar-component', [
             'menus' => $menus,
-            'sidebarHeaderName' => $sidebarHeaderName ? $sidebarHeaderName : 'Header',
-            'sidebarHeaderSubName' => $sidebarHeaderSubName ? $sidebarHeaderSubName : 'Sub Header',
+            'sidebarHeaderName' => $sidebarHeaderName ? $sidebarHeaderName : ($this->app['sidebar_header'] ?? 'Header'),
+            'sidebarHeaderSubName' => $sidebarHeaderSubName ? $sidebarHeaderSubName : ($this->app['sidebar_subheader'] ?? ''),
         ]);
     }
 }

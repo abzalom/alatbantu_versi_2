@@ -1,4 +1,5 @@
 <x-app-layout-component :title="$app['title'] ?? null">
+
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">
@@ -12,24 +13,32 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
+                    <thead class="table-dark align-middle">
                         <tr>
                             <th style="width: 15%">KODE OPD</th>
-                            <th>NAMA OPD</th>
+                            <th>PERANGKAT DAERAH</th>
+                            <th class="text-center">JUMLAH BIDANG</th>
+                            <th class="text-center">JUMLAH INDIKATOR</th>
                             <th style="width: 15%"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($opds as $opdRakor)
                             <tr>
-                                <td>{{ $opdRakor->kode_opd }}</td>
-                                <td>{{ $opdRakor->nama_opd }}</td>
+                                <td>{{ $opdRakor['kode_opd'] }}</td>
+                                <td>{{ $opdRakor['nama_opd'] }}</td>
+                                <td class="text-center">{{ $opdRakor['count_bidang'] }}</td>
+                                <td class="text-center">{{ $opdRakor['count_indikator'] }}</td>
                                 <td class="text-center">
                                     <div class="btn-group text-nowrap">
-                                        <a href="/rakortek/urusan/{{ $opdRakor->id }}" class="btn btn-sm btn-primary"><i class="fa-solid fa-handshake"></i> Indikator</a>
+                                        <a href="/rakortek/urusan/{{ $opdRakor['id'] }}" class="btn btn-sm btn-primary">
+                                            <i class="fa-solid fa-handshake"></i> Indikator
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
+                            {{-- @if ($opdRakor['count_indikator'])
+                            @endif --}}
                         @endforeach
                     </tbody>
                 </table>

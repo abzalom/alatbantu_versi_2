@@ -1,59 +1,60 @@
 $(document).ready(function () {
-    const name_input = ['nama', 'nip', 'pangkat', 'jabatan'];
+    const name_input = ["nama", "nip", "pangkat", "jabatan", "status_jabatan"];
 
-    $('#search-opd-input').on('focus', function () {
-        $(this).removeClass('border-primary');
+    $("#search-opd-input").on("focus", function () {
+        $(this).removeClass("border-primary");
     });
-    $('#search-opd-input').on('focusout', function () {
-        $(this).addClass('border-primary');
+    $("#search-opd-input").on("focusout", function () {
+        $(this).addClass("border-primary");
     });
 
-    $('#search-opd-input').on('keyup', function () {
+    $("#search-opd-input").on("keyup", function () {
         let value = $(this).val().toLowerCase();
         $("#table-list-opd tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
         });
     });
 
-
-    $('#listKepalaOpdModal, #kepalaOpdModal').on('hide.bs.modal', function () {
+    $("#kepalaOpdModal").on("hide.bs.modal", function () {
         // reset input dan select pada formKepalaOpd by name
         name_input.forEach(function (name) {
-            $(`#formKepalaOpd [name="${name}"]`).val('').trigger('change');
+            $(`#id_${name}`).val("").trigger("change");
         });
+
         // reset invalid dan error message
         name_input.forEach(function (name) {
-            $(`#formKepalaOpd [name="${name}"]`).removeClass('is-invalid');
-            $(`#${name}_error`).text('');
+            $(`#id_${name}`).removeClass("is-invalid");
+            $(`#${name}_error`).text("");
         });
     });
 
-    $('.btn-kepala-opd').on('click', function () {
-        $('.listKepalaOpdModalDescription').text('');
-        $('#listKepalaOpdModalList').empty();
+    $(".btn-kepala-opd").on("click", function () {
+        $(".listKepalaOpdModalDescription").text("");
+        $("#listKepalaOpdModalList").empty();
         const id_opd = $(this).val();
+        $("#id_opd").val(id_opd);
         console.log(id_opd);
         $.ajax({
             type: "post",
             url: "/api/data/opd",
             data: {
-                id: id_opd
+                id: id_opd,
             },
             dataType: "json",
             success: function (response) {
                 if (response.success && response.data) {
                     let opd = response.data[0];
-                    $('#id_opd').val(opd.id);
-                    $('.listKepalaOpdModalDescription').text(opd.nama_opd);
+                    $("#id_opd").val(opd.id);
+                    $(".listKepalaOpdModalDescription").text(opd.nama_opd);
                     $.each(opd.kepala, function (indexKepala, valueKapala) {
                         let iconAksi = valueKapala.status ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-check"></i>';
-                        let btnCollor = valueKapala.status ? 'btn-danger' : 'btn-success';
+                        let btnCollor = valueKapala.status ? "btn-danger" : "btn-success";
                         let btnAksi = `
-                            <button class="btn btn-sm ${btnCollor} btn-status-kepala-opd" value="${valueKapala.nip}" data-bs-toggle="tooltip" title="${valueKapala.status ? 'Nonaktifkan' : 'Aktifkan'}">
+                            <button class="btn btn-sm ${btnCollor} btn-status-kepala-opd" value="${valueKapala.nip}" data-bs-toggle="tooltip" title="${valueKapala.status ? "Nonaktifkan" : "Aktifkan"}">
                                 ${iconAksi}
                             </button>
-                        `
-                        $('#listKepalaOpdModalList').append(`
+                        `;
+                        $("#listKepalaOpdModalList").append(`
                             <tr>
                                 <td>
                                 ${valueKapala.nama}
@@ -64,8 +65,8 @@ $(document).ready(function () {
                                 </td>
                                 <td>${valueKapala.jabatan}</td>
                                 <td>${valueKapala.tahun}</td>
-                                <td id="row-modal-status-kepala-opd-${valueKapala.nip.replace(/\./g, '_')}">${valueKapala.status ? 'Aktif' : 'Tidak Aktif'}</td>
-                                <td id="row-modal-action-kepala-opd-${valueKapala.nip.replace(/\./g, '_')}" class="text-center">
+                                <td id="row-modal-status-kepala-opd-${valueKapala.nip.replace(/\./g, "_")}">${valueKapala.status ? "Aktif" : "Tidak Aktif"}</td>
+                                <td id="row-modal-action-kepala-opd-${valueKapala.nip.replace(/\./g, "_")}" class="text-center">
                                     ${btnAksi}
                                 </td>
                             </tr>
@@ -77,16 +78,15 @@ $(document).ready(function () {
             error: function (xhr) {
                 console.error(xhr.responseText);
                 let errorResponse = handleAjaxError(xhr);
-                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : 'danger');
-            }
+                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : "danger");
+            },
         });
     });
 
-
     // body delegate untuk btn-set-status-kepala
-    $(document).on('click', '.btn-status-kepala-opd', function () {
+    $(document).on("click", ".btn-status-kepala-opd", function () {
         const nip = $(this).val();
-        $(`#row-modal-action-kepala-opd-${nip.replace(/\./g, '_')}`).html(`
+        $(`#row-modal-action-kepala-opd-${nip.replace(/\./g, "_")}`).html(`
             <div class="spinner-border" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
@@ -95,7 +95,7 @@ $(document).ready(function () {
             type: "POST",
             url: "/api/update/kepala_opd/status",
             data: {
-                nip: nip
+                nip: nip,
             },
             dataType: "json",
             success: function (response) {
@@ -103,74 +103,77 @@ $(document).ready(function () {
                 if (response.success && response.data) {
                     console.log(response.data.status);
                     setTimeout(() => {
-                        showToast(`Status kepala OPD ${response.data.nama} berhasil diubah.`, 'success');
-                        let btnCollor = response.data.status ? 'btn-danger' : 'btn-success';
+                        showToast(`Status kepala OPD ${response.data.nama} berhasil diubah.`, "success");
+                        let btnCollor = response.data.status ? "btn-danger" : "btn-success";
                         let iconAksi = response.data.status ? '<i class="fa-solid fa-xmark"></i>' : '<i class="fa-solid fa-check"></i>';
                         let btnAksi = `
-                            <button class="btn btn-sm ${btnCollor} btn-status-kepala-opd" value="${response.data.nip}" data-bs-toggle="tooltip" title="${response.data.status ? 'Nonaktifkan' : 'Aktifkan'}">
+                            <button class="btn btn-sm ${btnCollor} btn-status-kepala-opd" value="${response.data.nip}" data-bs-toggle="tooltip" title="${response.data.status ? "Nonaktifkan" : "Aktifkan"}">
                                 ${iconAksi}
                             </button>
                         `;
-                        $(`#row-modal-status-kepala-opd-${response.data.nip.replace(/\./g, '_')}`).html(response.data.status ? 'Aktif' : 'Tidak Aktif');
-                        $(`#row-modal-action-kepala-opd-${response.data.nip.replace(/\./g, '_')}`).html(btnAksi);
+                        $(`#row-modal-status-kepala-opd-${response.data.nip.replace(/\./g, "_")}`).html(response.data.status ? "Aktif" : "Tidak Aktif");
+                        $(`#row-modal-action-kepala-opd-${response.data.nip.replace(/\./g, "_")}`).html(btnAksi);
                         // set title
                         if (response.data.status) {
-                            $('#row-kepala-opd-' + response.data.kode_unik_opd.replace(/\./g, '_')).html(`
+                            $("#row-kepala-opd-" + response.data.kode_unik_opd.replace(/\./g, "_")).html(`
                                 ${response.data.nama} <br>
                                 NIP. ${response.data.nip} <br>
                                 ${response.data.pangkat}
                             `);
                         } else {
-                            $('#row-kepala-opd-' + response.data.kode_unik_opd.replace(/\./g, '_')).html('-');
+                            $("#row-kepala-opd-" + response.data.kode_unik_opd.replace(/\./g, "_")).html("-");
                         }
                     }, 1000);
                 } else {
-                    showToast(`Gagal mengubah status kepala OPD: ${response.message}`, 'danger');
+                    showToast(`Gagal mengubah status kepala OPD: ${response.message}`, "danger");
                 }
             },
             error: function (xhr) {
                 console.error(xhr.responseText);
                 let errorResponse = handleAjaxError(xhr);
-                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : 'danger');
-            }
+                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : "danger");
+            },
         });
     });
 
-    $('#formKepalaOpd').on('submit', function (e) {
+    $("#formKepalaOpd").on("submit", function (e) {
         e.preventDefault();
         const formData = $(this).serialize();
         // validasi formData dengan name input
         let isValid = true;
 
         name_input.forEach(function (name) {
-            let input = $(`[name="${name}"]`);
-            if (input.val() === '') {
+            let input = $(`#id_${name}`);
+            let errorMsg = $(`#${name}_error`);
+            if (input.val() === "") {
                 isValid = false;
-                input.addClass('is-invalid');
-                $(`#${name}_error`).text(`Field ${name} tidak boleh kosong.`);
+                input.addClass("is-invalid");
+                // replace underscores with spaces in name for error message
+                let labelName = name.replace(/_/g, " ");
+                errorMsg.text(`Field ${labelName} tidak boleh kosong.`);
             } else {
-                input.removeClass('is-invalid');
-                $(`#${name}_error`).text('');
+                input.removeClass("is-invalid");
+                errorMsg.text("");
             }
         });
 
         if (!isValid) {
-            showToast('Harap lengkapi semua field yang diperlukan.', 'danger');
+            showToast("Harap lengkapi semua field yang diperlukan.", "danger");
             return;
         }
         console.log(formData);
         $.ajax({
             type: "post",
-            url: '/api/save/kepala_opd/save',
+            url: "/api/save/kepala_opd/save",
             data: formData,
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    showToast('Kepala OPD berhasil disimpan.', 'success');
-                    $('#kepalaOpdModal').modal('hide');
-                    $('#listKepalaOpdModal').modal('show');
-                    $('#listKepalaOpdModalList').append(`
-                        <tr id="row-kepala-opd-${response.data.kode_unik_opd.replace(/\./g, '_')}">
+                    showToast("Kepala OPD berhasil disimpan.", "success");
+                    $("#kepalaOpdModal").modal("hide");
+                    $("#listKepalaOpdModal").modal("show");
+                    $("#listKepalaOpdModalList").append(`
+                        <tr id="row-kepala-opd-${response.data.kode_unik_opd.replace(/\./g, "_")}">
                             <td>
                             ${response.data.nama}
                             <br>
@@ -178,13 +181,13 @@ $(document).ready(function () {
                             <br>
                             ${response.data.pangkat}
                             </td>
-                            <td>${response.data.jabatan == 'kepala' ? 'Kepala' : response.data.jabatan == 'direktur' ? 'Direktur' : 'Kepala Unit'}</td>
+                            <td>${response.data.jabatan == "kepala" ? "Kepala" : response.data.jabatan == "direktur" ? "Direktur" : "Kepala Unit"}</td>
                             <td>${response.data.tahun}</td>
-                            <td id="row-modal-status-kepala-opd-${response.data.nip.replace(/\./g, '_')}">
-                                ${response.data.status ? 'Aktif' : 'Tidak Aktif'}
+                            <td id="row-modal-status-kepala-opd-${response.data.nip.replace(/\./g, "_")}">
+                                ${response.data.status ? "Aktif" : "Tidak Aktif"}
                             </td>
-                            <td id="row-modal-action-kepala-opd-${response.data.nip.replace(/\./g, '_')}" class="text-center">
-                                <button class="btn btn-sm btn-success btn-status-kepala-opd" value="${response.data.nip}" data-bs-toggle="tooltip" title="${response.data.status ? 'Nonaktifkan' : 'Aktifkan'}">
+                            <td id="row-modal-action-kepala-opd-${response.data.nip.replace(/\./g, "_")}" class="text-center">
+                                <button class="btn btn-sm btn-success btn-status-kepala-opd" value="${response.data.nip}" data-bs-toggle="tooltip" title="${response.data.status ? "Nonaktifkan" : "Aktifkan"}">
                                     <i class="fa-solid fa-check"></i>
                                 </button>
                             </td>
@@ -195,20 +198,74 @@ $(document).ready(function () {
             error: function (xhr) {
                 console.error(xhr.responseText);
                 let errorResponse = handleAjaxError(xhr);
-                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : 'danger');
-            }
+                showToast(errorResponse.message, errorResponse.alert ? errorResponse.alert : "danger");
+            },
         });
     });
 
     // reset invalid if input not empty but set invalid if empty
-    $('#formKepalaOpd .form-control').on('input', function () {
-        if ($(this).val() !== '') {
-            $(this).removeClass('is-invalid');
-            $(`#${$(this).attr('name')}_error`).text('');
+    $("#formKepalaOpd .form-control").on("input", function () {
+        if ($(this).val() !== "") {
+            $(this).removeClass("is-invalid");
+            $(`#${$(this).attr("name")}_error`).text("");
         } else {
-            $(this).addClass('is-invalid');
-            $(`#${$(this).attr('name')}_error`).text(`Field ${$(this).attr('name')} tidak boleh kosong.`);
+            $(this).addClass("is-invalid");
+            $(`#${$(this).attr("name")}_error`).text(`Field ${$(this).attr("name")} tidak boleh kosong.`);
         }
     });
 
+    $("#tagBidalOpdModal").on("hidden.bs.modal", function () {
+        $("#modal-tagBidangOpd-show-spinner").show();
+        $("#modal-tagBidangOpd-show-content").hide();
+        $("#nama_opd").val("");
+        $("#bidang").val("").trigger("change");
+    });
+
+    $(".bidang-select").each(function () {
+        $(this).select2({
+            theme: "bootstrap-5",
+            width: $(this).data("width") ? $(this).data("width") : $(this).hasClass("w-100") ? "100%" : "style",
+            placeholder: $(this).data("placeholder"),
+            dropdownParent: $(this).parent(),
+            maximumSelectionLength: $(this).data("max"),
+            language: {
+                maximumSelected: function (e) {
+                    // Return a custom message depending on the limit
+                    var message = "Setiap SKPD hanya dapat memilih maksimal " + e.maximum + " bidang.";
+                    showToast(message, "warning");
+                    return message;
+                },
+            },
+            allowClear: true,
+        });
+    });
+
+    $(".btn-tag-bidang-opd").on("click", function () {
+        let opdId = $(this).val();
+        $.ajax({
+            type: "post",
+            url: "/api/data/opd",
+            data: {
+                id: opdId,
+            },
+            dataType: "json",
+            success: function (response) {
+                // console.log(response);
+                if (response.success) {
+                    const opd = response.data[0];
+                    console.log(opd);
+                    $("#opd_id").val(opd.id);
+                    $("#nama_opd").val(opd.nama_opd);
+                    opd.tag_bidang.forEach((tag) => {
+                        $(`#optBid_${tag.bidang.id}`).attr("selected", "selected");
+                    });
+                    $("#bidang").trigger("change");
+                    setTimeout(() => {
+                        $("#modal-tagBidangOpd-show-spinner").hide();
+                        $("#modal-tagBidangOpd-show-content").show();
+                    }, 1000);
+                }
+            },
+        });
+    });
 });

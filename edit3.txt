@@ -1,3 +1,73 @@
-<button style="border-radius: 0 0.25rem 0.25rem 0;" class="btn btn-sm btn-info btn-detail-rap" data-bs-toggle="modal" data-bs-target="#detailRapOpdModal" data-rap="{&quot;opd&quot;:&quot;1.01.0.00.0.00.01.0000 DINAS PENDIDIKAN&quot;,&quot;rap&quot;:{&quot;id&quot;:7,&quot;kode_unik_opd&quot;:&quot;2025-1.01.0.00.0.00.01.0000&quot;,&quot;kode_unik_opd_tag_bidang&quot;:&quot;2025-1.01.0.00.0.00.01.0000-1.01&quot;,&quot;kode_unik_opd_tag_otsus&quot;:&quot;2025-1.01.0.00.0.00.01.0000-1.1.3.1.1-sg&quot;,&quot;kode_unik_sikd&quot;:&quot;1.01.02.3.05.0001-sg&quot;,&quot;kode_opd&quot;:&quot;1.01.0.00.0.00.01.0000&quot;,&quot;kode_tema&quot;:&quot;1&quot;,&quot;kode_program&quot;:&quot;1.1&quot;,&quot;kode_kegiatan&quot;:&quot;1.01.02.3.05&quot;,&quot;kode_keluaran&quot;:&quot;1.1.3&quot;,&quot;kode_aktifitas&quot;:&quot;1.1.3.1&quot;,&quot;kode_target_aktifitas&quot;:&quot;1.1.3.1.1&quot;,&quot;kode_indikator&quot;:null,&quot;kode_unik_indikator&quot;:null,&quot;kode_subkegiatan&quot;:&quot;1.01.02.3.05.0001&quot;,&quot;nama_subkegiatan&quot;:&quot;Pembangunan USB (Unit Sekolah Baru)&quot;,&quot;indikator_subkegiatan&quot;:&quot;Jumlah Sekolah Baru yang Telah Dibangun&quot;,&quot;satuan_subkegiatan&quot;:&quot;Unit&quot;,&quot;klasifikasi_belanja&quot;:&quot;Belanja Pendidikan&quot;,&quot;text_subkegiatan&quot;:&quot;1.01.02.3.05.0001 Pembangunan USB (Unit Sekolah Baru)&quot;,&quot;sumberdana&quot;:&quot;Otsus 1,25%&quot;,&quot;alias_dana&quot;:&quot;sg&quot;,&quot;penerima_manfaat&quot;:&quot;umum&quot;,&quot;jenis_layanan&quot;:&quot;terkait&quot;,&quot;jenis_kegiatan&quot;:&quot;fisik&quot;,&quot;dana_lain&quot;:&quot;[{\&quot;id\&quot;:2,\&quot;uraian\&quot;:\&quot;DAU\&quot;}]&quot;,&quot;lokus&quot;:&quot;[{\&quot;id\&quot;:2,\&quot;kecamatan\&quot;:\&quot;Benuki\&quot;,\&quot;kampung\&quot;:\&quot;Gesa Baru\&quot;},{\&quot;id\&quot;:15,\&quot;kecamatan\&quot;:\&quot;Mamberamo Hulu\&quot;,\&quot;kampung\&quot;:\&quot;Dabra\&quot;},{\&quot;id\&quot;:25,\&quot;kecamatan\&quot;:\&quot;Mamberamo Tengah\&quot;,\&quot;kampung\&quot;:\&quot;Burmeso\&quot;},{\&quot;id\&quot;:53,\&quot;kecamatan\&quot;:\&quot;Waropen Atas\&quot;,\&quot;kampung\&quot;:\&quot;Barapasi\&quot;}]&quot;,&quot;vol_subkeg&quot;:&quot;4.00&quot;,&quot;anggaran&quot;:&quot;3600000000.00&quot;,&quot;mulai&quot;:&quot;2025-01-01&quot;,&quot;selesai&quot;:&quot;2025-11-01&quot;,&quot;keterangan&quot;:&quot;- Perbaikan Nomenklatur Ke Bantuan Hibah Kepada Lembaga Yayasan; Pembangunan USB - SD YPK Eden Burmeso; - SD Cahaya Harapan Papua; - TK JOHNLITA Burmeso; - SD Yapis Burmeso;&quot;,&quot;ppsb&quot;:&quot;tidak&quot;,&quot;multiyears&quot;:&quot;tidak&quot;,&quot;file_path&quot;:null,&quot;file_kak_name&quot;:null,&quot;file_rab_name&quot;:null,&quot;file_pendukung1_name&quot;:null,&quot;file_pendukung2_name&quot;:null,&quot;file_pendukung3_name&quot;:null,&quot;link_file_dukung_lain&quot;:null,&quot;koordinat&quot;:&quot;-2.3258749351192507, 138.04145720154455 |Burmeso;\n-2.0967226489606388, 137.41599874011135 | Gesa Baru" \n-2.247260740092111,="" 136.995047145103="" |="" barapasi;\n-3.2699002703230873,="" 138.61373504769887="" dabra","pembahasan":null,"validasi":0,"catatan":null,"kirim":0,"tahun":"2025","created_at":"2024-10-21t15:44:56.000000z","updated_at":"2025-06-21t07:21:04.000000z","deleted_at":null,"laravel_through_key":"2025-1.01.0.00.0.00.01.0000","tagging":{"kode_unik_opd_tag_otsus":"2025-1.01.0.00.0.00.01.0000-1.1.3.1.1-sg","sumberdana":"otsus="" 1,25%","kode_target_aktifitas":"1.1.3.1.1","volume":"4.00","satuan":"unit","target_aktifitas":{"kode_target_aktifitas":"1.1.3.1.1","uraian":"jumlah="" unit="" sekolah\="" satuan="" pendidikan="" baru"}}}}'="">
-<i class="fa-solid fa-handshake"></i>
-</button>
+Screenshoot Website PEMDA Halaman Publikasi RKPD APBD Perubahan Tahun 2025
+Tangkapan Layar (Screenshoot) input usulan masrayarakat untuk APBD Murni Tahun 2026
+Jika terdapat kendala dalam implementasi SIPD karena kekhususan Pemda, maka Pemda perlu menyampaikan surat kepada kemendagri Dan ditembuskan kepada KPK
+Screenshot APBD Murni tahun 2026 di SIPD
+Screenshot APBD Perubahan tahun 2025 di SIPD
+"Dokumen Perkada yang sah
+(Pemda memiliki Peraturan Kepala Daerah (Perkada) Penetapan RKPD APBD Murni Tahun 2026)"
+"Dokumen Perkada yang sah
+(Pemda memiliki Peraturan Kepala Daerah (Perkada) Penetapan RKPD APBD Murni Tahun 2025)"
+"Dokumen Peraturan Kepala Perangkat Daerah yang sah
+( Seluruh perangkat daerah memiliki Peraturan Kepala Perangkat Daerah Penetapan Renja APBP Perubahan tahun 2025 yang sah."
+"Dokumen Peraturan Kepala Daerah yang sah
+(Surat Edaran Kepala Daerah tentang Penyusunan Rencana Kerja (Renja) Perangkat Daerah untuk APBD Murni Tahun 2026 yang disampaikan kepada Organisasi Perangkat Daerah (OPD) - paling lambat minggu ke-2 Februari tahun 2025)"
+"Dokumen surat edaran kepala daerah yang sah
+( Surat Edaran Kepala Daerah tentang Penyusunan Rencana Kerja (Renja) Perangkat Daerah pada APBD Perubahan Tahun 2025 yang disampaikan kepada Organisasi Perangkat Daerah (OPD) paling lambat minggu pertama bulan April 2025)"
+Surat Edaran Kepala Daerah tentang Penyusunan Rencana Kerja (Renja) Perangkat Daerah pada APBD Murni Tahun 2026
+"SOP Penyusunan RKPD yang sah
+(SOP Penyusunan RKPD yang disahkan oleh Sekertaris Daerah)"
+"SOP Penyusnan Renja yang sah
+(SOP Penyusunan Renja Perangkat Daerah yang ditetapkan oleh Sekretaris Daerah )"
+"Dokumen Peraturan Kepala Daerah yang ditandatangani sebelum 30 Juni 2025 untuk Provinsi dan Minggu I Bulan Juli 2025 untuk Kabupaten/Kota
+( Penetapan RKPD pada APBD Murni Tahun 2026 )"
+"Dokumen Peraturan Kepala Daerah yang ditandatangai maksimal Minggu Ketiga Bulan Mei 2025 untuk Provinsi dan Minggu Keempat Bulan Mei Tahun 2025 Kabupaten/Kota
+( Penetapan RKPD pada APBD Perubahan Tahun 2025 )"
+"Dokumen Peraturan Kepala Daerah yang ditandatangani sebelum 9 Agustus 2025
+( Penetapan Renja pada APBD Murni Tahun 2026 )"
+"Dokumen Peraturan Kepala Daerah yang ditandatangani sebelum 31 Juli 2025
+( Penetapan Renja pada APBD Perubahan Tahun 2025 )"
+"Form Kertas kerja yang ditandatangani pejabat berwenang
+( Form Konsistensi Tujuan dan Sasaran RPJMD dengan RKPD Tahun 2026 )"
+"Form Konsistensi Renstra dengan Renja ditandatangani pejabat berwenang
+(Form Konsistensi Renstra dengan Renja pada masing-masing Perangkat Daerah untuk APBD Tahun 2026)"
+"Form/Kertas kerja . dukungan indicator ditandatangani pejabat berwenang.
+(Form Dukungan Indikator Kinerja Output Pemerintah Daerah Terhadap Kinerja Urusan Tahun 2026)"
+"Form Keselarasan target kerangka ekonomi makro nasional ditandatangani pejabat berwenang. (Form Keselarasan Target Kerangka Ekonomi Makro Nasional dengan Pemerintah Daerah (Pemerintah Provinsi) pada APBD Tahun 2026; atau Form Keselarasan Target Kerangka
+Ekonomi Makro Nasional dengan Pemerintah Daerah (Pemerintah Kabupaten/Kota) pada APBD Tahun 2026 )"
+
+
+bahwa untuk mewujudkan sinkronisasi program dan kegiatan pada Rencana Kerja Perangkat Daerah dengan berpedoman pada Peraturan Bupati Mamberamo Raya Nomor 22 Tahun 2024 tentang Rencana Kerja Pemerintah Daerah Kabupaten Mamberamo Raya Tahun 2025, perlu menetapkan Rencana Kerja Perangkat Daerah Tahun 2025;
+
+bahwa berdasarkan pertimbangan sebagaimana dimaksud dalam huruf a, perlu menetapkan Peraturan Bupati tentang Penetapan Rencana Kerja Perangkat Daerah Tahun 2025;
+
+Undang-Undang Nomor 12 Tahun 1969 tentang Pembentukan Propinsi Otonomi Irian Barat dan Kabupaten-Kabupaten Otonom di Propinsi Irian Barat (Lembaran Negara tahun 1969 Nomor 47, Tambahan Lembaran Negara Republik Indonesia Nomor 2907);
+
+Undang-Undang Nomor 25 Tahun 2004 tentang Sistem Perencanaan Pembangunan Nasional (Lembaran Negara Republik Indonesia Tahun 2004 Nomor 104, Tambahan Lembaran Negara Republik Indonesia Nomor 4421);
+
+Undang-Undang Nomor 19 Tahun 2007 tentang Pembentukan Kabupaten Mamberamo Raya di Provinsi Papua (Lembaran Negara Republik Indonesia Tahun 2007 Nomor 44, Tambahan Lembaran Negara Republik Indonesia Nomor 4709);
+
+Undang-Undang Nomor 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-Undangan (Lembaran Negara Republik Indonesia Tahun 2011 Nomor 82, Tambahan Lembaran Negara Republik Indonesia Nomor 5234) sebagaimana telah diubah beberapa kali terakhir dengan Undang-Undang Nomor 15 Tahun 2019 tentang Perubahan Kedua Atas UndangUndang Nomor 12 Tahun 2011 tentang Pembentukan Peraturan Perundang-Undangan (Lembaran Negara Republik Indonesia Tahun 2023 Nomor 183, Tambahan Lembaran Negara Republik Indonesia Nomor 6398);
+
+Undang-Undang Nomor 23 Tahun 2014 tentang Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2014 Nomor 244, Tambahan Lembaran Negara Republik Indonesia Nomor 5587) sebagaimana telah diubah beberapa kali terakhir dengan UndangUndang Nomor 9 Tahun 2015 tentang Perubahan Kedua Atas Undang-Undang Nomor 23 Tahun 2014 tentang Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2020 Nomor 58, Tambahan Lembaran Negara Republik Indonesia Nomor 5679);
+
+Undang-Undang Nomor 1 Tahun 2022 tentang Hubungan Keuangan Antara Pemerintah Pusat dan Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2023 Nomor 4, Tambahan Lembaran Negara Republik Indonesia Nomor 6757);
+
+Peraturan Pemerintah Nomor 8 Tahun 2006 tentang Pelaporan Keuangan dan Kinerja Instansi Pemerintah (Lembaran Negara Republik Indonesia Tahun 2006 Nomor 25, Tambahan Lembaran Negara Republik Indonesia Nomor 4614);
+
+Peraturan Pemerintah Nomor 39 Tahun 2006 tentang Tata Cara Pengendalian dan Evaluasi Pelaksanaan Rencana Pembangunan (Lembaran Negara Republik Indonesia Tahun 2006 Nomor 96, Tambahan Lembaran Negara Republik Indonesia Nomor 4663);
+
+Peraturan Pemerintah Nomor 8 Tahun 2008 tentang Tahapan Tata Cara Penyusunan, Pengendalian dan Evaluasi Pelaksanaan Rencana Pembangunan Daerah (Lembaran Negara Republik Indonesia Tahun 2008 Nomor 21, Tambahan Lembaran Negara Republik Indonesia Nomor 4817);
+
+Peraturan Pemerintah Nomor 18 Tahun 2016 tentang Perangkat Daerah (Lembaran Negara Republik Indonesia Tahun 2016 Nomor 114, Tambahan Lembaran Negara Republik Indonesia Nomor 5888) sebagaimana telah diubah dengan Peraturan Pemerintah Nomor 72 Tahun 2019 (Lembaran Negara Republik Indonesia Tahun 2019 Nomor 187, Tambahan Lembaran Negara Republik Indonesia Nomor 6402);
+
+Peraturan Pemerintah Nomor 12 Tahun 2017 tentang Pembinaan dan Pengawasan Penyelenggaraan Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2017 Nomor 73, Tambahan Lembaran Negara Republik Indonesia Nomor 6041);
+
+Peraturan Pemerintah Nomor 17 Tahun 2017 tentang Sinkronisasi Proses Perencanaan dan Penganggaran Pembangunan Nasional (lembaran Negara Republik Indonesia Tahun 2017 Nomor 105, Tambahan Lembaran Negara Republik Indonesia Nomor 6056);
+
+Peraturan Pemerintah Nomor 45 Tahun 2017 tentang Partisipasi Masyarakat dalam Penyelenggaraan Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2017 Nomor 225, Tambahan Lembaran Negara Republik Indonesia Nomor 6133);
+
+Peraturan Pemerintah Nomor 2 Tahun 2018 tentang Standar Pelayanan Minimal (Lembaran Negara Republik Indonesia Tahun 2008 Nomor 2, Tambahan Lembaran Negara Republik Indonesia Nomor 6178);
+
+Peraturan Pemerintah Nomor 12 Tahun 2019 tentang Pengelolaan Keuangan Daerah (Lembaran Negara Republik Indonesia Tahun 2019 Nomor 42, Tambahan Lembaran Negara Republik Indonesia Nomor 6322);
+
+Peraturan Pemerintah Nomor 13 Tahun 2019 tentang Laporan dan Evaluasi Penyelenggaraan Pemerintahan Daerah (Lembaran Negara Republik Indonesia Tahun 2019 Nomor 52, Tambahan Lembaran Negara Republik Indonesia Nomor 6323);

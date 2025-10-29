@@ -43,18 +43,18 @@ class IndikatorUrusanPemdaSeeder extends Seeder
                 'satuan' => $item['satuan'],
             ]);
 
-            $bidang = A2Bidang::where('kode_bidang', $indikatorCreate->kode_bidang)->first();
+            // $bidang = A2Bidang::where('kode_bidang', $indikatorCreate->kode_bidang)->first();
 
-            $targetIndikator = [
-                'indikator_urusan_pemda_id' => $indikatorCreate->id,
-                'a2_bidang_id' => $bidang->id,
-                'kode_bidang' => $indikatorCreate->kode_bidang,
-                'kode_indikator' => $indikatorCreate->kode_indikator,
-                'target_nasional' => $item['target_nasional'],
-                'satuan' => $indikatorCreate->satuan,
-                'tahun' => now()->format('Y'),
-            ];
-            TargetIndikatorUrusan::create($targetIndikator);
+            // $targetIndikator = [
+            //     'indikator_urusan_pemda_id' => $indikatorCreate->id,
+            //     'a2_bidang_id' => $bidang->id,
+            //     'kode_bidang' => $indikatorCreate->kode_bidang,
+            //     'kode_indikator' => $indikatorCreate->kode_indikator,
+            //     'target_nasional' => $item['target_nasional'],
+            //     'satuan' => $indikatorCreate->satuan,
+            //     'tahun' => now()->format('Y'),
+            // ];
+            // TargetIndikatorUrusan::create($targetIndikator);
         }
     }
 }

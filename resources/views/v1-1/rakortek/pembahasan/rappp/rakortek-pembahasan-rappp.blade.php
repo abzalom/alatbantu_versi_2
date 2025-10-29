@@ -39,7 +39,7 @@
                                 <td>{{ $opd->kode_opd }}</td>
                                 <td>{{ $opd->nama_opd }}</td>
                                 <td class="text-center">
-                                    <a target="_blank" href="/pembahasan/rakortek/rappp/opd?id={{ $opd->id }}" class="btn btn-sm btn-{{ $admin ? 'primary' : 'secondary' }}">
+                                    <a href="/pembahasan/rakortek/rappp/opd?id={{ $opd->id }}" class="btn btn-sm btn-{{ $admin ? 'primary' : 'secondary' }}">
                                         @if ($admin)
                                             <i class="fa-solid fa-handshake"></i>
                                         @else

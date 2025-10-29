@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('schedule_monevs', function (Blueprint $table) {
             $table->id();
             $table->string('nama')->index();
+            $table->enum('tahapan', ['rakotek', 'rap'])->index();
             $table->text('keterangan');
             $table->boolean('status')->default(true)->index();
             $table->foreignId('user_create_id')->nullable()->index();

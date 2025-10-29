@@ -11,7 +11,7 @@ class DataPublishSikdController extends Controller
     public function rap_otsus(Request $request, $sumberdana)
     {
         if (!in_array($sumberdana, ['bg', 'sg', 'dti'])) {
-            return redirect()->to('/')->with('error', 'Sumber Dana tidak ditemukan!');
+            return redirect()->to('/dashboard')->with('error', 'Sumber Dana tidak ditemukan!');
         }
         $data = SikdPublishRap::where('sumberdana', $sumberdana)
             ->where('tahun', tahun())
@@ -30,7 +30,7 @@ class DataPublishSikdController extends Controller
     public function destroy_rap_otsus(Request $request, $sumberdana)
     {
         if (!in_array($sumberdana, ['bg', 'sg', 'dti'])) {
-            return redirect()->to('/')->with('error', 'Sumber Dana tidak ditemukan!');
+            return redirect()->to('/dashboard')->with('error', 'Sumber Dana tidak ditemukan!');
         }
         $data = SikdPublishRap::where('sumberdana', $sumberdana)
             ->where('tahun', tahun())

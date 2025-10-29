@@ -1,5 +1,9 @@
 <x-app-layout-component :title="$app['title'] ?? null">
 
+    <script>
+        const bidangs = @json($bidangs);
+    </script>
+
     @if (session()->has('pesan-success'))
         <div class="row mb-3">
             <div class="alert alert-success" role="alert">{{ session()->get('pesan-success') }}</div>
@@ -46,7 +50,11 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th>Kode OPD</th>
+                                    @if (auth()->user()->hasRole('admin'))
+                                        <th>id</th>
+                                    @endif
                                     <th>Nama OPD</th>
+                                    <th>Bidang Yang Melekat</th>
                                     <th>Kepala OPD</th>
                                     <th>Tahun</th>
                                     <th></th>
@@ -56,7 +64,17 @@
                                 @foreach ($opds as $opd)
                                     <tr>
                                         <td>{{ $opd->kode_opd }}</td>
+                                        @if (auth()->user()->hasRole('admin'))
+                                            <td>{{ $opd->id }}</td>
+                                        @endif
                                         <td>{{ $opd->nama_opd }}</td>
+                                        <td>
+                                            <ul class="small text-muted">
+                                                @foreach ($opd->tag_bidang as $tag_bidang)
+                                                    <li>{{ $tag_bidang->bidang->uraian }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </td>
                                         <td id="row-kepala-opd-{{ str_replace('.', '_', $opd->kode_unik_opd) }}" class="text-nowrap">
                                             @if ($opd->kepala_aktif)
                                                 {{ $opd->kepala_aktif->nama }}
@@ -71,7 +89,10 @@
                                         <td>{{ $opd->tahun }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <button class="btn btn-sm btn-info btn-kepala-opd" value="{{ $opd->id }}" data-bs-toggle="modal" data-bs-target="#listKepalaOpdModal"><i class="fa-solid fa-user-tie"></i></button>
+                                                <button class="btn btn-sm btn-outline-info btn-kepala-opd" value="{{ $opd->id }}" data-bs-toggle="modal" data-bs-target="#listKepalaOpdModal"><i class="fa-solid fa-user-tie"></i></button>
+                                                @if (auth()->user()->hasRole('admin'))
+                                                    <button class="btn btn-sm btn-outline-secondary btn-tag-bidang-opd" value="{{ $opd->id }}" data-bs-toggle="modal" data-bs-target="#tagBidalOpdModal"><i class="fa-solid fa-bookmark"></i></button>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
@@ -86,5 +107,6 @@
     </div>
 
     @include('app.pengaturan.opd.modal.modal-kepala-opd')
+    @include('app.pengaturan.opd.modal.modal-tag-bidang-opd')
     @include('app.pengaturan.opd.script-pengaturan-opd')
 </x-app-layout-component>

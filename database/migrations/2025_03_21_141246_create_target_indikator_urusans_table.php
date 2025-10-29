@@ -22,9 +22,10 @@ return new class extends Migration
             $table->decimal('target_nasional', 16, 2)->nullable()->index();
             $table->decimal('usulan_target_daerah', 16, 2)->nullable()->index();
             $table->decimal('target_daerah', 16, 2)->nullable()->index();
+            $table->string('satuan')->index();
             $table->enum('pembahasan', ['setujui', 'perbaikan', 'tolak'])->nullable();
             $table->text('catatan')->nullable();
-            $table->string('satuan')->index();
+            $table->boolean('validasi')->default(false);
             $table->year('tahun')->index();
             $table->timestamps();
         });

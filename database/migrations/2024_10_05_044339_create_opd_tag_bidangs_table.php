@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('kode_urusan');
             $table->string('kode_bidang');
             $table->year('tahun');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

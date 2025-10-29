@@ -5,20 +5,34 @@ namespace App\Http\Controllers\Config;
 use App\Enums\PangkatEnums;
 use App\Http\Controllers\Controller;
 use App\Models\Data\Opd;
+use App\Models\Nomenklatur\A2Bidang;
 use App\Models\Tagging\Nomenklatur\OpdTagBidang;
+use App\Services\OpdTagBidangService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Validator;
+
 // use Illuminate\Http\Client\ConnectionException;
 
 class ConfigOpdController extends Controller
 {
+    protected OpdTagBidangService $opdTagBidangService;
+
+    public function __construct(OpdTagBidangService $opdTagBidangService)
+    {
+        $this->opdTagBidangService = $opdTagBidangService;
+    }
+
     public function config_opd()
     {
         $opds = Auth::user()->hasRole('user') ? Auth::user()->opds() : new Opd();
         $opds = $opds->with([
             'kepala_aktif',
-        ])->get();
+            'tag_bidang.bidang',
+        ])->orderBy('kode_opd')->get();
+        $bidangs = A2Bidang::orderBy('kode_bidang')->get();
         // return $opds;
         return view('app.pengaturan.opd.pengaturan-opd', [
             'app' => [
@@ -27,6 +41,7 @@ class ConfigOpdController extends Controller
             ],
             'opds' => $opds,
             'pangkats' => PangkatEnums::cases(),
+            'bidangs' => $bidangs,
         ]);
     }
 
@@ -136,5 +151,76 @@ class ConfigOpdController extends Controller
         } catch (ConnectionException $e) {
             return redirect()->to('/config/opd')->with('error', 'Tidak dapat terhubung ke server API');
         }
+    }
+
+    public function tag_bidang_opd(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'opd_id' => 'required|exists:opds,id',
+            'bidangs' => 'required|array|min:1|max:5',
+            'bidangs.*' => 'exists:a2_bidangs,id',
+        ], [
+            'opd_id.required' => 'OPD tidak ditemukan.',
+            'opd_id.exists' => 'OPD tidak ditemukan.',
+            'bidangs.required' => 'Bidang wajib diisi.',
+            'bidangs.array' => 'Bidang tidak valid.',
+            'bidangs.min' => 'Pilih minimal 1 bidang.',
+            'bidangs.max' => 'Pilih maksimal 5 bidang.',
+            'bidangs.*.exists' => 'Bidang tidak valid.',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan! data gagal disimpan.')
+                ->withInput()
+                ->withErrors($validator);
+        }
+        $bidangs = A2Bidang::whereIn('id', $request->bidangs)->orderBy('kode_bidang')->get();
+        $opd = Opd::with([
+            'tag_bidang' => fn($q) => $q->withTrashed(),
+        ])->find($request->opd_id);
+        if (!$opd) {
+            return redirect()->back()
+                ->with('error', 'OPD tidak ditemukan.');
+        }
+        $existing = $opd->tag_bidang->keyBy('kode_bidang');
+        $toAdd = $bidangs->filter(fn($item) => !$existing->has($item->kode_bidang))->values();
+        $toKeep = $bidangs->filter(fn($item) => $existing->has($item->kode_bidang))->values();
+        $toDelete = $existing->filter(fn($item) => !in_array($item->kode_bidang, $bidangs->pluck('kode_bidang')->toArray()) && !$item->trashed())->values();
+
+        try {
+            DB::beginTransaction();
+            // Proses tambah bidang
+            foreach ($toAdd as $addBidang) {
+                $dataAdd = [
+                    'kode_unik_opd' => $opd->kode_unik_opd,
+                    'kode_unik_opd_tag_bidang' => $opd->kode_unik_opd . '-' . $addBidang->kode_bidang,
+                    'kode_opd' => $opd->kode_opd,
+                    'kode_urusan' => $addBidang->kode_urusan,
+                    'kode_bidang' => $addBidang->kode_bidang,
+                    'tahun' => $opd->tahun,
+                ];
+                OpdTagBidang::create($dataAdd);
+            }
+            foreach ($toKeep as $keepBidang) {
+                $tag = $existing->get($keepBidang->kode_bidang);
+                if ($tag && $tag->trashed()) {
+                    $tag->restore();
+                }
+            }
+            foreach ($toDelete as $delBidang) {
+                if ($delBidang && !$delBidang->trashed()) {
+                    $delBidang->delete();
+                }
+            }
+            DB::commit();
+            return redirect()->back()
+                ->with('success', 'Data berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan! data gagal disimpan. ' . $e->getMessage())
+                ->withInput();
+        }
+        // return $request->all();
     }
 }

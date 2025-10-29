@@ -17,7 +17,7 @@ class AuthController extends Controller
     public function login_auth(Request $request)
     {
         if (Auth::check()) {
-            return redirect()->to('/');
+            return redirect()->to('/dashboard');
         }
         $tahuns = DB::table('tahun_anggaran')->get('tahun');
         return view('auth.login-auth', [
@@ -74,10 +74,9 @@ class AuthController extends Controller
             ];
             $userToken = $hasKey . '|' . $keyHalf1 . '|' . base64_encode(json_encode($userData));
             session(['user_token' => $userToken]);
-            // if ($user->hasRole('user')) {
-            //     return redirect()->to('/user/rap')->with('success', "Selamat datang $user->name!");
-            // }
-            return redirect()->to('/')->with('success', "Selamat datang $user->name!");
+
+            return redirect()->intended('/dashboard')
+                ->with('success', "Selamat datang {$user->name}!");
         }
 
         return redirect()->back()->with('error', 'Terjadi kesalahan! username tidak diketahui!');

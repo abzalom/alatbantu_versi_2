@@ -23,14 +23,41 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm mb-2">
-                            <button id="btn-create-schedule" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-square-plus"></i> Jadwal Baru</button>
-                        </div>
+
+                    <div class="text-muted">
+                        <strong>Jadwal terdiri dari beberapa tahapan yang harus dilalui yaitu</strong>
+                        <ul>
+                            <li>Rapat Koordinasi Teknis (Rakortek)</li>
+                            <li>Rancangan Awal (Ranwal) RAP</li>
+                            <li>Rancangan RAP</li>
+                            <li>Finalisasi RAP</li>
+                            <li>Perubahan RAP</li>
+                        </ul>
                     </div>
 
+                    <div class="row justify-content-between">
+                        <div class="col-sm mb-2">
+                            <button id="btn-create-schedule" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#scheduleModal"><i class="fa-solid fa-square-plus"></i> Jadwal Baru</button>
+                        </div>
+                        @if ($aktif)
+                            <div class="col-sm mb-2 text-end">
+                                @if ($aktif->status)
+                                    @if ($aktif->selesai > now())
+                                        <form method="post" action="/config/schedule/rap/input_user">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $aktif->id }}">
+                                            <input type="hidden" name="penginputan" value="{{ $aktif->penginputan ? 'false' : 'true' }}">
+                                            <button class="btn btn-sm {{ $aktif->penginputan ? 'btn-danger' : 'btn-secondary' }}" data-bs-toggle="tooltip" data-bs-title="{{ $aktif->penginputan ? 'Nonaktifkan Penginputan' : 'Aktifkan Penginputan' }}">
+                                                <i class="fa-solid {{ $aktif->penginputan ? 'fa-lock' : 'fa-lock-open' }}"></i> Penginputan
+                                            </button>
+                                        </form>
+                                    @endif
+                                @endif
+                            </div>
+                        @endif
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                        <table class="table table-bordered table-striped" style="font-size: 90%">
                             <thead class="table-dark align-middle">
                                 <tr>
                                     <th>#</th>
@@ -60,59 +87,52 @@
                                         <td class="{{ $textMuted }}">
                                             {{ $jadwal->keterangan }}
                                         </td>
-                                        <td class="{{ $textMuted }}">
-                                            {{ $jadwal->mulai }}
+                                        <td class="{{ $textMuted }} text-nowrap">
+                                            {{ Carbon\Carbon::parse($jadwal->mulai)->translatedFormat('d F Y') }}
+                                            <br>
+                                            {{ Carbon\Carbon::parse($jadwal->mulai)->translatedFormat('\P\u\k\u\l H:i:s A') }}
                                         </td>
-                                        <td class="{{ $textMuted }}">
-                                            {{ $jadwal->selesai }}
+                                        <td class="{{ $textMuted }} text-nowrap">
+                                            {{ Carbon\Carbon::parse($jadwal->selesai)->translatedFormat('d F Y') }}
+                                            <br>
+                                            {{ Carbon\Carbon::parse($jadwal->selesai)->translatedFormat('\P\u\k\u\l H:i:s A') }}
                                         </td>
-                                        <form method="post" action="/config/schedule/rap/input_user">
-                                            @csrf
+                                        <td class="text-nowrap text-center">
                                             @if ($jadwal->status)
-                                                <td class="text-nowrap">
+                                                @if ($jadwal->selesai > now())
                                                     @if ($jadwal->penginputan)
-                                                        <input type="hidden" name="id" value="{{ $jadwal->id }}">
-                                                        <input type="hidden" name="penginputan" value="false">
-                                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP Aktif">Aktif</span> | <button class="btn btn-sm btn-danger"><i class="fa-solid fa-circle-xmark"></i></button>
+                                                        <span class="badge bg-success" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP Aktif">Aktif</span>
                                                     @else
-                                                        <input type="hidden" name="id" value="{{ $jadwal->id }}">
-                                                        <input type="hidden" name="penginputan" value="true">
-                                                        <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP dikunci. Terkecuali admin">Tidak Aktif</span> | <button class="btn btn-sm btn-primary"><i class="fa-solid fa-circle-check"></i></button>
+                                                        <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP dikunci. Terkecuali admin">Tidak Aktif</span>
                                                     @endif
-                                                </td>
-                                            @else
-                                                <td class="text-center">
-                                                    <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.8rem"></i>
-                                                </td>
-                                            @endif
-                                        </form>
-                                        @if (!$jadwal->deleted_at)
-                                            <td>
-                                                @if ($jadwal->status)
-                                                    <span class="badge bg-success">Aktif</span>
-                                                    <br>
-                                                    @php
-                                                        $start = now();
-                                                        $end = date_create($jadwal->selesai);
-                                                        $diff = date_diff($start, $end);
-                                                    @endphp
-                                                    @if (now()->diffInDays($jadwal->selesai) <= 0)
-                                                        <span class="badge bg-danger">Selesai</span>
-                                                    @else
-                                                        Sedang berlangsung
-                                                        <br>
-                                                        <div class="count-down-time"></div>
-                                                    @endif
-                                                    <br>
                                                 @else
-                                                    <span class="badge bg-danger">Dikunci</span>
+                                                    <span class="badge bg-danger" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Penginputan RAP dikunci. Terkecuali admin">Tidak Aktif</span>
                                                 @endif
-                                            </td>
-                                        @else
-                                            <td class="text-center">
+                                            @else
                                                 <i class="fa-solid fa-circle-xmark text-danger" style="font-size: 1.8rem"></i>
-                                            </td>
-                                        @endif
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($jadwal->status)
+                                                <span class="badge bg-success">Aktif</span>
+                                                <br>
+                                                @php
+                                                    $start = now();
+                                                    $end = date_create($jadwal->selesai);
+                                                    $diff = date_diff($start, $end);
+                                                @endphp
+                                                @if (now()->diffInDays($jadwal->selesai) <= 0)
+                                                    <span class="badge text-bg-danger">Selesai</span>
+                                                @else
+                                                    <span class="badge text-bg-info">Sedang berlangsung</span>
+                                                    {{-- <br>
+                                                    <div class="count-down-time"></div> --}}
+                                                @endif
+                                                <br>
+                                            @else
+                                                <span class="badge bg-danger">Dikunci</span>
+                                            @endif
+                                        </td>
                                         <td>
                                             @if ($jadwal->status)
                                                 <div class="btn-group">

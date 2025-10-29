@@ -32,4 +32,9 @@ class KepalaOpd extends Model
     {
         return $this->belongsTo(Opd::class, 'kode_unik_opd', 'kode_unik_opd');
     }
+
+    public function getShowNipAttribute(): string
+    {
+        return preg_replace("/(\d{8})(\d{6})(\d{1})/", "$1 $2 $3 ", $this->nip);
+    }
 }

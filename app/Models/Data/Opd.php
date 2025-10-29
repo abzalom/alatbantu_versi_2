@@ -3,6 +3,8 @@
 namespace App\Models\Data;
 
 use App\Models\Config\PaguOpd;
+use App\Models\Config\TimPembahas;
+use App\Models\Config\TimPembahasOpd;
 use App\Models\Nomenklatur\A5Subkegiatan;
 use App\Models\Otsus\Data\B5TargetAktifitasUtamaOtsus;
 use App\Models\Rap\RapOtsus;
@@ -17,11 +19,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 #[ScopedBy(TahunScope::class)]
 class Opd extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
 
     public function getTextAttribute()
@@ -96,8 +99,21 @@ class Opd extends Model
         );
     }
 
-    // public function rakortek_urusan(): HasMany
-    // {
-    //     return $this->hasMany(Rako::class, 'foreign_key', 'local_key');
-    // }
+    /**
+     * Get all of the Tim Pembahas OPD for the Opd
+     */
+    public function tim_pembahas_opd(): HasMany
+    {
+        return $this->hasMany(TimPembahasOpd::class)->orderBy('urutan', 'asc');
+    }
+
+    /**
+     * Get all of the Tim Pembahas Bappeda for the Opd
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tim_pembahas(): BelongsToMany
+    {
+        return $this->belongsToMany(TimPembahas::class)->withPivot('tahun', 'urutan')->orderBy('urutan', 'asc');
+    }
 }

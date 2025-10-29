@@ -3,20 +3,22 @@
 namespace App\Models\Tagging\Nomenklatur;
 
 use App\Models\Data\Opd;
-use App\Models\Data\Perencanaan\IndikatorUrusanPemda;
+use App\Models\Rap\RapOtsus;
 use App\Models\Nomenklatur\A1Urusan;
 use App\Models\Nomenklatur\A2Bidang;
 use App\Models\Nomenklatur\A3Program;
 use App\Models\Nomenklatur\A4Kegiatan;
-use App\Models\Nomenklatur\A5Subkegiatan;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Models\Nomenklatur\A5Subkegiatan;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Data\Perencanaan\IndikatorUrusanPemda;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OpdTagBidang extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
 
     public function urusan(): BelongsTo
@@ -52,5 +54,10 @@ class OpdTagBidang extends Model
     public function opd(): BelongsTo
     {
         return $this->belongsTo(Opd::class, 'kode_unik_opd', 'kode_unik_opd');
+    }
+
+    public function raps(): HasMany
+    {
+        return $this->hasMany(RapOtsus::class, 'kode_unik_opd_tag_bidang', 'kode_unik_opd_tag_bidang');
     }
 }

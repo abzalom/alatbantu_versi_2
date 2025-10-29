@@ -7,7 +7,9 @@ use App\Models\Scopes\TahunScope;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -19,9 +21,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Role::truncate();
-        // Permission::truncate();
+        Schema::disableForeignKeyConstraints();
+        DB::table('model_has_permissions')->truncate();
+        DB::table('role_has_permissions')->truncate();
+        DB::table('model_has_roles')->truncate();
+
+        Permission::truncate();
+        Role::truncate();
         User::truncate();
+        Schema::enableForeignKeyConstraints();
+
+        // Create roles and permissions
         $adminRole = Role::create(['name' => 'admin']);
         $userRole = Role::create(['name' => 'user']);
 
@@ -33,7 +43,7 @@ class UserSeeder extends Seeder
         $adminRole->syncPermissions(['create', 'read', 'update', 'delete']);
         $userRole->syncPermissions(['read', 'update']);
 
-
+        // Create users
         $admin = User::updateOrCreate(
             ['username' => 'admin'],
             [
@@ -41,8 +51,16 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('adminotsus123'),
             ]
         );
+        $guru = User::updateOrCreate(
+            ['username' => 'guru'],
+            [
+                'name' => 'Guru',
+                'password' => Hash::make('guru123'),
+            ]
+        );
 
         $admin->assignRole('admin');
+        $guru->assignRole('user');
 
         $skpds = json_decode(Storage::disk('public')->get('/data/users/user-skpd2.json'), true);
 
@@ -55,16 +73,16 @@ class UserSeeder extends Seeder
                 ]
             );
 
-            $opd24 = Opd::withoutGlobalScope(TahunScope::class)->where('kode_unik_opd', '2024-' . $skpd['kode_opd'])->first();
-            if ($opd24) {
-                $opd24->username = $user->username;
-                $opd24->save();
-            }
-            $opd25 = Opd::withoutGlobalScope(TahunScope::class)->where('kode_unik_opd', '2025-' . $skpd['kode_opd'])->first();
-            if ($opd25) {
-                $opd25->username = $user->username;
-                $opd25->save();
-            }
+            // $opd24 = Opd::withoutGlobalScope(TahunScope::class)->where('kode_unik_opd', '2024-' . $skpd['kode_opd'])->first();
+            // if ($opd24) {
+            //     $opd24->username = $user->username;
+            //     $opd24->save();
+            // }
+            // $opd25 = Opd::withoutGlobalScope(TahunScope::class)->where('kode_unik_opd', '2025-' . $skpd['kode_opd'])->first();
+            // if ($opd25) {
+            //     $opd25->username = $user->username;
+            //     $opd25->save();
+            // }
 
             $user->assignRole($skpd['role']);
         }

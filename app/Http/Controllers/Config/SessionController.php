@@ -50,6 +50,6 @@ class SessionController extends Controller
         // Simpan ke session
         Session::put('tahun', $request->tahun);
 
-        return redirect()->to('/')->with('success', 'Tahun berhasil disimpan.');
+        return redirect()->to('/dashboard')->with('success', 'Tahun berhasil disimpan.');
     }
 }

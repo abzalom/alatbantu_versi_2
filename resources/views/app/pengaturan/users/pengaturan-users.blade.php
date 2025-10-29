@@ -81,9 +81,9 @@
                                         <span class="badge text-bg-{{ $color }}">{{ $role }}</span>
                                     @endforeach
                                 </td>
-                                <td class="text-wrap">
+                                <td class="text-wrap skpd-td-{{ $user->id }}">
                                     @if ($user->opds->count() > 0)
-                                        <ul>
+                                        <ul class="skpd-list-{{ $user->id }}">
                                             @foreach ($user->opds as $opd)
                                                 <li style="border-bottom: 1px solid #aeaeae; padding: 2px 0;">
                                                     {{ $opd->nama_opd }}

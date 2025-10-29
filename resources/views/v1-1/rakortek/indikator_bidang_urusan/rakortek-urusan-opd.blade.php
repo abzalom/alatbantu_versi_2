@@ -33,16 +33,22 @@
                                 <tr class="{{ $itemIndikator->target && $itemIndikator->target->validasi ? 'table-warning' : '' }}">
                                     <td>{{ $itemIndikator->kode_indikator }}</td>
                                     <td>{{ $itemIndikator->nama_indikator }}</td>
-                                    <td>{{ $itemIndikator->satuan }}</td>
-                                    <td>{{ $itemIndikator->target && $itemIndikator->target->target_nasional ? $itemIndikator->target->target_nasional : '' }}</td>
-                                    <td id="show-target-urusan-{{ $itemIndikator->target ? $itemIndikator->target->id : $loop->iteration }}">{{ $itemIndikator->target && $itemIndikator->target->usulan_target_daerah ? $itemIndikator->target->usulan_target_daerah : '' }}</td>
+                                    <td class="text-center">{{ $itemIndikator->satuan }}</td>
+                                    <td class="text-center">{{ $itemIndikator->target && $itemIndikator->target->target_nasional ? $itemIndikator->target->target_nasional : '' }}</td>
+                                    <td class="text-center" id="show-target-urusan-{{ $itemIndikator->target ? $itemIndikator->target->id : $loop->iteration }}">{{ $itemIndikator->target && $itemIndikator->target->usulan_target_daerah ? $itemIndikator->target->usulan_target_daerah : '' }}</td>
                                     <td class="text-center">
                                         @if ($itemIndikator->target && $itemIndikator->target->validasi)
                                             <i class="fa-solid fa-circle-info text-info" style="font-size: 30px" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Telah dibahas dan divalidasi"></i>
                                         @else
-                                            <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary edit-target-urusan" value="{{ $itemIndikator }}" data-bs-toggle="modal" data-bs-target="#newTargetIndikatorUrusanModal"><i class="fa-solid fa-pen-to-square"></i></button>
-                                            </div>
+                                            @if (auth()->user()->hasRole('user') && (!jadwal_rap() || jadwal_rap()->tahapan !== 'rakortek' || !jadwal_rap()->penginputan))
+                                                <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Terkunci. Hubungi administrator!">
+                                                    <button class="btn btn-info btn-sm" disabled><i class="fa-solid fa-lock"></i></button>
+                                                </div>
+                                            @else
+                                                <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Edit">
+                                                    <button class="btn btn-sm btn-primary edit-target-urusan" value="{{ $itemIndikator }}" data-bs-toggle="modal" data-bs-target="#newTargetIndikatorUrusanModal"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                </div>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

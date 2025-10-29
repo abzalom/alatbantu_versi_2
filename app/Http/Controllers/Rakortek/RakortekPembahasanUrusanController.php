@@ -177,8 +177,10 @@ class RakortekPembahasanUrusanController extends Controller
         }
 
         // redirect to /pembahasan/rakortek/urusan jika bidang tidak mempunyai indikator
-        if ($opd->tag_bidang->isEmpty() || $opd->tag_bidang->every(fn($tag) => $tag->indikators->isEmpty())) {
-            return redirect()->to('/pembahasan/rakortek/urusan')->with('error', 'Perangkat Daerah tidak mempunyai indikator atau belum mengisi target kinerja indikator urusan!');
+        if (auth()->user()->hasRole('user')) {
+            if ($opd->tag_bidang->isEmpty() || $opd->tag_bidang->every(fn($tag) => $tag->indikators->isEmpty())) {
+                return redirect()->to('/pembahasan/rakortek/urusan')->with('error', 'Perangkat Daerah tidak mempunyai indikator atau belum mengisi target kinerja indikator urusan!');
+            }
         }
         // return $opd;
         return view('v1-1.rakortek.pembahasan.urusan.rakortek-pembahasan-urusan-opd', [
@@ -190,7 +192,7 @@ class RakortekPembahasanUrusanController extends Controller
         ]);
     }
 
-    public function save_pembahasan_urusan_opd(Request $request)
+    public function pembahasan_save_urusan_opd(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
@@ -229,7 +231,7 @@ class RakortekPembahasanUrusanController extends Controller
         return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
-    public function validasi_pembahasan_urusan_opd(Request $request)
+    public function pembahasan_validasi_urusan_opd(Request $request)
     {
         $validator = Validator::make(
             $request->all(),

@@ -1,4 +1,9 @@
 <?php
+
+use App\Models\Config\Schedule;
+use App\Models\Config\ScheduleMonev;
+use Illuminate\Support\Facades\DB;
+
 if (!function_exists('formatIdr')) {
     function formatIdr($number, $decimals = 2)
     {
@@ -7,18 +12,39 @@ if (!function_exists('formatIdr')) {
 }
 
 if (!function_exists('formatNumber')) {
-    function formatNumber($number, $decimals = 2)
+    function formatNumber($number, int $decimals = 2): string
     {
-        // Cek apakah nilai desimalnya semuanya nol
-        if (fmod($number, 1) == 0) {
-            // Bilangan bulat, format tanpa desimal
-            return number_format($number, 0, ',', '.');
-        } else {
-            // Ada desimal signifikan, tampilkan desimal
-            return number_format($number, $decimals, ',', '.');
+        // Kosong/null → kembalikan string kosong (jangan format)
+        if ($number === null || $number === '') {
+            return '';
         }
+
+        // Normalisasi jika string (hapus 'Rp', spasi, titik ribuan, set desimal ke '.')
+        if (is_string($number)) {
+            $n = trim($number);
+            if ($n === '') return '';
+            $n = preg_replace('/[^0-9,.\-]/', '', $n); // sisakan digit, koma, titik, minus
+
+            if (strpos($n, ',') !== false && strpos($n, '.') !== false) {
+                // asumsikan: titik = ribuan, koma = desimal (format Indonesia)
+                $n = str_replace('.', '', $n);
+                $n = str_replace(',', '.', $n);
+            } elseif (strpos($n, ',') !== false) {
+                // hanya koma → anggap sebagai desimal
+                $n = str_replace(',', '.', $n);
+            }
+
+            if (!is_numeric($n)) return '';
+            $number = (float) $n;
+        }
+
+        // Di sini pasti angka
+        $isInteger = fmod((float)$number, 1.0) == 0.0;
+
+        return number_format((float)$number, $isInteger ? 0 : $decimals, ',', '.');
     }
 }
+
 
 if (!function_exists('clearFloatFormat')) {
     function clearFloatFormat($input)
@@ -103,5 +129,45 @@ if (!function_exists('terbilang')) {
             $terbilang = terbilang($nilai / 1000000000000) . ' triliun ' . terbilang($nilai % 1000000000000);
         }
         return $terbilang;
+    }
+}
+
+if (!function_exists('jadwal_rap')) {
+    function jadwal_rap()
+    {
+        $jadwal_rap = Schedule::where('status', true)->first();
+        return $jadwal_rap ? $jadwal_rap : null;
+    }
+}
+
+if (!function_exists('jadwal_rap')) {
+    function jadwal_rap()
+    {
+        $jadwal_rap = Schedule::where('status', true)->first();
+        return $jadwal_rap ? $jadwal_rap : null;
+    }
+}
+
+if (!function_exists('input_rap')) {
+    function input_rap()
+    {
+        $jadwal_monev = jadwal_monev();
+        $jadwal_rap = jadwal_rap();
+        return !$jadwal_monev && $jadwal_rap && $jadwal_rap->tahapan !== 'rakortek' &&  $jadwal_rap->aktif && $jadwal_rap->penginputan;
+    }
+}
+
+if (!function_exists('jadwal_monev')) {
+    function jadwal_monev()
+    {
+        $jadwal_monev = ScheduleMonev::where('status', true)->first();
+        return $jadwal_monev ? $jadwal_monev : null;
+    }
+}
+
+if (!function_exists('formatNip')) {
+    function formatNip($nip)
+    {
+        return preg_replace("/(\d{8})(\d{6})(\d{1})/", "$1 $2 $3 ", $nip);
     }
 }

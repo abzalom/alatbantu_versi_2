@@ -18,44 +18,36 @@ class RakortekRapppController extends Controller
     public function rakortek_rappp(Request $request)
     {
         $opds = auth()->user()->hasRole('user')
-            ? auth()->user()->opds()
-            : (new Opd());
+            ? auth()->user()->opds()->with(['tag_bidang.indikators.target'])
+            : Opd::with(['tag_bidang.indikators.target']);
 
-        $opds = $opds->with(['tag_bidang.indikators.target'])->get();
+        $opds = $opds->get();
 
-        $opds = $opds->map(function ($opd_user) {
-            $countIndikator = 0;
-            $hasIndikators = false;
 
-            foreach ($opd_user->tag_bidang as $tag_bidang) {
-                if ($tag_bidang->indikators && $tag_bidang->indikators->isNotEmpty()) {
-                    $hasIndikators = true;
-                    foreach ($tag_bidang->indikators as $indikator) {
-                        $target = $indikator->target;
-
-                        if ($target && (
-                            $target->usulan_target_daerah !== null &&
-                            $target->usulan_target_daerah !== '' &&
-                            $target->usulan_target_daerah !== 0
-                        )) {
-                            $countIndikator++;
+        $opds = $opds->map(function ($opd) {
+            $punya_indikator = 0;
+            $punya_target = 0;
+            foreach ($opd->tag_bidang as $bidang) {
+                if ($bidang->indikators) {
+                    $punya_indikator += $bidang->indikators->count();
+                    foreach ($bidang->indikators as $indikator) {
+                        if ($indikator->target && $indikator->target->pembahasan == 'setujui' && $indikator->target->validasi) {
+                            $punya_target += 1;
                         }
                     }
                 }
             }
-
             return (object) [
-                'id' => $opd_user->id,
-                'kode_unik_opd' => $opd_user->kode_unik_opd,
-                'kode_opd' => $opd_user->kode_opd,
-                'nama_opd' => $opd_user->nama_opd,
-                'tahun' => $opd_user->tahun,
-                'has_indikator' => [
-                    'status' => $hasIndikators,
-                    'count' => $countIndikator,
-                ],
+                'id' => $opd->id,
+                'kode_unik_opd' => $opd->kode_unik_opd,
+                'kode_opd' => $opd->kode_opd,
+                'nama_opd' => $opd->nama_opd,
+                'tahun' => $opd->tahun,
+                'punya_indikator' => $punya_indikator > 0,
+                'punya_target' => $punya_target > 0,
             ];
-        });
+        })->sortBy('kode_opd');
+
         // return $opds;
         return view('v1-1.rakortek.rappp.rakortek-rappp', [
             'app' => [
@@ -95,9 +87,12 @@ class RakortekRapppController extends Controller
                 'tag.id',
                 'tag.kode_target_aktifitas',
                 'tag.volume',
+                'tag.volume_usulan',
                 'tag.satuan',
                 'tag.sumberdana',
+                'tag.sumberdana_usulan',
                 'tag.alias_dana',
+                'tag.alias_dana_usulan',
                 'tag.pembahasan',
                 'tag.validasi',
                 'tag.deleted_at',
@@ -141,7 +136,7 @@ class RakortekRapppController extends Controller
         ]);
     }
 
-    public function save_opd_rakortek_rappp(Request $request)
+    public function opd_save_rakortek_rappp(Request $request)
     {
         // return $request->all();
         $id_opd = $request->id;
@@ -159,28 +154,28 @@ class RakortekRapppController extends Controller
         if ($request->exists_check == 'yes') {
             $validator = Validator::make($request->all(), [
                 'target_aktifitas' => 'required|exists:b5_target_aktifitas_utama_otsuses,id',
-                'volume_target_aktifitas' => 'required|numeric',
-                'sumberdana' => 'required|in:bg,sg,dti',
+                'volume_usulan' => 'required|numeric',
+                'alias_dana_usulan' => 'required|in:bg,sg,dti',
             ], [
                 'target_aktifitas.required' => 'Target Program RAPPP harus diisi!',
                 'target_aktifitas.exists' => 'Target Program RAPPP tidak ditemukan!',
-                'volume_target_aktifitas.required' => 'Volume Target harus diisi!',
-                'volume_target_aktifitas.numeric' => 'Volume harus berupa angka yang valid!',
-                'sumberdana.required' => 'Sumber Pendanaan harus diisi!',
+                'volume_usulan.required' => 'Volume Target harus diisi!',
+                'volume_usulan.numeric' => 'Volume harus berupa angka yang valid!',
+                'alias_dana_usulan.required' => 'Sumber Pendanaan harus diisi!',
             ]);
         } elseif ($request->exists_check == "no") {
             $validator = Validator::make($request->all(), [
                 'target_aktifitas' => 'required|exists:b5_target_aktifitas_utama_otsuses,id',
-                'volume_target_aktifitas_satuan_not_exists' => 'required|numeric',
+                'volume_usulan_satuan_not_exists' => 'required|numeric',
                 'satuan_traget_aktifitas_satuan_not_exists' => 'required',
-                'sumberdana' => 'required|in:bg,sg,dti',
+                'alias_dana_usulan' => 'required|in:bg,sg,dti',
             ], [
                 'target_aktifitas.required' => 'Target Program RAPPP harus diisi!',
                 'target_aktifitas.exists' => 'Target Program RAPPP tidak ditemukan!',
-                'volume_target_aktifitas_satuan_not_exists.required' => 'Volume Target harus diisi!',
-                'volume_target_aktifitas_satuan_not_exists.numeric' => 'Volume harus berupa angka yang valid!',
+                'volume_usulan_satuan_not_exists.required' => 'Volume Target harus diisi!',
+                'volume_usulan_satuan_not_exists.numeric' => 'Volume harus berupa angka yang valid!',
                 'satuan_traget_aktifitas_satuan_not_exists.required' => 'Satuan Target harus diisi!',
-                'sumberdana.required' => 'Sumber Pendanaan harus diisi!',
+                'alias_dana_usulan.required' => 'Sumber Pendanaan harus diisi!',
             ]);
         } else {
             return redirect()->back()->with('error', 'Terjadi kesalahan! data gagal tersimpan!. exists_check tidak valid!');
@@ -189,7 +184,7 @@ class RakortekRapppController extends Controller
             return redirect()->back()->with('error', 'Terjadi kesalahan! data gagal tersimpan!')->withErrors($validator);
         }
         $target_aktifitas = B5TargetAktifitasUtamaOtsus::where('kode_target_aktifitas', $request->target_aktifitas)->first();
-        $kode_unik_opd_tag_otsus = $opd->kode_unik_opd . '-' . $target_aktifitas->kode_target_aktifitas . '-' . $request->sumberdana;
+        $kode_unik_opd_tag_otsus = $opd->kode_unik_opd . '-' . $target_aktifitas->kode_target_aktifitas . '-' . $request->alias_dana_usulan;
         if (OpdTagOtsus::where('kode_unik_opd_tag_otsus', $kode_unik_opd_tag_otsus)->exists()) {
             return redirect()->back()->with('error', 'Data sudah ada! Silahkan periksa kembali!');
         }
@@ -202,32 +197,32 @@ class RakortekRapppController extends Controller
             'kode_keluaran' => $target_aktifitas->kode_keluaran,
             'kode_aktifitas' => $target_aktifitas->kode_aktifitas,
             'kode_target_aktifitas' => $target_aktifitas->kode_target_aktifitas,
-            'volume' => $request->exists_check == "yes" ? $request->volume_target_aktifitas : $request->volume_target_aktifitas_satuan_not_exists,
+            'volume_usulan' => $request->exists_check == "yes" ? $request->volume_usulan : $request->volume_usulan_satuan_not_exists,
             'satuan' => $request->exists_check == "yes" ? $target_aktifitas->satuan : $request->satuan_traget_aktifitas_satuan_not_exists,
-            'sumberdana' => $request->sumberdana == 'bg' ? 'Otsus 1%' : ($request->sumberdana == 'sg' ? 'Otsus 1,25%' : 'DTI'),
-            'alias_dana' => $request->sumberdana,
+            'sumberdana_usulan' => $request->alias_dana_usulan == 'bg' ? 'Otsus 1%' : ($request->alias_dana_usulan == 'sg' ? 'Otsus 1,25%' : 'DTI'),
+            'alias_dana_usulan' => $request->alias_dana_usulan,
             'tahun' => session()->get('tahun'),
         ];
         OpdTagOtsus::create($data);
         return redirect()->back()->with('success', 'Data berhasil disimpan!');
     }
 
-    public function update_opd_rakortek_rappp(Request $request)
+    public function opd_update_rakortek_rappp(Request $request)
     {
         $validator = Validator::make(
             $request->all(),
             [
                 'id_opd_tag_otsus' => 'required|exists:opd_tag_otsuses,id',
                 'satuan' => 'sometimes|required|string',
-                'volume' => 'required|numeric',
-                'sumberdana' => 'required|in:bg,sg,dti',
+                'volume_usulan' => 'required|numeric',
+                'alias_dana_usulan' => 'required|in:bg,sg,dti',
             ],
             [
                 'satuan.required' => 'Satuan Target harus diisi!',
                 'satuan.string' => 'Satuan Target harus berupa string yang valid!',
-                'volume.required' => 'Volume Target harus diisi!',
-                'volume.numeric' => 'Volume harus berupa angka yang valid!',
-                'sumberdana.required' => 'Sumber Pendanaan harus diisi!',
+                'volume_usulan.required' => 'Volume Target harus diisi!',
+                'volume_usulan.numeric' => 'Volume harus berupa angka yang valid!',
+                'alias_dana_usulan.required' => 'Sumber Pendanaan harus diisi!',
             ]
         );
         if ($validator->fails()) {
@@ -243,15 +238,15 @@ class RakortekRapppController extends Controller
         }
         $data = [
             'satuan' => $target_aktifitas->satuan ? $target_aktifitas->satuan : $request->satuan,
-            'volume' => $request->volume,
-            'sumberdana' => $request->sumberdana == 'bg' ? 'Otsus 1%' : ($request->sumberdana == 'sg' ? 'Otsus 1,25%' : 'DTI'),
-            'alias_dana' => $request->sumberdana,
+            'volume_usulan' => $request->volume_usulan,
+            'sumberdana_usulan' => $request->alias_dana_usulan == 'bg' ? 'Otsus 1%' : ($request->alias_dana_usulan == 'sg' ? 'Otsus 1,25%' : 'DTI'),
+            'alias_dana_usulan' => $request->alias_dana_usulan,
         ];
         $tag->update($data);
         return redirect()->back()->with('success', 'Data berhasil diperbarui!');
     }
 
-    public function delete_opd_rakortek_rappp(Request $request)
+    public function opd_delete_rakortek_rappp(Request $request)
     {
         if (!$request->has('id') || !$request->id) {
             return redirect()->back()->with('error', 'Terjadi kesalahan! data gagal dihapus!');

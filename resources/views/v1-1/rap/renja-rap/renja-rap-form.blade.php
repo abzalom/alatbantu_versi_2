@@ -5,7 +5,7 @@
     </script>
 
 
-    {{-- @if ($errors->any())
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -13,7 +13,9 @@
                 @endforeach
             </ul>
         </div>
-    @endif --}}
+    @endif
+
+    {{-- Style khusus untuk form --}}
 
     <style>
         .form-box {
@@ -157,14 +159,14 @@
 
                             <!-- Volume Target Sub Kegiatan -->
                             <div class="col-sm-12 col-md-12 col-lg-4">
-                                <x-rap-form.input-addon-component name="vol_subkeg" id="input-vol_subkeg" class="format-angka" label="Target Kinerja Sub Kegiatan <small class='text-muted'>(*wajib)</small>" :value="old('vol_subkeg') ? formatNumber(old('vol_subkeg')) : (request()->has('edit') && $edit_rap ? formatNumber($edit_rap->vol_subkeg) : formatNumber(1))" placeholder="Target Kinerja" addon="right" addonId="view-satuan_subkeg" :addonName="old('satuan_subkeg') ? old('satuan_subkeg') : (request()->has('edit') && $edit_rap ? $edit_rap->satuan_subkegiatan : 'Satuan')" />
+                                <x-rap-form.input-addon-component name="vol_subkeg" id="input-vol_subkeg" class="format-angka" label="Target Kinerja Sub Kegiatan <small class='text-muted'>(*wajib)</small>" :value="old('vol_subkeg') ? formatNumber(old('vol_subkeg')) : (request()->has('edit') && $edit_rap ? formatNumber($edit_rap->vol_subkeg) : '')" placeholder="Target Kinerja" addon="right" addonId="view-satuan_subkeg" :addonName="old('satuan_subkeg') ? old('satuan_subkeg') : (request()->has('edit') && $edit_rap ? $edit_rap->satuan_subkegiatan : 'Satuan')" />
                                 <input type="hidden" name="satuan_subkeg" id="input-satuan_subkeg" value="{{ old('satuan_subkeg', request()->has('edit') && $edit_rap ? $edit_rap->satuan_subkegiatan : '') }}">
                             </div>
                             <!-- Akhir Dari Volume Target Sub Kegiatan -->
 
                             <!-- Anggaran Sub Kegiatan -->
                             <div class="col-sm-12 col-md-12 col-lg-4">
-                                <x-rap-form.input-addon-component name="anggaran" id="input-anggaran" class="format-angka" label="Anggaran <small class='text-muted'>(*wajib)</small>" :value="old('anggaran') ? formatNumber(old('anggaran')) : (request()->has('edit') && $edit_rap ? formatNumber($edit_rap->anggaran) : formatNumber(200000000))" placeholder="Target Kinerja" addonName="Rp. " />
+                                <x-rap-form.input-addon-component name="anggaran" id="input-anggaran" class="format-angka" label="Target Anggaran <small class='text-muted'>(*wajib)</small>" :value="old('anggaran') ? formatNumber(old('anggaran')) : (request()->has('edit') && $edit_rap ? formatNumber($edit_rap->anggaran) : '')" placeholder="Target Anggaran" addonName="Rp. " />
                             </div>
                             <!-- Akhir Dari Anggaran Sub Kegiatan -->
 
@@ -173,7 +175,7 @@
                                 <x-rap-form.select-component name="penerima_manfaat" id="select-penerima_manfaat" label="Penerima Manfaat <small class='text-muted'>(*wajib)</small>">
                                     <option value="">Pilih...</option>
                                     <option value="oap" {{ old('penerima_manfaat') ? (old('penerima_manfaat') == 'oap' ? 'selected' : '') : (request()->has('edit') && $edit_rap->penerima_manfaat == 'oap' ? 'selected' : '') }}>OAP</option>
-                                    <option value="umum" {{ old('penerima_manfaat') ? (old('penerima_manfaat') == 'umum' ? 'selected' : '') : (request()->has('edit') && $edit_rap->penerima_manfaat == 'umum' ? 'selected' : 'selected') }}>Umum</option>
+                                    <option value="umum" {{ old('penerima_manfaat') ? (old('penerima_manfaat') == 'umum' ? 'selected' : '') : (request()->has('edit') && $edit_rap->penerima_manfaat == 'umum' ? 'selected' : '') }}>Umum</option>
                                 </x-rap-form.select-component>
                             </div>
                             <!-- Akhir Dari Penerima Manfaat -->
@@ -183,7 +185,7 @@
                                 <x-rap-form.select-component name="jenis_layanan" id="select-jenis_layanan" label="Jenis Layanan <small class='text-muted'>(*wajib)</small>">
                                     <option value="">Pilih...</option>
                                     <option value="terkait" {{ old('jenis_layanan') ? (old('jenis_layanan') == 'terkait' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_layanan == 'terkait' ? 'selected' : '') }}>Terkait Langsung Ke Penerima Manfaat</option>
-                                    <option value="pendukung" {{ old('jenis_layanan') ? (old('jenis_layanan') == 'pendukung' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_layanan == 'pendukung' ? 'selected' : 'selected') }}>Kegiatan Pendukung</option>
+                                    <option value="pendukung" {{ old('jenis_layanan') ? (old('jenis_layanan') == 'pendukung' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_layanan == 'pendukung' ? 'selected' : '') }}>Kegiatan Pendukung</option>
                                 </x-rap-form.select-component>
                             </div>
                             <!-- Akhir Dari Jenis Layanan -->
@@ -193,7 +195,7 @@
                                 <x-rap-form.select-component name="ppsb" id="select-ppsb" label="Prioritas Bersama Papua <small class='text-muted'>(*wajib)</small>">
                                     <option value="">Pilih...</option>
                                     <option value="ya" {{ old('ppsb') ? (old('ppsb') == 'ya' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->ppsb == 'ya' ? 'selected' : '') }}>Ya </option>
-                                    <option value="tidak" {{ old('ppsb') ? (old('ppsb') == 'tidak' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->ppsb == 'tidak' ? 'selected' : 'selected') }}>Tidak</option>
+                                    <option value="tidak" {{ old('ppsb') ? (old('ppsb') == 'tidak' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->ppsb == 'tidak' ? 'selected' : '') }}>Tidak</option>
                                 </x-rap-form.select-component>
                             </div>
                             <!-- Akhir Dari Prioritas Bersama Provinsi Papua -->
@@ -203,20 +205,20 @@
                                 <x-rap-form.select-component name="multiyears" id="select-multiyears" label="Kegiatan Multiyears <small class='text-muted'>(*wajib)</small>">
                                     <option value="">Pilih...</option>
                                     <option value="ya" {{ old('multiyears') ? (old('multiyears') == 'ya' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->multiyears == 'ya' ? 'selected' : '') }}>Ya</option>
-                                    <option value="tidak" {{ old('multiyears') ? (old('multiyears') == 'tidak' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->multiyears == 'tidak' ? 'selected' : '') }} selected>Tidak</option>
+                                    <option value="tidak" {{ old('multiyears') ? (old('multiyears') == 'tidak' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->multiyears == 'tidak' ? 'selected' : '') }}>Tidak</option>
                                 </x-rap-form.select-component>
                             </div>
                             <!-- Akhir Dari Kegiatan Multiyears -->
 
                             <!-- Waktu Mulai Pelaksanaan -->
                             <div class="col-sm-12 col-md-12 col-lg-4">
-                                <x-rap-form.input-basic-component name="mulai" inputType="date" id="input-mulai" label="Waktu Mulai Pelaksanaan <small class='text-muted'>(*wajib)</small>" :value="old('mulai') ? old('mulai') : (request()->has('edit') && $edit_rap ? $edit_rap->mulai : '2026-01-01')" />
+                                <x-rap-form.input-basic-component name="mulai" inputType="date" id="input-mulai" label="Waktu Mulai Pelaksanaan <small class='text-muted'>(*wajib)</small>" :value="old('mulai') ? old('mulai') : (request()->has('edit') && $edit_rap ? $edit_rap->mulai : '')" />
                             </div>
                             <!-- Akhir Dari Waktu Mulai Pelaksanaan -->
 
                             <!-- Waktu Selesai Pelaksanaan -->
                             <div class="col-sm-12 col-md-12 col-lg-4">
-                                <x-rap-form.input-basic-component name="selesai" inputType="date" id="input-selesai" label="Waktu Selesai Pelaksanaan <small class='text-muted'>(*wajib)</small>" :value="old('selesai') ? old('selesai') : (request()->has('edit') && $edit_rap ? $edit_rap->selesai : '2026-11-01')" />
+                                <x-rap-form.input-basic-component name="selesai" inputType="date" id="input-selesai" label="Waktu Selesai Pelaksanaan <small class='text-muted'>(*wajib)</small>" :value="old('selesai') ? old('selesai') : (request()->has('edit') && $edit_rap ? $edit_rap->selesai : '')" />
                             </div>
                             <!-- Akhir Dari Waktu Selesai Pelaksanaan -->
 
@@ -224,7 +226,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-4">
                                 <x-rap-form.select-component name="jenis_kegiatan" id="select-jenis_kegiatan" label="Jenis Kegiatan <small class='text-muted'>(*wajib)</small>">
                                     <option value="">Pilih...</option>
-                                    <option value="fisik" {{ old('jenis_kegiatan') ? (old('jenis_kegiatan') == 'fisik' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_kegiatan == 'fisik' ? 'selected' : '') }} selected>Fisik</option>
+                                    <option value="fisik" {{ old('jenis_kegiatan') ? (old('jenis_kegiatan') == 'fisik' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_kegiatan == 'fisik' ? 'selected' : '') }}>Fisik</option>
                                     <option value="nonfisik" {{ old('jenis_kegiatan') ? (old('jenis_kegiatan') == 'nonfisik' ? 'selected' : '') : (request()->has('edit') && $edit_rap && $edit_rap->jenis_kegiatan == 'nonfisik' ? 'selected' : '') }}>Non Fisik</option>
                                 </x-rap-form.select-component>
                             </div>
@@ -248,7 +250,7 @@
                             <!-- Koordinat Lokasi Fokus Kegiatan -->
                             <div id="div-koordinat" class="col-sm-12 col-md-12 col-lg-12" @if (old('jenis_kegiatan') === 'fisik' || (request()->has('edit') && $edit_rap && $edit_rap->jenis_kegiatan === 'fisik')) style="display: block;" @else style="display: none;" @endif>
                                 <x-rap-form.textarea-component name="koordinat" id="input-koordinat" label="Koordinat Lokasi Fokus Kegiatan <a href='https://www.google.com/maps' target='_blank' class='text-info' data-bs-toggle='tooltip' data-bs-palcement='Top' data-bs-title='Buka Google Maps'>google maps <i class='fa-solid fa-up-right_from_square'></i></a> (<small>*wajib untuk jenis kegiatan fisik</small>)" :disabled="old('jenis_kegiatan') === 'nonfisik' || (!old('jenis_kegiatan') && request()->has('edit') && $edit_rap && $edit_rap->jenis_kegiatan === 'nonfisik')">
-                                    {{ old('koordinat') ?? (request()->has('edit') && $edit_rap ? $edit_rap->koordinat : 'Test Koordinat') }}
+                                    {{ old('koordinat') ?? (request()->has('edit') && $edit_rap ? $edit_rap->koordinat : '') }}
                                 </x-rap-form.textarea-component>
                             </div>
                             <!-- Akhir Dari Koordinat Lokasi Fokus Kegiatan -->
@@ -272,7 +274,7 @@
                             <!-- Keterangan -->
                             <div class="col-sm-12 col-md-12 col-lg-12">
                                 <x-rap-form.textarea-component name="keterangan" id="input-keterangan" label="Keterangan (<small>*wajib menjelaskan konteks kegiatan</small>)" placeholder="Keterangan">
-                                    {{ old('keterangan') ? old('keterangan') : (request()->has('edit') && $edit_rap ? $edit_rap->keterangan : 'Test Keterangan') }}
+                                    {{ old('keterangan') ? old('keterangan') : (request()->has('edit') && $edit_rap ? $edit_rap->keterangan : '') }}
                                 </x-rap-form.textarea-component>
                             </div>
                             <!-- Akhir Dari Keterangan -->

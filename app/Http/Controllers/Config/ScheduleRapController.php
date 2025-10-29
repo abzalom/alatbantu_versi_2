@@ -15,16 +15,20 @@ class ScheduleRapController extends Controller
             'user_create',
             'user_update',
         ])
-            ->where('tahun', session()->get('tahun'))
-            ->orderBy('created_at', 'desc')
+            ->where('tahun', session()->get('tahun'));
+        $aktif = (clone $jadwals)->where('status', 1)->first();
+
+        $jadwals = $jadwals->orderBy('created_at', 'desc')
             ->get();
-        // return $jadwals;
+
+        // return $aktif;
         return view('app.pengaturan.schedule.pengaturan-schedule', [
             'app' => [
                 'title' => 'Pengaturan Jadwal',
                 'desc' => 'Pengaturan Jadwal Pelaksanaan Sinkronisasi Data RAP',
             ],
             'jadwals' => $jadwals,
+            'aktif' => $aktif,
         ]);
     }
 
@@ -171,30 +175,32 @@ class ScheduleRapController extends Controller
 
     public function penginputan_user_rap_schedule(Request $request)
     {
-        // return $request->all();
         if (!$request->has('penginputan')) {
             return redirect()->back()->with('error', 'Terjadi kesalahan!');
         }
-        if ($request->penginputan) {
-            $request->validate(
-                [
-                    'id' => 'required|exists:schedules,id',
-                    'penginputan' => 'required|in:true,false,1,0',
-                ],
-                [
-                    'id.required' => 'Terjadi kesahalan!',
-                    'penginputan.required' => 'Terjadi kesahalan!',
-                    'penginputan.in' => 'Terjadi kesahalan!',
-                ]
-            );
-            $jadwal = Schedule::find($request->id);
-            if (!$jadwal) {
-                return redirect()->back()->with('error', 'Jadwal tidak ditemukan');
-            }
-            $jadwal->penginputan = $request->penginputan == 'true' || $request->penginputan == 1 ? 1 : 0;
-            $jadwal->save();
-            $message = $jadwal->penginputan ? 'diaktifkan' : 'dinonaktifkan';
-            return redirect()->back()->with('success', "Penginputan berhasil $message");
+        // return $request->all();
+        $request->validate(
+            [
+                'id' => 'required|exists:schedules,id',
+                'penginputan' => 'required|in:true,false,1,0',
+            ],
+            [
+                'id.required' => 'Terjadi kesahalan!',
+                'penginputan.required' => 'Terjadi kesahalan!',
+                'penginputan.in' => 'Terjadi kesahalan!',
+            ]
+        );
+        $jadwal = Schedule::find($request->id);
+        if (!$jadwal) {
+            return redirect()->back()->with('error', 'Jadwal tidak ditemukan');
         }
+        $now = now();
+        if ($now > $jadwal->selesai) {
+            return redirect()->back()->with('error', 'Waktu habis, tambahkan jadwal terlebih dahulu!');
+        }
+        $jadwal->penginputan = $request->penginputan == 'true' || $request->penginputan == 1 ? 1 : 0;
+        $jadwal->save();
+        $message = $jadwal->penginputan ? 'diaktifkan' : 'dinonaktifkan';
+        return redirect()->back()->with('success', "Penginputan berhasil $message");
     }
 }

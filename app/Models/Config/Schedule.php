@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 class Schedule extends Model
 {
@@ -22,5 +23,14 @@ class Schedule extends Model
     public function user_update(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by', 'id');
+    }
+
+    public function getAktifAttribute()
+    {
+        $mulai   = Carbon::parse($this->mulai);
+        $selesai = Carbon::parse($this->selesai);
+        $now     = Carbon::now();
+
+        return $now->between($mulai, $selesai);
     }
 }

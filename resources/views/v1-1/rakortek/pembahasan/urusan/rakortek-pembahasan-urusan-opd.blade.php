@@ -50,7 +50,26 @@
                                 <th colspan="7">{{ $tag_bidang->bidang->uraian }}</th>
                             </tr>
                             @foreach ($tag_bidang->indikators as $indikator)
-                                <tr>
+                                @php
+                                    // $classTable = $indikator->target->pembahasan && $indikator->target->validasi ? 'bg-text-danger' : '';
+                                @endphp
+
+                                @if ($indikator->target->pembahasan == 'tolak' && $indikator->target->validasi)
+                                    <style>
+                                        #table-{{ $indikator->id }} td {
+                                            background-color: rgb(246, 194, 194);
+                                            /* color: white; */
+                                        }
+                                    </style>
+                                @endif
+                                @if ($indikator->target->pembahasan == 'setujui' && $indikator->target->validasi)
+                                    <style>
+                                        #table-{{ $indikator->id }} td {
+                                            background-color: #ebe8f6;
+                                        }
+                                    </style>
+                                @endif
+                                <tr id="table-{{ $indikator->id }}">
                                     <td class="text-nowrap">{{ $tag_bidang->kode_bidang . '-' . $indikator->kode_indikator }}</td>
                                     <td>
                                         {{ $indikator->nama_indikator }}

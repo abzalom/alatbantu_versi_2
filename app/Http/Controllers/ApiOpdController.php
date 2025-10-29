@@ -13,7 +13,10 @@ class ApiOpdController extends Controller
 {
     public function api_opd(Request $request)
     {
-        $data = Opd::with(['kepala']);
+        $data = Opd::withoutGlobalScopes()->with([
+            'kepala',
+            'tag_bidang.bidang',
+        ]);
         if ($request->has('id')) {
             $data = $data->where('id', $request->id);
         }
@@ -76,7 +79,8 @@ class ApiOpdController extends Controller
 
     public function api_save_kepala_opd(Request $request)
     {
-        $opd = Opd::find($request->id_opd);
+        // return $request->id_opd;
+        $opd = Opd::withoutGlobalScopes()->find($request->id_opd);
         if (!$opd) {
             return response()->json([
                 'success' => false,

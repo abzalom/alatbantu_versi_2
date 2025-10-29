@@ -13,9 +13,17 @@ class TahunScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
-        if (session()->has('tahun')) {
-            // Tambahkan kondisi where untuk memfilter berdasarkan tahun
-            $builder->where('tahun', session()->get('tahun'));
-        }
+        $tahun = session('tahun') ?? now()->year;
+
+        // Prefix pakai nama tabel model terkait
+        $table = $model->getTable();
+
+        // Jika semua model yang memakai scope PASTI punya kolom 'tahun':
+        $builder->where("$table.tahun", $tahun);
+
+        // Kalau tidak semua model punya kolom 'tahun', pakai opt-in flag:
+        // if (property_exists($model, 'usesTahun') && $model->usesTahun) {
+        //     $builder->where("$table.tahun", $tahun);
+        // }
     }
 }

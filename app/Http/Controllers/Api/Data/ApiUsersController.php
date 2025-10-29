@@ -102,38 +102,40 @@ class ApiUsersController extends Controller
             ], 400);
         }
 
+        $validatedData = $validator->validated();
+        $data = [
+            'name' => $validatedData['name'],
+            'username' => $validatedData['username'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'password' => Hash::make($validatedData['username'] . '123')
+        ];
+        // return $data;
         try {
             DB::beginTransaction();
-            $user = User::create([
-                'name' => $request->name,
-                'username' => $request->username,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => Hash::make($request->username . '123')
-            ]);
-
-            if ($user) {
-                $user->assignRole($request->role);
-                DB::commit();
+            $user = User::create($data);
+            if (!$user) {
+                DB::rollback();
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Data berhasil tersimpan!',
-                    'alert' => 'success',
-                    'data' => [
-                        'name' => $user->name,
-                        'username' => $user->username,
-                        'email' => $user->email,
-                        'phone' => $user->phone,
-                        'roles' => $user->getRoleNames()
-                    ]
-                ], 200);
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan. data gagal di simpan!',
+                    'alert' => 'danger',
+                ], 500);
             }
-            DB::rollback();
+            $user->assignRole($request->role);
+            DB::commit();
             return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan. data gagal di simpan!',
-                'alert' => 'danger',
-            ], 500);
+                'success' => true,
+                'message' => 'Data berhasil tersimpan!',
+                'alert' => 'success',
+                'data' => [
+                    'name' => $user->name,
+                    'username' => $user->username,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'roles' => $user->getRoleNames()
+                ]
+            ], 200);
         } catch (\Throwable $th) {
             DB::rollback();
             return response()->json([
@@ -406,7 +408,7 @@ class ApiUsersController extends Controller
         // }
 
         $tagging = DB::table('opd_user')->where('user_id', $user->id)->get();
-        $opds = Opd::where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->whereNotIn('id', $tagging->pluck('opd_id')->toArray())->get();
+        $opds = Opd::withoutGlobalScopes()->where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->whereNotIn('id', $tagging->pluck('opd_id')->toArray())->get();
 
         return response()->json([
             'success' => true,
@@ -449,10 +451,12 @@ class ApiUsersController extends Controller
             // Jika insert berhasil, commit transaksi
             if ($inserted) {
                 DB::commit();
+                $data = Opd::find($request->opd_id);
                 return response()->json([
                     'success' => true,
                     'alert' => 'success',
                     'message' => 'Data berhasil disimpan',
+                    'data' => $data
                 ], 200);
             } else {
                 // Jika insert gagal, rollback transaksi
@@ -497,10 +501,12 @@ class ApiUsersController extends Controller
             if ($data->exists()) {
                 $data->delete();
                 DB::commit();
+                $skpd = Opd::find($request->opd_id);
                 return response()->json([
                     'success' => true,
                     'alert' => 'success',
                     'message' => 'Data berhasil dihapus!',
+                    'data' => $skpd,
                 ], 200);
             } else {
                 // Jika data tidak ditemukan, rollback transaksi

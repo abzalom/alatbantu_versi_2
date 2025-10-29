@@ -79,7 +79,7 @@ class ApiTaggingController extends Controller
             $alias_dana = $aliasDanaMap[$request->sumberdana] ?? 'dti';
 
             // Mengambil data OPD & Target Aktivitas
-            $opd = Opd::find($request->opd);
+            $opd = Opd::withoutGlobalScopes()->find($request->opd);
             $target_aktifitas = B5TargetAktifitasUtamaOtsus::find($request->id_target_aktifitas);
 
             // Membuat kode unik

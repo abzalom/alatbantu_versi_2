@@ -51,12 +51,12 @@
                             <tr class="border-bottom">
                                 <td>Volume</td>
                                 <td>:</td>
-                                <td><span id="edit-rappp-volume"></span></td>
+                                <td><span id="edit-rappp-volume_usulan"></span></td>
                             </tr>
                             <tr class="border-bottom">
                                 <td>Sumber Pendanaan</td>
                                 <td>:</td>
-                                <td><span id="edit-rappp-sumberdana"></span></td>
+                                <td><span id="edit-rappp-alias_dana_usulan"></span></td>
                             </tr>
                         </table>
                     </div>

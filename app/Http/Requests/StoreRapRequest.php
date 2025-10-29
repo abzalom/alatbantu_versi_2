@@ -144,7 +144,7 @@ class StoreRapRequest extends FormRequest
             redirect()->back()
                 ->with('error', 'Terjadi kesalahan!')
                 ->withErrors($validator)
-                ->withInput()
+                ->withInput($this->all())
         );
     }
 }

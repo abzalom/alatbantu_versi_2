@@ -248,7 +248,7 @@ $(document).ready(function () {
         $('#modal-edit-rappp-show-content').hide();
     })
 
-    $('.btn-edit-rapp').on('click', function () {
+    $('.btn-edit-rappp').on('click', function () {
         const id_opd_tag_otsus = $(this).val();
         const data = $(this).data('rappp');
         console.log(data);
@@ -284,13 +284,13 @@ $(document).ready(function () {
                 $('#edit-rappp-program').html(data.program || '-');
                 $('#edit-rappp-target_aktifitas').html(data.target_aktifitas || '-');
                 $('#edit-rappp-satuan').html(target_aktifitas.satuan || `<input type="text" name="satuan" class="form-control border-danger" id="edit-rappp-satuan-input" value="${data.satuan || ''}">`);
-                $('#edit-rappp-volume').html(`<input type="text" name="volume" class="form-control border-danger" id="edit-rappp-volume-input" value="${data.volume || ''}">`);
-                $('#edit-rappp-sumberdana').html(`
-                    <select name="sumberdana" class="form-control border-danger" id="edit-rappp-sumberdana-select">
+                $('#edit-rappp-volume_usulan').html(`<input type="text" name="volume_usulan" class="form-control border-danger" id="edit-rappp-volume_usulan-input" value="${data.volume_usulan || ''}">`);
+                $('#edit-rappp-alias_dana_usulan').html(`
+                    <select name="alias_dana_usulan" class="form-control border-danger" id="edit-rappp-alias_dana_usulan-select">
                         <option value="">Pilih Sumber Dana</option>
-                        <option value="bg" ${data.alias_dana === 'bg' ? 'selected' : ''}>OTSUS 1%</option>
-                        <option value="sg" ${data.alias_dana === 'sg' ? 'selected' : ''}>OTSUS 1,25%</option>
-                        <option value="dti" ${data.alias_dana === 'dti' ? 'selected' : ''}>DTI</option>
+                        <option value="bg" ${data.alias_dana_usulan === 'bg' ? 'selected' : ''}>OTSUS 1%</option>
+                        <option value="sg" ${data.alias_dana_usulan === 'sg' ? 'selected' : ''}>OTSUS 1,25%</option>
+                        <option value="dti" ${data.alias_dana_usulan === 'dti' ? 'selected' : ''}>DTI</option>
                     </select>
                 `);
                 setTimeout(() => {

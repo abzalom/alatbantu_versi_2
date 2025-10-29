@@ -129,7 +129,7 @@ class ApiRapController extends Controller
                 'errors' => $validator->errors()
             ], 403);
         }
-        $opd = Opd::find($request->opd);
+        $opd = Opd::withoutGlobalScopes()->find($request->opd);
         $tag = OpdTagOtsus::find($request->opd_tag_otsus);
         $nomenSikd = NomenklaturSikd::find($request->subkegiatan);
         $dana_lain = Sumberdana::select(['id', 'uraian'])->whereIn('id', $request->dana_lain)->get();

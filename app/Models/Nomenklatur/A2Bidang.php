@@ -14,6 +14,11 @@ class A2Bidang extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
+    public function getTextAttribute()
+    {
+        return $this->kode_bidang . ' ' . $this->uraian;
+    }
+
     public function urusan(): BelongsTo
     {
         return $this->belongsTo(A1Urusan::class, 'kode_urusan', 'kode_urusan');

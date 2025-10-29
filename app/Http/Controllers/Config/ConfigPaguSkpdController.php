@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Config;
 
 use App\Http\Controllers\Controller;
 use App\Models\Data\Opd;
+use App\Models\Otsus\DanaAlokasiOtsus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -12,12 +13,47 @@ class ConfigPaguSkpdController extends Controller
     public function config_pagu(Request $request)
     {
         $data = Opd::with('pagu')->orderBy('kode_opd', 'asc')->get();
+        $alokasi = DanaAlokasiOtsus::where('tahun', session('tahun'))->first();
+        $total_pagu_bg = $data->sum(function ($item) {
+            return $item->pagu->bg ?? 0;
+        });
+        $total_pagu_sg = $data->sum(function ($item) {
+            return $item->pagu->sg ?? 0;
+        });
+        $total_pagu_dti = $data->sum(function ($item) {
+            return $item->pagu->dti ?? 0;
+        });
+        // return $alokasi;
+        $total = [
+            'bg' => [
+                'alokasi' => $alokasi ? (float)  $alokasi->alokasi_bg : 0,
+                'total_pagu' => (float) $total_pagu_bg,
+                'sisa' => ($alokasi ? $alokasi->alokasi_bg : 0) - $total_pagu_bg,
+            ],
+            'sg' => [
+                'alokasi' => $alokasi ? (float) $alokasi->alokasi_sg : 0,
+                'total_pagu' => (float) $total_pagu_sg,
+                'sisa' => ($alokasi ? $alokasi->alokasi_sg : 0) - $total_pagu_sg,
+            ],
+            'dti' => [
+                'alokasi' => $alokasi ? (float) $alokasi->alokasi_dti : 0,
+                'total_pagu' => (float) $total_pagu_dti,
+                'sisa' => ($alokasi ? $alokasi->alokasi_dti : 0) - $total_pagu_dti,
+            ],
+            'jumlah' => [
+                'alokasi' => (float) ($alokasi ? $alokasi->alokasi_bg : 0) + ($alokasi ? $alokasi->alokasi_sg : 0) + ($alokasi ? $alokasi->alokasi_dti : 0),
+                'total_pagu' => (float) $total_pagu_bg + $total_pagu_sg + $total_pagu_dti,
+                'sisa' => (($alokasi ? $alokasi->alokasi_bg : 0) - $total_pagu_bg) + (($alokasi ? $alokasi->alokasi_sg : 0) - $total_pagu_sg) + (($alokasi ? $alokasi->alokasi_dti : 0) - $total_pagu_dti),
+            ],
+        ];
+        // return $total;
         return view('v1-1.config.pagu.config-pagu-skpd', [
             'app' => [
                 'title' => 'Pengaturan Pagu SKPD',
                 'desc' => 'Pengaturan Batasan Pagu SKPD',
             ],
             'data' => $data,
+            'total' => $total,
         ]);
     }
 

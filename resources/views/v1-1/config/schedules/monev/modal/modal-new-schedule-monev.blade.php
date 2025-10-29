@@ -18,13 +18,21 @@
                     <h1 class="modal-title fs-5" id="ScheduleMonevModalLabel">Buat Jadwal Monev Baru</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="/config/schedule/monev/new" method="post">
+                <form action="/config/schedule/monev/new" method="post" id="form-schedule-monev">
                     <div class="modal-body">
                         @csrf
                         <div id="new-item-input">
                         </div>
                         <div id="edit-item-input">
                             <input type="hidden" name="id" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add-schedule-monev-tahapan" class="form-label">Tahapan</label>
+                            <select class="form-control" id="add-schedule-monev-tahapan" name="tahapan">
+                                <option value="">Pilih...</option>
+                                <option value="rakotek">Rakortek</option>
+                                <option value="rap">RAP</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="add-schedule-monev-nama" class="form-label">Nama Jadwal</label>

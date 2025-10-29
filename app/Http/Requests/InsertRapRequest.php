@@ -42,7 +42,7 @@ class InsertRapRequest extends FormRequest
             'file_pendukung2_name' => 'nullable|file|mimes:pdf|max:5120',
             'file_pendukung3_name' => 'nullable|file|mimes:pdf|max:5120',
             'link_file_dukung_lain' => 'nullable|url',
-            'tahun' => 'required|integer|min:2022|max:' . (date('Y') + 1),
+            // 'tahun' => 'required|integer|min:2022|max:' . (date('Y') + 1),
         ];
     }
 
@@ -88,7 +88,7 @@ class InsertRapRequest extends FormRequest
             redirect()->back()
                 ->with('error', 'Gagal menambahkan RAP!')
                 ->withErrors($validator)
-                ->withInput()
+                ->withInput($this->all())
         );
     }
 }

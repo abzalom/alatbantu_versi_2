@@ -37,8 +37,11 @@
                     <thead class="table-dark align-middle">
                         <tr>
                             <th>#</th>
+                            <th>Tahapan</th>
                             <th>Nama</th>
                             <th>Keterangan</th>
+                            <th>Created By</th>
+                            <th>Updated By</th>
                             <th>Status</th>
                             <th></th>
                         </tr>
@@ -47,8 +50,11 @@
                         @foreach ($data as $itemJadwal)
                             <tr @if (!$itemJadwal->status) class="table-danger" @endif>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $itemJadwal->tahapan }}</td>
                                 <td>{{ $itemJadwal->nama }}</td>
                                 <td>{{ $itemJadwal->keterangan }}</td>
+                                <td>{{ $itemJadwal->created_by ? $itemJadwal->created_by->username : '-' }}</td>
+                                <td>{{ $itemJadwal->updated_by ? $itemJadwal->updated_by->username : '-' }}</td>
                                 <td>
                                     @if ($itemJadwal->status)
                                         <span class="badge bg-success">Aktif</span>
@@ -58,7 +64,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if ($itemJadwal->status)
-                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                        <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm btn-warning btn-edit-schedule" value="{{ $itemJadwal }}" data-bs-toggle="modal" data-bs-target="#ScheduleMonevModal" data-id="{{ $itemJadwal->id }}" data-nama="{{ $itemJadwal->nama }}" data-keterangan="{{ $itemJadwal->keterangan }}" data-status="{{ $itemJadwal->status }}"><i class="fa-solid fa-pencil"></i></button>
                                             <form action="/config/schedule/monev/lock" method="post">
                                                 @csrf
@@ -67,7 +73,15 @@
                                             </form>
                                         </div>
                                     @else
-                                        <i class="fa-solid fa-lock fa-xl" data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Jadwal telah berakhir"></i>
+                                        <div class="btn-group" role="group">
+                                            <form action="/config/schedule/monev/activate" method="post">
+                                                @csrf
+                                                <input type="hidden" name="id" value="{{ $itemJadwal->id }}">
+                                                <div data-bs-toggle="tooltip" data-bs-placement="Top" data-bs-title="Aktifkan Jadwal">
+                                                    <button type="submit" class="btn btn-sm btn-secondary"><i class="fa-solid fa-check"></i></button>
+                                                </div>
+                                            </form>
+                                        </div>
                                     @endif
                                 </td>
                             </tr>

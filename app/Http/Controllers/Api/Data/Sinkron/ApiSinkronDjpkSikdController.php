@@ -162,7 +162,7 @@ class ApiSinkronDjpkSikdController extends Controller
                     'kode_subkegiatan_full' => $kode_subkegiatan_full,
                     'text_subkegiatan' => $kode_subkegiatan_full . ' ' . $item['subkegiatan_uraian'],
                     'opd_uraian' => $item['opd_uraian'],
-                    'kesesuaian' => $item['kesesuaian'],
+                    'kesesuaian' => isset($item['kesesuaian']) ? $item['kesesuaian'] : null,
                     'tahun' => $item['tahun'],
                 ];
             }

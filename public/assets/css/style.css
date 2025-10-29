@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
 :root {
     /* Warna Primary */
@@ -60,16 +60,15 @@
     --card-text-dark: #1b1e21;
 }
 
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: "Nunito", sans-serif;
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -122,6 +121,21 @@ header a {
 
 #header-logo a:hover {
     color: #dedede;
+}
+
+#header-content {
+    display: flex;
+    gap: 12px;
+    /* justify-content: center; */
+    width: 50%;
+}
+
+#schedule-header,
+#schedule-penginputan {
+    flex: 1 1 0;
+    /* keduanya fleksibel */
+    min-width: 0;
+    /* cegah overflow teks panjang */
 }
 
 #header-end {
@@ -219,7 +233,6 @@ header a {
     text-align: center;
 }
 
-
 #container aside ul li.menu-item .sidebar-menu-link a .icon-expand {
     margin-right: 20px;
     transition: transform 0.3s ease-in-out;
@@ -291,7 +304,7 @@ header a {
     color: #fff;
 }
 
-#container main {
+#main-content {
     height: 100%;
     overflow: auto;
     transition: margin-left 0.3s;
@@ -519,8 +532,6 @@ header a {
 
 /* Akhir dari style untuk RAP ALL untuk ADMIN */
 
-
-
 /* style untuk RAP OPD */
 
 .custom-container {
@@ -630,6 +641,16 @@ header a {
 
 /* Akhir dari Style Untuk RAP OPD */
 
+@media (max-width: 907px) {
+    #schedule-header {
+        display: none;
+    }
+
+    #header-logo a {
+        text-wrap: nowrap;
+    }
+}
+
 @media (max-width: 780px) {
     #burger-menu {
         display: block;
@@ -637,6 +658,10 @@ header a {
 
     #header-logo {
         margin-right: auto;
+    }
+
+    #header-logo a {
+        font-size: 18px;
     }
 
     #container aside {
@@ -652,8 +677,9 @@ header a {
         width: 230px;
     }
 
-    #container main {
+    #main-content {
         margin-left: 0;
+        padding-top: 75px !important;
         width: 100%;
     }
 
@@ -703,6 +729,13 @@ header a {
         width: 100%;
         overflow-y: auto;
     }
+
+    #user-profile-left {
+        /* border: none !important; */
+        border-bottom: 1px solid #ddd !important;
+        border-right: none !important;
+        margin-bottom: 25px !important;
+    }
 }
 
 @media (max-width: 576px) {
@@ -719,7 +752,7 @@ header a {
         width: 230px;
     }
 
-    #container main {
+    #main-content {
         margin-left: 0;
         width: 100%;
     }
@@ -736,7 +769,6 @@ header a {
     .custom-card {
         width: calc(100% / 2 - 20px);
     }
-
 }
 
 @media (max-width: 520px) {
@@ -752,7 +784,6 @@ header a {
         display: block;
         margin-left: 20px;
     }
-
 
     .custom-card {
         width: 100%;

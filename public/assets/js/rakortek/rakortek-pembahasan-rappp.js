@@ -30,17 +30,25 @@ $(document).ready(function () {
         $('#bahas-opd_tag_otsus_id').val(data.rappp.id);
         $('#bahas-target_aktifitas-show').text(data.kode_target_aktifitas + ' - ' + data.uraian_target_aktifitas);
         $('#bahas-satuan-show').text(data.rappp.satuan);
+
         if (!data.rappp.pembahasan || data.rappp.pembahasan.length == "" || data.rappp.pembahasan == 'perbaikan') {
+            $('#bahas-volume-input').attr('disabled', false);
+            $('#bahas-sumberdana-select').attr('disabled', false);
             $('#bahas-pembahasan-select').attr('disabled', false);
             $('#bahas-catatan-textarea').attr('disabled', false);
             $('#ubah-pembahasan-rappp').hide();
         } else {
             $('#ubah-pembahasan-rappp').show();
+            $('#bahas-volume-input').attr('disabled', true);
+            $('#bahas-sumberdana-select').attr('disabled', true);
             $('#bahas-pembahasan-select').attr('disabled', true);
             $('#bahas-catatan-textarea').attr('disabled', true);
         }
-        $('#bahas-volume-show').text(data.rappp.volume);
-        $('#bahas-sumberdana-show').text(data.rappp.sumberdana);
+        $('#bahas-volume_usulan-show').text(formatAngka(data.rappp.volume_usulan));
+        $('#bahas-sumberdana_usulan-show').text(data.rappp.sumberdana_usulan);
+
+        $('#bahas-volume-input').val(data.rappp.volume ? formatAngka(data.rappp.volume) : formatAngka(data.rappp.volume_usulan));
+        $('#bahas-sumberdana-select').val(data.rappp.alias_dana ? data.rappp.alias_dana : data.rappp.alias_dana_usulan);
         $('#bahas-pembahasan-select').val(data.rappp.pembahasan);
         $('#bahas-catatan-textarea').val(data.rappp.catatan);
 
@@ -53,6 +61,8 @@ $(document).ready(function () {
     });
 
     $('#click-ubah-pembahasan-rappp').on('click', function () {
+        $('#bahas-volume-input').attr('disabled', false);
+        $('#bahas-sumberdana-select').attr('disabled', false);
         $('#bahas-pembahasan-select').attr('disabled', false);
         $('#bahas-catatan-textarea').attr('disabled', false);
     });
@@ -60,8 +70,8 @@ $(document).ready(function () {
     $('#lihatCatatanRakorRapppModal').on('modal.bs.hide', function () {
         $('#catatan-target_aktifitas-show').text('');
         $('#catatan-satuan-show').text('');
-        $('#catatan-volume-show').text('');
-        $('#catatan-sumberdana-show').text('');
+        $('#catatan-volume_usulan-show').text('');
+        $('#catatan-sumberdana_usulan-show').text('');
         $('#catatan-status_pembahasan-show').text('');
         $('#catatan-catatan-show').text('');
     });
@@ -78,6 +88,8 @@ $(document).ready(function () {
         }
         $('#catatan-target_aktifitas-show').text(data.kode_target_aktifitas + ' - ' + data.uraian_target_aktifitas);
         $('#catatan-satuan-show').text(data.rappp.satuan);
+        $('#catatan-volume_usulan-show').text(data.rappp.volume_usulan ? data.rappp.volume_usulan : '-');
+        $('#catatan-sumberdana_usulan-show').text(data.rappp.sumberdana_usulan ? data.rappp.sumberdana_usulan : '-');
         $('#catatan-volume-show').text(data.rappp.volume ? data.rappp.volume : '-');
         $('#catatan-sumberdana-show').text(data.rappp.sumberdana ? data.rappp.sumberdana : '-');
         $('#catatan-status_pembahasan-show').text(data.rappp.pembahasan ? data.rappp.pembahasan : 'Belum Dibahas');

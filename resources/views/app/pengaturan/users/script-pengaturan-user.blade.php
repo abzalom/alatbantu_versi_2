@@ -3,3 +3,4 @@
 <script src="/vendors/select2-4.0.rc/js/select2.full.min.js"></script>
 <script src="/vendors/summernote-0.8.18-dist/summernote.min.js"></script>
 <script src="/assets/js/pengaturan/pengaturan-user.js"></script>
+{{-- <script type="module" src="/assets/js/pengaturan/pengaturan-user.min.js"></script> --}}

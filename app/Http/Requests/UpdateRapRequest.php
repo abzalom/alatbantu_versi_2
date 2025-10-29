@@ -80,7 +80,7 @@ class UpdateRapRequest extends FormRequest
             redirect()->back()
                 ->with('error', 'Gagal memperbarui RAP!')
                 ->withErrors($validator)
-                ->withInput()
+                ->withInput($this->all())
         );
     }
 }

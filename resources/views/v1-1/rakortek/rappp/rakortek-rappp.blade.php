@@ -1,20 +1,25 @@
 <x-app-layout-component :title="$app['title'] ?? null">
 
-    <style>
-        .table-disabled {
-            /* pointer-events: none; */
-            opacity: 0.6;
-        }
-    </style>
-
     <div style="font-size: 18px" class="alert alert-info mb-3 d-flex align-items-center justify-content-start gap-3 shadow" role="info">
         <i class="fa-solid fa-circle-info fa-2xl fa-fade"></i>
         @if (!auth()->user()->hasRole(['admin']))
-            <span>
-                <i>
-                    Perangkat Daerah yang disabled atau akses penginputan RAPPP dikunci (<i class="fa-solid fa-lock"></i>) adalah Perangkat Daerah yang mempunyai indikator urusan namun belum diinput. Silakan input <a href="/rakortek/urusan">Kinerja Bidang Urusan</a> terlebih dahulu
-                </i>
-            </span>
+            <ul>
+                <li class="mb-2">
+                    <i>
+                        Perangkat Daerah yang muncul disini adalah Perangkat Daerah yang mempunyai indikator urusan dan sudah diinput terget daerah telah dibahas serta divalidasi dengan status disetujui.
+                    </i>
+                </li>
+                <li class="mb-2">
+                    <i>
+                        Untuk perangkat daerah yang tidak mempunyai indikator urusan akan muncul secara otomatis.
+                    </i>
+                </li>
+                <li>
+                    <i>
+                        Silakan input <a href="/rakortek/urusan">Kinerja Bidang Urusan</a> terlebih dahulu
+                    </i>
+                </li>
+            </ul>
         @else
             <span>
                 <i>
@@ -45,37 +50,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($opds as $itemOpd)
-                            @php
-                                $notAllow =
-                                    !auth()
-                                        ->user()
-                                        ->hasRole(['admin']) &&
-                                    $itemOpd->has_indikator['status'] &&
-                                    $itemOpd->has_indikator['count'] == 0
-                                        ? true
-                                        : false;
-                            @endphp
-                            <tr class="{{ $notAllow ? 'table-disabled' : '' }}">
-                                <td>{{ $itemOpd->kode_opd }}</td>
-                                <td>{{ $itemOpd->id . ' - ' . $itemOpd->nama_opd }}</td>
-                                <td class="text-nowrap text-center">
-                                    <div class="btn-group">
-                                        @if (!$notAllow)
-                                            <a href="/rakortek/rappp/opd?id={{ $itemOpd->id }}" class="btn btn-sm btn-primary">
-                                                <i class="fa-solid fa-list"></i>
-                                            </a>
-                                        @endif
-                                        @if ($notAllow)
-                                            <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Wajib menginput indikator urusan terlebih dahulu!">
-                                                <button class="btn btn-sm btn-secondary" disabled>
-                                                    <i class="fa-solid fa-lock"></i>
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </td>
-                            </tr>
+                        @foreach ($opds as $opd)
+                            @if (!$opd->punya_indikator)
+                                <tr>
+                                    <td>{{ $opd->kode_opd }}</td>
+                                    <td>{{ $opd->id . ' - ' . $opd->nama_opd }}</td>
+                                    <td>
+                                        <a href="/rakortek/rappp/opd?id={{ $opd->id }}" class="btn btn-sm btn-primary">
+                                            <i class="fa-solid fa-list"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @elseif ($opd->punya_indikator && $opd->punya_target)
+                                <tr>
+                                    <td>{{ $opd->kode_opd }}</td>
+                                    <td>{{ $opd->id . ' - ' . $opd->nama_opd }}</td>
+                                    <td>
+                                        <a href="/rakortek/rappp/opd?id={{ $opd->id }}" class="btn btn-sm btn-primary">
+                                            <i class="fa-solid fa-list"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>

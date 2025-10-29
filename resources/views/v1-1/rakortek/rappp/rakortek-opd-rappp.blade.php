@@ -45,10 +45,14 @@
             </h5>
         </div>
         <div class="card-body">
-            <div class="mb-3 d-flex justify-content-between gap-2">
-                <button id="new-rappp-program" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProgramRapppModal"><i class="fa-solid fa-square-plus"></i> Program</button>
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#arsipProgramRapppModal"><i class="fa-solid fa-folder-open"></i> Arsip</button>
-            </div>
+            @if (auth()->user()->hasRole('admin') || (jadwal_rap() && jadwal_rap()->aktif && jadwal_rap()->tahapan === 'rakortek' && jadwal_rap()->penginputan))
+                <div class="mb-3 d-flex justify-content-between gap-2">
+                    <button id="new-rappp-program" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newProgramRapppModal"><i class="fa-solid fa-square-plus"></i> Program</button>
+                    <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#arsipProgramRapppModal"><i class="fa-solid fa-folder-open"></i> Arsip</button>
+                </div>
+            @else
+                <div style="color: rgb(168, 1, 1)" class="alert alert-danger">Jadwal belum ada atau telah berakhir atau penginputan terkunci! hubungi administrator</div>
+            @endif
             <div class="table-responsive">
                 <table class="table table-bordered table-striped" style="font-size: 90%">
                     <thead class="align-middle table-primary">
@@ -58,8 +62,8 @@
                             <th>PROGRAM</th>
                             <th>TARGET AKTIFITAS</th>
                             <th>SATUAN</th>
-                            <th>VOLUME</th>
-                            <th>SUMBERDANA</th>
+                            <th>USULAN VOLUME</th>
+                            <th>USULAN SUMBERDANA</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -81,19 +85,23 @@
                                         @endif
                                     </td>
                                     <td>{{ $itemRappp->satuan }}</td>
-                                    <td>{{ $itemRappp->volume }}</td>
-                                    <td>{{ $itemRappp->sumberdana }}</td>
+                                    <td>{{ $itemRappp->volume_usulan }}</td>
+                                    <td>{{ $itemRappp->sumberdana_usulan }}</td>
                                     <td class="text-center">
-                                        <div class="btn-group">
-                                            @if (!$pembahasan)
-                                                <button class="btn btn-sm btn-primary btn-edit-rapp" value="{{ $itemRappp->id }}" data-bs-toggle="modal" data-bs-target="#editProgramRapppModal" data-rappp='@json($itemRappp)'><i class="fa-solid fa-pen-square"></i></button>
-                                                @if (!$totalRap)
-                                                    <button class="btn btn-sm btn-danger btn-delete-rappp" value="{{ $itemRappp->id }}"><i class="fa-solid fa-trash"></i></button>
+                                        @if (auth()->user()->hasRole('admin') || (jadwal_rap() || jadwal_rap()->aktif || jadwal_rap()->tahapan === 'rakortek' || jadwal_rap()->penginputan))
+                                            <div class="btn-group">
+                                                @if (!$pembahasan)
+                                                    <button class="btn btn-sm btn-primary btn-edit-rappp" value="{{ $itemRappp->id }}" data-bs-toggle="modal" data-bs-target="#editProgramRapppModal" data-rappp='@json($itemRappp)'><i class="fa-solid fa-pen-square"></i></button>
+                                                    @if (!$totalRap)
+                                                        <button class="btn btn-sm btn-danger btn-delete-rappp" value="{{ $itemRappp->id }}"><i class="fa-solid fa-trash"></i></button>
+                                                    @endif
+                                                @else
+                                                    <i class="fa-solid fa-circle-info text-info fa-beat" style="font-size: 1.5rem"></i>
                                                 @endif
-                                            @else
-                                                <i class="fa-solid fa-circle-info text-info fa-beat" style="font-size: 1.5rem"></i>
-                                            @endif
-                                        </div>
+                                            </div>
+                                        @else
+                                            <i class="fa-solid fa-lock text-muted" style="font-size: 1.5rem" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Terkunci. Hubungi administrator!"></i>
+                                        @endif
                                     </td>
                                 </tr>
                             @endif

@@ -11,37 +11,55 @@
                     <table class="table table-sm table-borderless table-hover">
                         <tr>
                             <td style="width: 30%">SKPD</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td>{{ $opd->nama_opd }}</td>
                         </tr>
                         <tr>
                             <td style="width: 30%">Target Aktifitas Utama</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-target_aktifitas-show"></td>
                         </tr>
                         <tr>
                             <td style="width: 30%">Satuan</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-satuan-show"></td>
                         </tr>
+                    </table>
+                    <hr>
+                    <h5>Usulan Perangkat Daerah</h5>
+                    <table class="table table-sm table-borderless table-hover">
+                        <tr>
+                            <td style="width: 30%">Volume Usulan</td>
+                            <td style="width: 1px">:</td>
+                            <td id="catatan-volume_usulan-show"></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 30%">Sumber Dana</td>
+                            <td style="width: 1px">:</td>
+                            <td id="catatan-sumberdana_usulan-show"></td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <h5>Kesepakatan Pembahasan</h5>
+                    <table class="table table-sm table-borderless table-hover">
                         <tr>
                             <td style="width: 30%">Volume</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-volume-show"></td>
                         </tr>
                         <tr>
                             <td style="width: 30%">Sumber Dana</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-sumberdana-show"></td>
                         </tr>
                         <tr>
                             <td style="width: 30%">Status Pembahasan</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-status_pembahasan-show"></td>
                         </tr>
                         <tr>
                             <td style="width: 30%">Catatan</td>
-                            <td>:</td>
+                            <td style="width: 1px">:</td>
                             <td id="catatan-catatan-show"></td>
                         </tr>
                     </table>
