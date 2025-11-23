@@ -43,37 +43,37 @@ $(document).ready(function () {
         let tahun = $(this).data('tahun');
 
         let attributes = [{
-                key: 'id',
-                value: $(this).data('id')
-            },
-            {
-                key: 'name',
-                value: $(this).data('name')
-            },
-            {
-                key: 'sumberdana',
-                value: $(this).data('sumberdana')
-            },
-            {
-                key: 'jenis',
-                value: $(this).data('jenis')
-            },
-            {
-                key: 'method',
-                value: $(this).data('method')
-            },
-            {
-                key: 'url',
-                value: $(this).data('url')
-            },
-            {
-                key: 'param_key',
-                value: $(this).data('param_key')
-            },
-            {
-                key: 'param_value',
-                value: $(this).data('param_value')
-            }
+            key: 'id',
+            value: $(this).data('id')
+        },
+        {
+            key: 'name',
+            value: $(this).data('name')
+        },
+        {
+            key: 'sumberdana',
+            value: $(this).data('sumberdana')
+        },
+        {
+            key: 'jenis',
+            value: $(this).data('jenis')
+        },
+        {
+            key: 'method',
+            value: $(this).data('method')
+        },
+        {
+            key: 'url',
+            value: $(this).data('url')
+        },
+        {
+            key: 'param_key',
+            value: $(this).data('param_key')
+        },
+        {
+            key: 'param_value',
+            value: $(this).data('param_value')
+        }
         ];
 
         attributes.forEach(itemAttr => {
@@ -177,7 +177,7 @@ $(document).ready(function () {
                             ${item.pagu_alokasi}
                         </td>
                         <td>
-                            ${ item.lokus.map((item) => item).join(', ') }
+                            ${item.lokus.map((item) => item).join(', ')}
                         </td>
                     </tr>
                 `);

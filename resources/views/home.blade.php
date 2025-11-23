@@ -28,13 +28,6 @@
             </div>
         </div>
 
-        <div class="dashboard-card dashboard-card-warning text-dark">
-            <div class="card-content">
-                <h5>Jumlah SKPD</h5>
-                <h5>{{ $countSkpd }} Organisasi</h5>
-            </div>
-        </div>
-
         <div class="dashboard-card dashboard-card-purple">
             <div class="card-content">
                 <h5>Program RAP</h5>
@@ -67,24 +60,13 @@
             <div class="dashboard-card dashboard-card-light">
                 <div class="card-content">
                     @php
-                        $selisihInputan = $totalInputOtsus - $totalAlokasiOtsusTkdd;
+                        $selisihInputan = $totalAlokasiOtsusTkdd - $totalInputOtsus;
                     @endphp
                     <h5>
                         Sisa Input
                         @if ($selisihInputan < 0)
-                            <span class="{{ $selisihInputan < 0 ? 'badge bg-danger' : ($selisihInputan > 0 ? 'badge bg-danger' : 'badge bg-success') }}">
-                                Kurang
-                                {{ $selisihInputan < 0 ? 'Kurang' : ($selisihInputan > 0 ? 'Lebih' : 'Sama') }}
-                            </span>
-                        @endif
-                        @if ($selisihInputan > 0)
-                            <span class="badge bg-warning">
-                                Lebih
-                            </span>
-                        @endif
-                        @if ($selisihInputan == 0)
-                            <span class="badge bg-success">
-                                Lebih
+                            <span class="badge bg-danger">
+                                Over
                             </span>
                         @endif
                     </h5>
@@ -95,19 +77,17 @@
             <div class="dashboard-card dashboard-card-light">
                 <div class="card-content">
                     @php
-                        $selsiihInputBg = $alokasi_otsus ? $dataKlasBel['alokasi_bg']['alokasi_terinput'] - $alokasi_otsus->alokasi_bg : 0;
+                        $selsiihInputBg = $alokasi_otsus
+                            ? $alokasi_otsus->alokasi_bg - $dataKlasBel['alokasi_bg']['alokasi_terinput']
+                            : 0;
                     @endphp
                     <h5>
                         Sisa Otsus BG 1%
-                        <span class="badge bg-danger">
-                            @if ($selsiihInputBg < 0)
-                                Kurang
-                            @elseif ($selsiihInputBg == 0)
-                                Pass
-                            @else
-                                Lebih
-                            @endif
-                        </span>
+                        @if ($selsiihInputBg < 0)
+                            <span class="badge bg-danger">
+                                Over
+                            </span>
+                        @endif
                     </h5>
                     <h5>Rp. {{ formatIdr($selsiihInputBg) }}</h5>
                 </div>
@@ -116,19 +96,17 @@
             <div class="dashboard-card dashboard-card-light">
                 <div class="card-content">
                     @php
-                        $selisihInputSg = $alokasi_otsus ? $dataKlasBel['alokasi_sg']['alokasi_terinput'] - $alokasi_otsus->alokasi_sg : 0;
+                        $selisihInputSg = $alokasi_otsus
+                            ? $alokasi_otsus->alokasi_sg - $dataKlasBel['alokasi_sg']['alokasi_terinput']
+                            : 0;
                     @endphp
                     <h5>
                         Sisa Otsus SG 1,25%
-                        <span class="badge bg-danger">
-                            @if ($selisihInputSg < 0)
-                                Kurang
-                            @elseif ($selisihInputSg == 0)
-                                Pass
-                            @else
-                                Lebih
-                            @endif
-                        </span>
+                        @if ($selisihInputSg < 0)
+                            <span class="badge bg-danger">
+                                Over
+                            </span>
+                        @endif
                     </h5>
                     <h5>Rp. {{ formatIdr($selisihInputSg) }}</h5>
                 </div>
@@ -137,24 +115,29 @@
             <div class="dashboard-card dashboard-card-light">
                 <div class="card-content">
                     @php
-                        $selisihInputDti = $alokasi_otsus ? $dataKlasBel['alokasi_dti']['alokasi_terinput'] - $alokasi_otsus->alokasi_dti : 0;
+                        $selisihInputDti = $alokasi_otsus
+                            ? $alokasi_otsus->alokasi_dti - $dataKlasBel['alokasi_dti']['alokasi_terinput']
+                            : 0;
                     @endphp
                     <h5>
                         Sisa DTI
-                        <span class="badge bg-danger">
-                            @if ($selisihInputDti < 0)
-                                Kurang
-                            @elseif ($selisihInputDti == 0)
-                                Pass
-                            @else
-                                Lebih
-                            @endif
-                        </span>
+                        @if ($selisihInputDti < 0)
+                            <span class="badge bg-danger">
+                                Over
+                            </span>
+                        @endif
                     </h5>
                     <h5>Rp. {{ formatIdr($selisihInputDti) }}</h5>
                 </div>
             </div>
         @endif
+
+        <div class="dashboard-card dashboard-card-warning text-dark">
+            <div class="card-content">
+                <h5>Jumlah SKPD</h5>
+                <h5>{{ $countSkpd }} Perangkat Daerah</h5>
+            </div>
+        </div>
 
     </div>
 
@@ -166,7 +149,11 @@
             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                 @foreach ($dataKlasBel as $klasBelPill)
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link {{ $klasBelPill['active'] ? 'active' : '' }}" id="{{ $klasBelPill['id'] }}-tab" data-bs-toggle="pill" data-bs-target="#{{ $klasBelPill['id'] }}" type="button" role="tab" aria-controls="{{ $klasBelPill['id'] }}" aria-selected="{{ $klasBelPill['active'] ? 'true' : 'false' }}">
+                        <button class="nav-link {{ $klasBelPill['active'] ? 'active' : '' }}"
+                            id="{{ $klasBelPill['id'] }}-tab" data-bs-toggle="pill"
+                            data-bs-target="#{{ $klasBelPill['id'] }}" type="button" role="tab"
+                            aria-controls="{{ $klasBelPill['id'] }}"
+                            aria-selected="{{ $klasBelPill['active'] ? 'true' : 'false' }}">
                             {{ $klasBelPill['name'] }}
                         </button>
                     </li>
@@ -175,7 +162,9 @@
 
             <div class="tab-content" id="pills-tabContent">
                 @foreach ($dataKlasBel as $klasBelTab)
-                    <div class="tab-pane fade {{ $klasBelTab['active'] ? 'show active' : '' }}" id="{{ $klasBelTab['id'] }}" role="tabpanel" aria-labelledby="{{ $klasBelTab['id'] }}-tab" tabindex="0">
+                    <div class="tab-pane fade {{ $klasBelTab['active'] ? 'show active' : '' }}"
+                        id="{{ $klasBelTab['id'] }}" role="tabpanel" aria-labelledby="{{ $klasBelTab['id'] }}-tab"
+                        tabindex="0">
 
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-hover">
@@ -192,7 +181,8 @@
                                         <tr>
                                             <td class="text-center">{{ $loop->iteration }}</td>
                                             <td class="text-start">{{ $itemKlasBel['name'] }}</td>
-                                            <td class="text-end text-nowrap">Rp. {{ formatIdr($itemKlasBel['total']) }}</td>
+                                            <td class="text-end text-nowrap">Rp. {{ formatIdr($itemKlasBel['total']) }}
+                                            </td>
                                             <td class="text-center">{{ formatIdr($itemKlasBel['persen']) }}%</td>
                                         </tr>
                                     @endforeach

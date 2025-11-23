@@ -166,16 +166,6 @@ class ApiSinkronDjpkSikdController extends Controller
                     'tahun' => $item['tahun'],
                 ];
             }
-
-            // return response()->json([
-            //     'success' => true,
-            //     'alert' => 'success',
-            //     'data' => [
-            //         'sumberdana' => $request->sumberdana,
-            //         'jenis' => $request->jenis,
-            //         'data' => $data,
-            //     ]
-            // ], 200);
         }
 
         SinkronDataSikd::dispatch($data, $request->jenis, $request->sumberdana);

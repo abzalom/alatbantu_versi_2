@@ -10,6 +10,9 @@ class A5Subkegiatan extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+    protected $casts = [
+        'tag' => 'array',
+    ];
 
     function getTextAttribute()
     {

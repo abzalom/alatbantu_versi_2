@@ -38,7 +38,7 @@
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="edit-header-request-method" class="form-label">Method</label>
-                                <select name="method" class="form-control" id="edit-header-request-method">
+                                <select name="request_method" class="form-control" id="edit-header-request-method">
                                     <option value="">Pilih...</option>
                                     <option value="get">GET</option>
                                     <option value="post">POST</option>

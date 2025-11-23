@@ -19,6 +19,8 @@
                 <th>INDIKATOR</th>
                 <th>SATUAN</th>
                 <th>KLASIFIKASI BELANJA</th>
+                <th>TAG</th>
+                <th>DEFINISI</th>
             </tr>
         </thead>
         <tbody class="align-middle">
@@ -26,17 +28,17 @@
                 @foreach ($data as $bidang)
                     <tr>
                         <th>{{ $bidang['kode_bidang'] }}</th>
-                        <th colspan="4">{{ $bidang['uraian'] }}</th>
+                        <th colspan="6">{{ $bidang['uraian'] }}</th>
                     </tr>
                     @foreach ($bidang['programs'] as $program)
                         <tr>
                             <th>{{ $program['kode_program'] }}</th>
-                            <th colspan="4">{{ $program['uraian'] }}</th>
+                            <th colspan="6">{{ $program['uraian'] }}</th>
                         </tr>
                         @foreach ($program['kegiatans'] as $kegiatan)
                             <tr>
                                 <th>{{ $kegiatan['kode_kegiatan'] }}</th>
-                                <th colspan="4">{{ $kegiatan['uraian'] }}</th>
+                                <th colspan="6">{{ $kegiatan['uraian'] }}</th>
                             </tr>
                             @foreach ($kegiatan['subkegiatans'] as $subkegiatan)
                                 <tr>
@@ -45,6 +47,20 @@
                                     <td>{{ $subkegiatan['indikator'] }}</td>
                                     <td>{{ $subkegiatan['satuan'] }}</td>
                                     <td>{{ $subkegiatan['klasifikasi_belanja'] }}</td>
+                                    <td>
+                                        @if (is_array($subkegiatan['tag']) && count($subkegiatan['tag']) > 0)
+                                            @foreach ($subkegiatan['tag'] as $tag)
+                                                <span class="badge bg-secondary">{{ $tag }}</span>
+                                            @endforeach
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                    <td style="font-size: small; white-space: pre-line">
+                                        @if ($with_definisi)
+                                            {{ $subkegiatan['definisi'] }}
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                         @endforeach

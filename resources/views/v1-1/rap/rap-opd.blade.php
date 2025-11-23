@@ -36,7 +36,7 @@
                 <div class="custom-card-icon green">💲</div>
                 <div>
                     <div>Pagu OPD <small>({{ $jenis == 'bg' || $jenis == 'sg' ? 'OTSUS ' . strtoupper($jenis) : strtoupper($jenis) }})</small></div>
-                    <div>Rp {{ formatIdr($opd->pagu ? $opd->pagu->$jenis : 'nol') }}</div>
+                    <div>Rp {{ formatIdr($opd->pagu ? $opd->pagu->$jenis : '0') }}</div>
                 </div>
             </div>
             <div class="custom-card">
@@ -133,6 +133,11 @@
                                     <tr>
                                         <td>
                                             <div class="btn-group" role="group">
+                                                {{-- <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Detail RAP (Admin)">
+                                                    <button style="border-radius: 0 0.25rem 0.25rem 0;" class="btn btn-sm btn-success btn-detail-rap" data-bs-toggle="modal" data-bs-target="#detailRapOpdModal" data-rap='@json(['opd' => $opd->text, 'tagging' => $tagging, 'rap' => $rap])'>
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </button>
+                                                </div> --}}
                                                 @if (auth()->user()->hasRole('admin') && $rap->kirim)
                                                     @if ($rap->pembahasan && $rap->pembahasan !== 'perbaiki' && auth()->user()->hasRole('admin'))
                                                         <form action="/rap/validasi" method="POST" class="d-inline">
@@ -145,13 +150,7 @@
                                                         </form>
                                                     @endif
                                                     @if (auth()->user()->hasRole('admin'))
-                                                        @if ($rap->validasi)
-                                                            <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Lihat Detail RAP (Admin)">
-                                                                <button style="border-radius: 0 0.25rem 0.25rem 0;" class="btn btn-sm btn-success btn-detail-rap" data-bs-toggle="modal" data-bs-target="#detailRapOpdModal" data-rap='@json(['opd' => $opd->text, 'tagging' => $tagging, 'rap' => $rap])'>
-                                                                    <i class="fa-solid fa-eye"></i>
-                                                                </button>
-                                                            </div>
-                                                        @else
+                                                        @if (!$rap->validasi)
                                                             <div data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Bahas RAP (Admin)">
                                                                 <button style="border-radius: 0 0.25rem 0.25rem 0;" class="btn btn-sm btn-info btn-detail-rap" data-bs-toggle="modal" data-bs-target="#detailRapOpdModal" data-rap='@json(['opd' => $opd->text, 'tagging' => $tagging, 'rap' => $rap])'>
                                                                     <i class="fa-solid fa-handshake"></i>

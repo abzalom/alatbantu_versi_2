@@ -8,6 +8,7 @@ use App\Models\Data\Opd;
 use App\Models\Nomenklatur\A2Bidang;
 use App\Models\Tagging\Nomenklatur\OpdTagBidang;
 use App\Services\OpdTagBidangService;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,7 @@ class ConfigOpdController extends Controller
             return redirect()->to('/config/opd')->with('error', 'Unauthorized');
         }
         try {
-            $response = Http::get('http://localhost:3000/api/local/get/data/skpd', [
+            $response = Http::get(env('SIPD_SCRAP_URL') . 'http://localhost:3000/api/local/get/data/skpd', [
                 'tahun' => session()->get('tahun')
             ]);
 

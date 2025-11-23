@@ -29,7 +29,7 @@
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-sm-12 col-md-6 col-lg-8 mb-3">
+                        <div class="d-flex gap-3 col-sm-12 col-md-6 col-lg-8 mb-3">
                             @if (auth()->user()->hasRole('admin'))
                                 <form action="/config/sinkron/opd-sipd" method="post">
                                     @csrf
@@ -37,6 +37,7 @@
                                     <button class="btn btn-primary"><i class="fa-solid fa-arrows-rotate"></i> Sinkron SKPD SIPD-RI</button>
                                 </form>
                             @endif
+                            <a class="btn btn-secondary" href="http://sipd-ri.kemendagri.go.id/master/skpd" target="_blank">Buka SIPD-RI</a>
                         </div>
                         <div class="col-sm-12 col-md-6 col-lg-4">
                             <div class="mb-3 ms-3">
@@ -71,7 +72,7 @@
                                         <td>
                                             <ul class="small text-muted">
                                                 @foreach ($opd->tag_bidang as $tag_bidang)
-                                                    <li>{{ $tag_bidang->bidang->uraian }}</li>
+                                                    <li>{{ $tag_bidang->bidang ? $tag_bidang->bidang->uraian : '' }}</li>
                                                 @endforeach
                                             </ul>
                                         </td>

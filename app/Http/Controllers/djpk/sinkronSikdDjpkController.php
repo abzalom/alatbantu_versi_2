@@ -19,7 +19,6 @@ class sinkronSikdDjpkController extends Controller
         }
         $data = DB::table($this->tabelSikdRequest)
             ->where('jenis', $jenis)
-            ->where('tahun', session()->get('tahun'))
             ->get();
         return view('sinkron-data.djpk.sinkron-data-djpk-sikd', [
             'app' => [
@@ -43,7 +42,6 @@ class sinkronSikdDjpkController extends Controller
         $data = DB::table($this->tabelSikdRequest)
             ->where('jenis', $jenis)
             ->where('sumberdana', $sumberdana)
-            ->where('tahun', session()->get('tahun'))
             ->get();
 
         // return $data;
@@ -67,14 +65,14 @@ class sinkronSikdDjpkController extends Controller
                 'name' => 'required|unique:' . $this->tabelSikdRequest . ',name',
                 'sumberdana' => 'required|in:bg,sg,dti',
                 'jenis' => 'required|in:nomenklatur,rap',
-                'method' => 'required|in:get,post',
+                'request_method' => 'required|in:get,post',
                 'url' => 'required|url',
                 'param_key' => 'required',
                 'param_value' => 'required',
             ],
             [
-                'method.required' => 'Method tidak boleh kosong!',
-                'method.in' => 'Method hanya boleh GET atau POST!',
+                'request_method.required' => 'Method tidak boleh kosong!',
+                'request_method.in' => 'Method hanya boleh GET atau POST!',
 
                 'sumberdana.required' => 'Sumber Dana tidak boleh kosong!',
                 'sumberdana.in' => 'Sumber Dana tidak valid!',
@@ -100,11 +98,19 @@ class sinkronSikdDjpkController extends Controller
             'url' => $request->url,
             'param_key' => $request->param_key,
             'param_value' => $request->param_value,
-            'method' => $request->method,
+            'method' => $request->request_method,
             'tahun' => session()->get('tahun'),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        // update kolom param_key dan param_value saja
+        // DB::table($this->tabelSikdRequest)
+        //     ->update([
+        //         'param_key' => $request->param_key,
+        //         'param_value' => $request->param_value,
+        //     ]);
+
         return redirect()->back()->with('success', 'Data berhasil di simpan!');
     }
 
@@ -116,14 +122,14 @@ class sinkronSikdDjpkController extends Controller
                 'name' => 'required|unique:' . $this->tabelSikdRequest . ',name,' . $request->id,
                 'sumberdana' => 'required|in:bg,sg,dti',
                 'jenis' => 'required|in:nomenklatur,rap',
-                'method' => 'required|in:get,post',
+                'request_method' => 'required|in:get,post',
                 'url' => 'required|url',
                 'param_key' => 'required',
                 'param_value' => 'required',
             ],
             [
-                'method.required' => 'Method tidak boleh kosong!',
-                'method.in' => 'Method hanya boleh GET atau POST!',
+                'request_method.required' => 'Method tidak boleh kosong!',
+                'request_method.in' => 'Method hanya boleh GET atau POST!',
 
                 'sumberdana.required' => 'Sumber Dana tidak boleh kosong!',
                 'sumberdana.in' => 'Sumber Dana tidak valid!',
@@ -152,7 +158,7 @@ class sinkronSikdDjpkController extends Controller
                 'name' => $request->name,
                 'sumberdana' => $request->sumberdana,
                 'jenis' => $request->jenis,
-                'method' => $request->method,
+                'method' => $request->request_method,
                 'url' => $request->url,
                 'param_key' => $request->param_key,
                 'param_value' => $request->param_value,

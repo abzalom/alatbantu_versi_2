@@ -12,8 +12,14 @@
                         @endisset
                     </h5>
                     @if (auth()->user()->hasRole('admin'))
-                        <div class="ms-md-auto mt-3 mt-md-0">
-                            <form action="/ref/nomenklatur/update/sikd" method="post">
+                        <div class="ms-md-auto mt-3 mt-md-0 d-flex gap-2">
+                            <form action="/ref/nomenklatur/sipd/upload_xlsx" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <input type="file" name="nomenklatur_sipd_xlsx" style="display: none" id="upload-nomenklatur-sipd-xlsx" accept=".xlsx">
+                                <button type="button" id="btn-upload-nomenklatur-sipd-xlsx" class="btn btn-primary">Upload max 2MB (.xlsx)</button>
+                            </form>
+                            <a class="btn btn-warning" href="https://sipd-ri.kemendagri.go.id/master/sub_giat" target="_blank"><i class="fa-solid fa-sync"></i> SINKRON SIPD-RI</a>
+                            <form action="/ref/nomenklatur/sipd/update/sikd" method="post">
                                 @csrf
                                 <button type="submit" id="sinkron-data" type="button" class="btn btn-secondary">Update Dari SIKD</button>
                             </form>
@@ -21,7 +27,7 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    <form action="/ref/nomenklatur/cetak" method="get" target="_blank">
+                    <form action="/ref/nomenklatur/sipd/cetak" method="get" target="_blank">
                         <div class="row mb-3">
                             <div class="col-sm-6 col-md-6 col-lg-4">
                                 <div class="mb-3">
@@ -57,6 +63,10 @@
                                 </div>
                             </div>
                             <div class="col-6">
+                                <div class="form-check form-switch mb-3" style="font-size: 16px">
+                                    <input name="definisi" class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault">
+                                    <label class="form-check-label" for="switchCheckDefault">Dengan Definisi</label>
+                                </div>
                                 <button type="submit" class="btn btn-primary"><i class="fa-solid fa-print"></i> Cetak</button>
                                 {{-- <a href="#"></a> --}}
                             </div>

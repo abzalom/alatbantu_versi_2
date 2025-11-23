@@ -40,7 +40,6 @@
                                     <td>Param Key</td>
                                     <td>Param Value</td>
                                     <td>Sumber Dana</td>
-                                    <td>Tahun</td>
                                     <td></td>
                                 </tr>
                             </thead>
@@ -58,10 +57,9 @@
                                         <td>{{ $itemUrl->param_key }}</td>
                                         <td style="max-width: 300px">{{ $itemUrl->param_value }}</td>
                                         <td>{{ $itemUrl->sumberdana }}</td>
-                                        <td>{{ $itemUrl->tahun }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <button class="btn btn-sm btn-primary btn-edit-request-header" data-bs-toggle="modal" data-bs-target="#editHeaderSinkronDjpkSikdModal" data-id="{{ $itemUrl->id }}" data-jenis="{{ $itemUrl->jenis }}" data-name="{{ $itemUrl->name }}" data-method="{{ $itemUrl->method }}" data-url="{{ $itemUrl->url }}"data-param_key="{{ $itemUrl->param_key }}" data-param_value="{{ $itemUrl->param_value }}" data-tahun="{{ $itemUrl->tahun }}" data-sumberdana="{{ $itemUrl->sumberdana }}"><i class="fa-solid fa-pen-to-square"></i></button>
+                                                <button class="btn btn-sm btn-primary btn-edit-request-header" data-bs-toggle="modal" data-bs-target="#editHeaderSinkronDjpkSikdModal" data-id="{{ $itemUrl->id }}" data-jenis="{{ $itemUrl->jenis }}" data-name="{{ $itemUrl->name }}" data-method="{{ $itemUrl->method }}" data-url="{{ $itemUrl->url }}"data-param_key="{{ $itemUrl->param_key }}" data-param_value="{{ $itemUrl->param_value }}" data-sumberdana="{{ $itemUrl->sumberdana }}"><i class="fa-solid fa-pen-to-square"></i></button>
                                                 <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
                                             </div>
                                         </td>

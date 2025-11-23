@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('request_sikd_djpks', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->year('tahun');
+            // $table->year('tahun');
             $table->string('url');
             $table->text('param_key');
             $table->text('param_value');

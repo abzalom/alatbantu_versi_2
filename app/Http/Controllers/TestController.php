@@ -12,15 +12,19 @@ use App\Http\Resources\RapRipppResource;
 use App\Models\Config\Schedule;
 use App\Models\Data\KepalaOpd;
 use App\Models\Data\Sumberdana;
+use App\Models\Nomenklatur\A1Urusan;
 use App\Models\Nomenklatur\A2Bidang;
+use App\Models\Nomenklatur\A5Subkegiatan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Nomenklatur\NomenklaturSikd;
 use App\Models\Rap\RapOtsus;
 use App\Models\Tagging\Nomenklatur\OpdTagBidang;
 use App\Models\Tagging\Otsus\OpdTagOtsus;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Browsershot\Browsershot;
 
@@ -296,8 +300,8 @@ class TestController extends Controller
 
     public function indikator_rakortek_rappp(Request $request)
     {
-        $opds = auth()->user()->hasRole('user')
-            ? auth()->user()->opds()->with(['tag_bidang.indikators.target'])
+        $opds = Auth::user()->hasRole('user')
+            ? Auth::user()->opds()->with(['tag_bidang.indikators.target'])
             : Opd::withoutGlobalScopes()->with(['tag_bidang.indikators.target']);
 
         $opds = $opds->get();
@@ -522,5 +526,100 @@ class TestController extends Controller
             'tag_bidang.raps' => fn($q) => $q->withTrashed(),
         ])->find(41);
         return $opd;
+    }
+
+    public function storage_test()
+    {
+        return json_decode(Storage::disk('public')->get('/data/users/user-skpd2.json'), true);
+    }
+
+    public function test_opd()
+    {
+        $user = User::find(2);
+        return $user->opds;
+    }
+
+    public function sipd_pemuktahiran()
+    {
+        $data = json_decode(Storage::disk('public')->get('data/sipd-ri/sipd_pemuktahiran.json'), true);
+        $programs = [];
+        $kegiatans = [];
+        $subkegiatans = [];
+        foreach ($data as $item) {
+            $prog = explode(' ', $item['program'], 2);
+            $kode_urusan = explode('.', $prog[0])[0];
+            $kode_bidang = explode('.', $prog[0])[0] . '.' . explode('.', $prog[0])[1];
+            $programs[$prog[0]] = [
+                'kode_urusan' => explode('.', $prog[0])[0],
+                'kode_bidang' => explode('.', $prog[0])[0] . '.' . explode('.', $prog[0])[1],
+                'kode_program' => $prog[0],
+                'uraian' => isset($prog[1]) ? $prog[1] : '',
+                'tahun' => session('tahun'),
+            ];
+            $keg = explode(' ', $item['kegiatan'], 2);
+            $kegiatans[$keg[0]] = [
+                'kode_urusan' => explode('.', $prog[0])[0],
+                'kode_bidang' => explode('.', $prog[0])[0] . '.' . explode('.', $prog[0])[1],
+                'kode_program' => $prog[0],
+                'kode_kegiatan' => $keg[0],
+                'uraian' => isset($keg[1]) ? $keg[1] : '',
+                'tahun' => session('tahun'),
+            ];
+            $subkeg = explode(' ', $item['subkegiatan'], 2);
+            $gaji = false;
+
+            $kode_gaji = [
+                'X.XX.01.2.02.0001',
+                'X.XX.01.2.11.0001',
+                'X.XX.01.3.01.0001',
+                'X.XX.01.3.01.0002',
+                'X.XX.01.4.01.0001',
+                'X.XX.01.4.01.0002',
+                'X.XX.01.2.15.0001',
+            ];
+
+            if (in_array($subkeg[0], $kode_gaji)) {
+                $gaji = true;
+            }
+
+            $subkegiatans[$subkeg[0]] = [
+                'kode_urusan' => explode('.', $prog[0])[0],
+                'kode_bidang' => explode('.', $prog[0])[0] . '.' . explode('.', $prog[0])[1],
+                'kode_program' => $prog[0],
+                'kode_kegiatan' => $keg[0],
+                'kode_subkegiatan' => $subkeg[0],
+                'uraian' => isset($subkeg[1]) ? $subkeg[1] : '',
+                'indikator' => $item['indikator'],
+                'kinerja' => $item['kinerja'],
+                'satuan' => $item['satuan'],
+                'rutin' => $kode_urusan == 'X' ? true : false,
+                'gaji' => $gaji,
+                'referensi' => 'SIPD-RI Pemuktahiran Tahun 2025',
+                'tag' => $item['tag'],
+                'definisi' => $item['definisi_operasional'],
+                'pelaksana' => $item['pelaksana'],
+                'spm' => $item['spm'],
+                'jenis' => $item['jenis'],
+                'subkegiatan_sebelumnya' => $item['subkegiatan_sebelumnya'],
+                'tahun' => session('tahun'),
+            ];
+        }
+        return array_values($kegiatans);
+        // $string = '1.01.02 PROGRAM PENGELOLAAN PENDIDIKAN';
+        // preg_match('/^(\S+)/', $string, $matches);
+        // return $matches[0];
+    }
+
+    public function test_cetak_sipd(Request $request)
+    {
+        $kode_bidang1 = '1.01';
+        $kode_bidang2 = '2.11';
+        $kode_bidang3 = '3.25';
+        $data = A2Bidang::whereIn('kode_bidang', [$kode_bidang1, $kode_bidang2, $kode_bidang3])
+            ->with([
+                'program.kegiatan.subkegiatan'
+            ])
+            ->get();
+        return $data;
     }
 }

@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="userTaggingSkpdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="userTaggingSkpdModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
             <div id="modal-user-tagging-skpd-show-spinner" style="display: block">
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Simpan</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Selesai</button>
                 </div>
             </div>
         </div>
@@ -44,7 +44,7 @@
 
 <!-- Modal -->
 <div class="modal fade" id="userSelectSkpdModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="userSelectSkpdModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
 
 

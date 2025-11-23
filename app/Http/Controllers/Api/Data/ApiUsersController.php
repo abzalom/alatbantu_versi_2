@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ApiUsersController extends Controller
@@ -357,7 +358,7 @@ class ApiUsersController extends Controller
     public function skpd_user(Request $request)
     {
         // Validasi awal untuk memastikan ID pengguna ada
-        if (!$request->has('id') || !$request->id) {
+        if (!$request->has('id') || !$request->input('id')) {
             return response()->json([
                 'success' => false,
                 'alert' => 'danger',
@@ -366,7 +367,9 @@ class ApiUsersController extends Controller
         }
 
         // Cari pengguna berdasarkan ID
-        $user = User::find($request->id);
+        $id = $request->input('id');
+        $user = User::find($id);
+
         if (!$user) {
             return response()->json([
                 'success' => false,
@@ -375,9 +378,12 @@ class ApiUsersController extends Controller
             ], 400);
         }
 
+
+        $tahun = $request->input('tahun') ? $request->input('tahun') : $request->input('token_tahun');
+
         // Jika hanya data pengguna yang diminta
         if ($request->has('only_user') && $request->only_user) {
-            $opds = $user->opds->where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->map(function ($itemOpd) {
+            $opds = $user->opds()->withoutGlobalScopes()->where('tahun', $tahun)->get()->map(function ($itemOpd) {
                 return [
                     'id' => $itemOpd->id,
                     'kode_unik_opd' => $itemOpd->kode_unik_opd,
@@ -397,15 +403,6 @@ class ApiUsersController extends Controller
                 ],
             ], 200);
         }
-
-        // Data OPD berdasarkan tahun yang tidak terkait dengan pengguna
-        // if (!$request->has('tahun') || !$request->token_tahun) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'alert' => 'danger',
-        //         'message' => 'Parameter "tahun" is required!',
-        //     ], 400);
-        // }
 
         $tagging = DB::table('opd_user')->where('user_id', $user->id)->get();
         $opds = Opd::withoutGlobalScopes()->where('tahun', $request->tahun ? $request->tahun : $request->token_tahun)->whereNotIn('id', $tagging->pluck('opd_id')->toArray())->get();
@@ -451,7 +448,7 @@ class ApiUsersController extends Controller
             // Jika insert berhasil, commit transaksi
             if ($inserted) {
                 DB::commit();
-                $data = Opd::find($request->opd_id);
+                $data = Opd::withoutGlobalScopes()->find($request->opd_id);
                 return response()->json([
                     'success' => true,
                     'alert' => 'success',
@@ -501,7 +498,7 @@ class ApiUsersController extends Controller
             if ($data->exists()) {
                 $data->delete();
                 DB::commit();
-                $skpd = Opd::find($request->opd_id);
+                $skpd = Opd::withoutGlobalScopes()->find($request->opd_id);
                 return response()->json([
                     'success' => true,
                     'alert' => 'success',

@@ -408,7 +408,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: appApiUrl + "/api/data/user/skpd",
+            url: "/api/data/user/skpd",
             data: {
                 id: user_id,
                 only_user: true,
@@ -473,7 +473,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: appApiUrl + "/api/data/user/skpd",
+            url: "/api/data/user/skpd",
             data: {
                 id: user_id,
                 tahun: tahun,
@@ -521,13 +521,14 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: appApiUrl + "/api/data/user/tagging-skpd",
+            url: "/api/data/user/tagging-skpd",
             data: {
                 user_id: user_id,
                 opd_id: opd_id,
             },
             dataType: "JSON",
             success: function (response) {
+                console.log(response);
                 showToast(response.message, response.alert);
                 const data = response.data;
                 const skpdTd = $(".skpd-td-" + user_id);
@@ -585,7 +586,7 @@ $(document).ready(function () {
 
             $.ajax({
                 type: "POST",
-                url: appApiUrl + "/api/data/user/remove-skpd",
+                url: "/api/data/user/remove-skpd",
                 data: {
                     user_id: user_id,
                     opd_id: opd_id,

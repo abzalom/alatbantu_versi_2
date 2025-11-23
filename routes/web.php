@@ -69,9 +69,10 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 
     Route::controller(ReferensiDataController::class)->group(function () {
         Route::get('/ref/bantuan', 'ref_data');
-        Route::get('/ref/nomenklatur', 'ref_nomenklatur');
-        Route::get('/ref/nomenklatur/cetak', 'ref_cetak_nomenklatur');
-        Route::post('/ref/nomenklatur/update/sikd', 'update_nomenklatur_sikd');
+        Route::get('/ref/nomenklatur/sipd', 'ref_nomenklatur');
+        Route::get('/ref/nomenklatur/sipd/cetak', 'ref_cetak_nomenklatur');
+        Route::post('/ref/nomenklatur/sipd/upload_xlsx', 'ref_upload_xlsx_nomenklatur');
+        Route::post('/ref/nomenklatur/sipd/update/sikd', 'update_nomenklatur_sikd');
     });
 
     Route::controller(ConfigAppController::class)->group(function () {
@@ -93,13 +94,12 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
         Route::resource('/config/roles', ConfigRolesController::class);
 
         Route::resource('/config/team/bappeda', TimPembahasController::class)->except(['show']);
+
         Route::controller(TimPembahasController::class)->group(function () {
             Route::post('/config/team/bappeda/add_tim_opd', 'add_tim_opd');
         });
+
         Route::resource('/config/team/opd', TimPembahasOpdController::class)->except(['show']);
-        // Route::controller(TimPembahasOpdController::class)->group(function () {
-        //     Route::get('/config/team/opd', 'index');
-        // });
 
         Route::controller(ScheduleRapController::class)->group(function () {
             Route::get('/config/schedule/rap', 'schedule_rap_config');
@@ -260,7 +260,7 @@ Route::middleware(WebAuthenticateUser::class)->group(function () {
 });
 
 Route::controller(TestController::class)->group(function () {
-    Route::get('/test', 'test_tag_bidang');
-    Route::get('/test/schema', 'schema_table');
-    Route::get('/test/opd', 'result_opd_raps');
+    Route::get('/test', 'test_cetak_sipd');
+    // Route::get('/test/schema', 'schema_table');
+    // Route::get('/test/opd', 'result_opd_raps');
 });

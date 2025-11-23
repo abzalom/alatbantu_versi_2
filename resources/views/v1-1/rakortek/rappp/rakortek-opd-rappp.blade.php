@@ -93,7 +93,7 @@
                                                 @if (!$pembahasan)
                                                     <button class="btn btn-sm btn-primary btn-edit-rappp" value="{{ $itemRappp->id }}" data-bs-toggle="modal" data-bs-target="#editProgramRapppModal" data-rappp='@json($itemRappp)'><i class="fa-solid fa-pen-square"></i></button>
                                                     @if (!$totalRap)
-                                                        <button class="btn btn-sm btn-danger btn-delete-rappp" value="{{ $itemRappp->id }}"><i class="fa-solid fa-trash"></i></button>
+                                                        <button class="btn btn-sm btn-danger btn-delete-rappp" data-rappp='@json($itemRappp)'><i class="fa-solid fa-trash"></i></button>
                                                     @endif
                                                 @else
                                                     <i class="fa-solid fa-circle-info text-info fa-beat" style="font-size: 1.5rem"></i>

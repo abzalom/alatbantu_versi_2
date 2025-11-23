@@ -1,2 +1,137 @@
-GET https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-1?search=&_=1750398458462
-cookie: "cookiesession1=678B29B212B6A0EE16644650283A5602; twk_idm_key=KCFMHizCghkRcDbb5lKrY; sessionid=6qia60s0aenle0e1vvw1c62dhz1jjdph; TawkConnectionTime=0; csrftoken=3AxI7HCTILz4m17zgBWuuTojTjqBG3vj"
+# GET https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-1?search=
+# Cookie: cookiesession1=678B293920709D6910AAFEB560890233; twk_idm_key=QRatq6kpPbKCuONfKqBrE; TawkConnectionTime=0; csrftoken=3Hf6eNYdxAd1NUWOdSek1JL3zNI3TlC6; sessionid=ndicf35ojyn3yxqn84hpqowzgo9hm1ob
+
+
+POST https://sipd-ri.kemendagri.go.id/pemutakhiran/c59480f8fd1b1ef81e01f0cf64b10b8f05b58c4d/?m=bukadata
+Content-Type: "application/json"
+Cookie: "kt_aside_menu_wrapperst=0; PHPSESSID=cn6uuuk9iecgoiln8cnob85s3g"
+
+{
+  "draw": 1,
+  "columns": [
+    {
+      "data": "no",
+      "name": "no",
+      "searchable": false,
+      "orderable": false,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "jnspemda",
+      "name": "jnspemda",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "bidang",
+      "name": "bidang",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "program",
+      "name": "program",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "kegiatan",
+      "name": "kegiatan",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "subkegiatan_tampil",
+      "name": "subkegiatan",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "kinerja",
+      "name": "kinerja",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "indikator",
+      "name": "indikator",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "satuan",
+      "name": "satuan",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "definisi_operasional",
+      "name": "definisi_operasional",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "bidang_pelaksana",
+      "name": "bidang_pelaksana",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "spm",
+      "name": "spm",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "jenis",
+      "name": "jenis",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "tag",
+      "name": "tag",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    },
+    {
+      "data": "referensi_subkegiatan",
+      "name": "referensi_subkegiatan",
+      "searchable": true,
+      "orderable": true,
+      "search": { "value": "", "regex": false }
+    }
+  ],
+  "start": 0,
+  "length": 50,
+  "search": { "value": "", "regex": false },
+  "jnspemda": "",
+  "bidang": "",
+  "program": "",
+  "kegiatan": "",
+  "tag": [],
+  "kekhususan": "semua",
+  "pemda": [],
+  "versipemutakhiran": 20261,
+  "astacita": "",
+  "bidang_prioritas": "",
+  "prioritas": "",
+  "kegiatan_prioritas": "",
+  "program_prioritas_nasional": "",
+  "type_filter": "filter-attr-subkegiatan",
+  "jenis": "semua",
+  "jenis_astacita": "semua"
+}

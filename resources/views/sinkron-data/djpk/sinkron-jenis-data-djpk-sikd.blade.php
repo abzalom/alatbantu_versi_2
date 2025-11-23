@@ -31,6 +31,18 @@
                             <label for="request-select-data" class="form-label">Pilih URL</label>
                             <div class="input-group">
                                 <select class="form-select" id="request-select-data" aria-label="Example select with button addon">
+                                    {{-- @if ($sumberdana === 'bg')
+                                        <option value="https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-1?search=&_=">Request API Link SIKD Block Grant 1%</option>
+                                    @endif
+                                    @if ($sumberdana === 'bg')
+                                        <option value="https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-1?search=&_=">Request API Link SIKD Block Grant 1%</option>
+                                    @endif
+                                    @if ($sumberdana === 'sg')
+                                        <option value="https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-2?search=&_=">Request API Link SIKD Spesific Grant 1,25%</option>
+                                    @endif
+                                    @if ($sumberdana === 'dti')
+                                        <option value="https://web.djpk.kemenkeu.go.id/danaotsus/otsus/perencanaan/rap-subkegiatan-3?search=&_=">Request API Link SIKD Dana Tambahan Infrastruktur</option>
+                                    @endif --}}
                                     <option value="">Pilih...</option>
                                     @foreach ($data as $itemData)
                                         <option value="{{ $itemData->id }}" data-jenis="{{ $itemData->jenis }}" data-sumberdana="{{ $itemData->sumberdana }}">{{ $itemData->name }}</option>

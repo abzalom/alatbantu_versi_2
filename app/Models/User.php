@@ -57,6 +57,11 @@ class User extends Authenticatable
 
     public function opds(): BelongsToMany
     {
-        return $this->belongsToMany(Opd::class);
+        return $this->belongsToMany(
+            Opd::class, // related
+            'opd_user',                  // pivot table
+            'user_id',                   // FK ke users
+            'opd_id'                     // FK ke opds
+        );
     }
 }

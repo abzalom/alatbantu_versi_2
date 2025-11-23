@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ref;
 use App\Models\Data\Lokus;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Imports\Ref\NomenklaturImport;
 use App\Models\Data\Sumberdana;
 use App\Models\Nomenklatur\A2Bidang;
 use App\Models\Nomenklatur\A3Program;
@@ -12,6 +13,8 @@ use App\Models\Nomenklatur\A4Kegiatan;
 use App\Models\Nomenklatur\A5Subkegiatan;
 use App\Models\Nomenklatur\NomenklaturSikd;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReferensiDataController extends Controller
 {
@@ -42,7 +45,7 @@ class ReferensiDataController extends Controller
             ];
         });
         // return $data;
-        return view('referensi.ref-nomenklatur', [
+        return view('referensi.ref-nomenklatur-sipd', [
             'app' => [
                 'title' => 'Referensi',
                 'desc' => 'Renferensi Nomenklatur',
@@ -82,6 +85,8 @@ class ReferensiDataController extends Controller
                                                         'uraian' => $subkegiatan->uraian,
                                                         'indikator' => $subkegiatan->indikator,
                                                         'satuan' => $subkegiatan->satuan,
+                                                        'tag' => json_decode($subkegiatan->tag, true) ?? [],
+                                                        'definisi' => $subkegiatan->definisi,
                                                     ];
                                                 })
                                         ];
@@ -101,7 +106,33 @@ class ReferensiDataController extends Controller
         return view('referensi.ref-cetak-nomenklatur', [
             'title' => $title,
             'data' => $data,
+            'with_definisi' => $request->has('definisi'),
         ]);
+    }
+
+    public function ref_upload_xlsx_nomenklatur(Request $request)
+    {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'nomenklatur_sipd_xlsx' => 'required|file|mimes:xlsx|max:2048',
+            ],
+            [
+                'nomenklatur_sipd_xlsx.required' => 'File XLSX wajib diunggah.',
+                'nomenklatur_sipd_xlsx.file' => 'Unggahan harus berupa file.',
+                'nomenklatur_sipd_xlsx.mimes' => 'File harus berformat .xlsx.',
+                'nomenklatur_sipd_xlsx.max' => 'Ukuran file tidak boleh lebih dari 2MB.',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->with('error', 'Terjadi kesalahan pada unggahan file.');
+        }
+
+        // Proses unggahan file XLSX di sini
+        // Misalnya, simpan file ke storage atau proses data dari file tersebut ke database
+        $import = Excel::queueImport(new NomenklaturImport(), $request->file('nomenklatur_sipd_xlsx'));
+        return redirect()->to('/ref/nomenklatur/sipd')->with('success', 'File XLSX berhasil diunggah dan diproses.');
     }
 
     public function update_nomenklatur_sikd(Request $request)
@@ -148,6 +179,6 @@ class ReferensiDataController extends Controller
             }
         }
         // return $notFound;
-        return redirect()->to('/ref/nomenklatur')->with('success', 'Data berhasil di update');
+        return redirect()->to('/ref/nomenklatur/sipd')->with('success', 'Data berhasil di update');
     }
 }

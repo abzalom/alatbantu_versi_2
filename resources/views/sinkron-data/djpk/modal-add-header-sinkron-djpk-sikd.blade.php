@@ -9,6 +9,15 @@
             <form action="/sinkron/djpk/insert/create-link" method="POST">
                 <div class="modal-body">
                     @csrf
+
+                    <h4 class="text-muted">Masukkan parameter untuk sinkronisasi data</h4>
+                    <p class="text-muted">Login pada <a href="https://web.djpk.kemenkeu.go.id/danaotsus/otsus" target="_blank">link ini</a> dan salin parameter yang diperlukan.</p>
+
+                    {{-- <div class="mb-3">
+                        <label for="add-cookie" class="form-label">Cookie</label>
+                        <textarea name="param" class="form-control" id="add-cookie" rows="3"></textarea>
+                    </div> --}}
+
                     <div class="mb-3">
                         <label for="header-request-djpk-sikd-name" class="form-label">Name</label>
                         <input name="name" type="text" class="form-control" id="header-request-djpk-sikd-name" placeholder="Name">
@@ -37,7 +46,7 @@
                         <div class="col-3">
                             <div class="mb-3">
                                 <label for="header-request-method" class="form-label">Method</label>
-                                <select name="method" class="form-control" id="header-request-method">
+                                <select name="request_method" class="form-control" id="header-request-method">
                                     <option value="">Pilih...</option>
                                     <option value="get">GET</option>
                                     <option value="post">POST</option>

@@ -5,7 +5,7 @@
         <a href="/">eRAPOT-MR</a>
     </div>
     <div id="header-content">
-        <div id="schedule-header" class="text-center">
+        <div id="schedule-header" class="text-center" style="cursor: pointer! important" data-bs-toggle="modal" data-bs-target="#editScheduleHeaderModal">
             <span id="timer-header-label">Tahapan : Nama Tahapan <small class="badge text-bg-secondary">status</small></span>
             <div id="timer-header">
                 00 Hari 00 Jam 00 Menit 00 Detik

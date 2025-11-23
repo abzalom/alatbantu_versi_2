@@ -132,7 +132,10 @@
                                         <option selected>{{ $edit_rap->text_subkegiatan }}</option>
                                     @else
                                         @foreach ($nomen_sikd as $subkegiatan)
-                                            <option value="{{ $subkegiatan->id }}" data-indikator="{{ $subkegiatan->indikator }}" data-klasifikasi_belanja="{{ $subkegiatan->klasifikasi_belanja }}" data-satuan="{{ $subkegiatan->satuan }}" {{ old('id_subkegiatan') == $subkegiatan->id ? 'selected' : '' }}>{{ $subkegiatan->text }}</option>
+                                            @php
+                                                $text_subkegiatan = $subkegiatan->text . " | $subkegiatan->klasifikasi_belanja";
+                                            @endphp
+                                            <option value="{{ $subkegiatan->id }}" data-indikator="{{ $subkegiatan->indikator }}" data-klasifikasi_belanja="{{ $subkegiatan->klasifikasi_belanja }}" data-satuan="{{ $subkegiatan->satuan }}" {{ old('id_subkegiatan') == $subkegiatan->id ? 'selected' : '' }}>{{ $text_subkegiatan }}</option>
                                         @endforeach
                                     @endif
                                 </x-rap-form.select-component>

@@ -495,23 +495,23 @@ $(document).ready(function () {
         $("#modal-detail-rap-dana_lain").text(
             rap.dana_lain
                 ? JSON.parse(rap.dana_lain)
-                      .map((item) => item.uraian)
-                      .join(", ")
+                    .map((item) => item.uraian)
+                    .join(", ")
                 : "Tidak ada dana lain"
         );
         $("#modal-detail-rap-lokus").text(
             rap.lokus
                 ? JSON.parse(rap.lokus)
-                      .map((item) => item.kampung)
-                      .join(", ")
+                    .map((item) => item.kampung)
+                    .join(", ")
                 : "Tidak ada lokasi fokus"
         );
         $("#modal-detail-rap-koordinat").html(
             rap.koordinat
                 ? rap.koordinat
-                      .replace(/\\n/g, "<br><br>")
-                      .replace(/\\"/g, '"') // kalau ada \" jadi "
-                      .replace(/\\'/g, "'") // kalau ada \' jadi '
+                    .replace(/\\n/g, "<br><br>")
+                    .replace(/\\"/g, '"') // kalau ada \" jadi "
+                    .replace(/\\'/g, "'") // kalau ada \' jadi '
                 : "Tidak ada koordinat"
         );
 
@@ -524,34 +524,30 @@ $(document).ready(function () {
                 <li>
                     <a href="/rap/view/file?path=${encodeURIComponent(rap.file_path)}&name=${rap.file_rab_name}" target="_blank">Rencana Anggaran Biaya (RAB) <i class="fa-solid fa-up-right-from-square"></a></i>
                 </li>
-                ${
-                    rap.file_pendukung1_name
-                        ? `<li>
+                ${rap.file_pendukung1_name
+                ? `<li>
                         <a href="/rap/view/file?path=${encodeURIComponent(rap.file_path)}&name=${rap.file_pendukung1_name}" target="_blank">Data Pendukung Tambahan <i class="fa-solid fa-up-right-from-square"></a></i>
                     </li>`
-                        : ""
-                }
-                ${
-                    rap.file_pendukung2_name
-                        ? `<li>
+                : ""
+            }
+                ${rap.file_pendukung2_name
+                ? `<li>
                         <a href="/rap/view/file?path=${encodeURIComponent(rap.file_path)}&name=${rap.file_pendukung2_name}" target="_blank">Data Pendukung Tambahan <i class="fa-solid fa-up-right-from-square"></a></i>
                     </li>`
-                        : ""
-                }
-                ${
-                    rap.file_pendukung3_name
-                        ? `<li>
+                : ""
+            }
+                ${rap.file_pendukung3_name
+                ? `<li>
                         <a href="/rap/view/file?path=${encodeURIComponent(rap.file_path)}&name=${rap.file_pendukung3_name}" target="_blank">Data Pendukung Tambahan <i class="fa-solid fa-up-right-from-square"></a></i>
                     </li>`
-                        : ""
-                }
-                ${
-                    rap.link_file_dukung_lain
-                        ? `<li>
+                : ""
+            }
+                ${rap.link_file_dukung_lain
+                ? `<li>
                         <a href="${rap.link_file_dukung_lain}" target="_blank">Link Drive Tambahan File Pendukung Lainnya <i class="fa-solid fa-up-right-from-square"></a></i>
                     </li>`
-                        : ""
-                }
+                : ""
+            }
             </ul>
         `);
 
@@ -564,8 +560,8 @@ $(document).ready(function () {
             $("#modal-detail-rap-status").text(pembahasan);
             $("#modal-detail-rap-catatan").text(rap.catatan);
         } else {
-            if (rap.validasi) {
-                $("#modal-detail-rap-status").text(rap.pembahasan == "setujui" ? "Setujui" : rap.pembahasan == "perbaiki" ? "Perbaikan" : "Ditolak");
+            if (rap.validasi || !rap.kirim) {
+                $("#modal-detail-rap-status").html(rap.pembahasan == "setujui" ? "Setujui" : rap.pembahasan == "perbaiki" ? "Perbaikan" : rap.pembahasan == "tolak" ? "Ditolak" : `<span class="text-bg-success p-1 rounded">Belum dibahas</span>`);
                 $("#modal-detail-rap-catatan").html(rap.catatan ? rap.catatan : "-");
             } else {
                 $("#modal-detail-rap-status").html(`

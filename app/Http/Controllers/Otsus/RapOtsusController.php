@@ -167,7 +167,7 @@ class RapOtsusController extends Controller
         // return $alokasi_otsus;
         $pagu_alokasi = $alokasi_otsus ? $alokasi_otsus->$alokasiKolom : 0;
 
-        if (auth()->user()->hasRole('user')) {
+        if (Auth::user()->hasRole('user')) {
             $pagu_alokasi = 0;
             foreach ($opds as $itemOpd) {
                 $pagu_alokasi += $itemOpd->pagu ? $itemOpd->pagu->$jenis : 0;
@@ -436,6 +436,7 @@ class RapOtsusController extends Controller
         ]);
     }
 
+    /** @var Illuminate\Http\Request */
     public function insert_new_rap(InsertRapRequest $request, $jenis, $id_opd)
     {
         if (!in_array($jenis, ['bg', 'sg', 'dti'])) {
@@ -949,6 +950,10 @@ class RapOtsusController extends Controller
 
         if ($rap->validasi) {
             return redirect()->back()->with('error', 'RAP tidak dapat dibahas, karena sudah divalidasi!');
+        }
+
+        if (!$rap->kirim) {
+            return redirect()->back()->with('error', 'RAP tidak dapat dibahas, karena belum dikirim oleh OPD!');
         }
 
         $rap->pembahasan = $request->pembahasan;

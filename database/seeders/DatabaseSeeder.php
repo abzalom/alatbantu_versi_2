@@ -27,6 +27,8 @@ class DatabaseSeeder extends Seeder
             ReferensiSeeder::class,
             TahunSeeder::class,
             OpdSeeder::class,
+            SikdRequestSeeder::class,
+            AlokasiOtsusSeeder::class,
         ]);
     }
 }

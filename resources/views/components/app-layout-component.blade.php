@@ -22,7 +22,7 @@
         @isset($app['title'])
             {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}{{ $app['title'] }}
         @else
-            {{ env('APP_ENV') === 'local' ? 'Local ' : '' }}eRAPOT-MR
+            {{ env('APP_ENV') === 'local' ? 'Local ' : 'Production' }}eRAPOT-MR
         @endisset
     </title>
 
@@ -37,7 +37,7 @@
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         const hostname = window.location.hostname;
         const port = window.location.port;
-        const appApiUrl = `http://${hostname}:${port}`;
+        const appApiUrl = `https://${hostname}:${port}`;
         const jadwal_aktif = @json(session('jadwal_aktif'));
         const jadwal_monev = @json(session('jadwal_monev'));
 
@@ -135,6 +135,9 @@
     </div>
 
     <script src="/assets/js/new_template/home.js"></script>
+
+    <x-modal.edit-schedule-header-modal></x-modal.edit-schedule-header-modal>
+
     <script>
         const navbar = document.getElementById("top-navbar");
         const content = document.getElementById("content");
@@ -323,26 +326,11 @@
                 document.getElementById('timer-header').innerHTML = jadwal_monev.keterangan;
             }
         })();
-        // const showStatusInput = document.getElementById('schedule-btn-status')
-        // const tooltip = bootstrap.Tooltip.getOrCreateInstance(showStatusInput)
-
-        // showStatusInput.addEventListener('hidden.bs.tooltip', () => {
-        //     // do something...
-        // })
-
-        // tooltip.hide()
 
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
         const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
-        // console.log(jadwal_aktif);
-        // const btnScheduleStatus = $('#schedule-input-status-btn');
-        // const tip = bootstrap.Tooltip.getOrCreateInstance(btnScheduleStatus[0], {
-        //     title: jadwal_aktif.penginputan ? 'Aktif! klik untuk kunci!' : 'Terkunci! klik untuk aktifkan!',
-        //     placement: 'top'
-        // });
-        // btnScheduleStatus.html(jadwal_aktif.penginputan ? '<i class="fa-solid fa-toggle-on fa-2x text-white"></i>' : '<i class="fa-solid fa-toggle-off fa-2x text-secondary"></i>');
     </script>
 </body>
 

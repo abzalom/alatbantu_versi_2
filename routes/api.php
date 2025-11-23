@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Auth\ApiAuthController;
 use App\Http\Controllers\Api\Config\ApiConfigTimPembahas;
 use App\Http\Controllers\Api\Data\ApiUsersController;
 use App\Http\Controllers\Api\Data\Sinkron\ApiSinkronDjpkSikdController;
+use App\Http\Controllers\Api\Data\Sinkron\ApiSinkroSipdRiController;
 use App\Http\Controllers\Api\Otsus\ApiAlokasiOtsusController;
 use App\Http\Controllers\Api\User\ApiUserRapController;
 use App\Http\Controllers\TestController;
@@ -93,14 +94,16 @@ Route::middleware(ApiAuthToken::class)->group(function () {
             Route::post('/schedule/get_schedule/deactivate_input', 'deactivate_input_schedule');
             Route::post('/schedule/get/active', 'get_schedule_active');
         });
+        Route::controller(ApiSinkroSipdRiController::class)->group(function () {
+            Route::post('/data/sinkron/sipd-ri/master_opd', 'sinkron_sipd_ri_master_opd');
+            Route::post('/data/sinkron/sipd-ri/master_program', 'sinkron_master_program_sipd_ri');
+            Route::post('/data/sinkron/sipd-ri/master_kegiatan', 'sinkron_master_kegiatan_sipd_ri');
+            Route::post('/data/sinkron/sipd-ri/master_subkegiatan', 'sinkron_master_subkegiatan_sipd_ri');
+        });
     });
 
     Route::controller(ApiUserRapController::class)->group(function () {
         Route::post('/user/rap/update', 'user_update_rap');
-    });
-
-    Route::controller(ApiTestController::class)->group(function () {
-        Route::post('/user/test/token', 'user_update_rap');
     });
 
     Route::controller(ApiIndikatorOtsus::class)->group(function () {
@@ -124,3 +127,5 @@ Route::middleware(ApiAuthToken::class)->group(function () {
         Route::post('/config/tim_pembahas/bappeda/destroy_member', 'destroy_member_tim_pembahas_bappeda');
     });
 });
+
+Route::post('/test/user-endpoint', [ApiTestController::class, 'test_user_endpoint']);
